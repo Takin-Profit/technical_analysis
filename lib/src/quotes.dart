@@ -5,18 +5,23 @@
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 
-typedef Person = ({String name, int age, bool isMale, bool isFemale});
+typedef Quote = ({
+  DateTime date,
+  Decimal open,
+  Decimal high,
+  Decimal low,
+  Decimal close,
+  Decimal volume
+});
 
-class Quote {
-  final DateTime date;
-  final Decimal open;
-  final Decimal high;
-  final Decimal low;
-  final Decimal close;
-  final Decimal volume;
-
-  static Either<String, Quote> create(DateTime date, Decimal open, Decimal high,
-      Decimal low, Decimal close, Decimal volume) {
+extension Quotes on Quote {
+  static Either<String, Quote> createQuote(
+      {required DateTime date,
+      required Decimal open,
+      required Decimal high,
+      required Decimal low,
+      required Decimal close,
+      required Decimal volume}) {
     final vals = [
       ("open", open),
       ("high", high),
@@ -37,50 +42,26 @@ class Quote {
               DateTime.now().millisecondsSinceEpoch =>
         Left(
             'TimeStamp $dt occurs in the future and cannot be added to the series.dart'),
-      (_, _) => Right(Quote._(
+      (_, _) => Right((
           date: date,
           open: open,
           close: close,
           volume: volume,
           high: high,
-          low: low))
+          low: low
+        ))
     };
   }
 
-/* #region */
-  const Quote._({
-    required this.date,
-    required this.open,
-    required this.high,
-    required this.low,
-    required this.close,
-    required this.volume,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Quote &&
-          runtimeType == other.runtimeType &&
-          date == other.date &&
-          open == other.open &&
-          high == other.high &&
-          low == other.low &&
-          close == other.close &&
-          volume == other.volume);
-
-  @override
-  int get hashCode =>
-      date.hashCode ^
-      open.hashCode ^
-      high.hashCode ^
-      low.hashCode ^
-      close.hashCode ^
-      volume.hashCode;
-
-  @override
-  String toString() {
-    return 'Quote{ date: $date, open: $open, high: $high, low: $low, close: $close, volume: $volume,}';
+  static Quote fromMap(final Map<String, dynamic> map) {
+    return (
+      date: map['date'] as DateTime,
+      open: map['open'] as Decimal,
+      high: map['high'] as Decimal,
+      low: map['low'] as Decimal,
+      close: map['close'] as Decimal,
+      volume: map['volume'] as Decimal,
+    );
   }
 
   Quote copyWith({
@@ -91,7 +72,7 @@ class Quote {
     final Decimal? close,
     final Decimal? volume,
   }) {
-    return Quote._(
+    return (
       date: date ?? this.date,
       open: open ?? this.open,
       high: high ?? this.high,
@@ -111,16 +92,4 @@ class Quote {
       'volume': volume,
     };
   }
-
-  factory Quote.fromMap(final Map<String, dynamic> map) {
-    return Quote._(
-      date: map['date'] as DateTime,
-      open: map['open'] as Decimal,
-      high: map['high'] as Decimal,
-      low: map['low'] as Decimal,
-      close: map['close'] as Decimal,
-      volume: map['volume'] as Decimal,
-    );
-  }
 }
-/* #endregion */

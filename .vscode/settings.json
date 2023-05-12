@@ -4,5 +4,8 @@
         "fpdart",
         "OLHCV",
         "vals"
+    ],
+    "conventionalCommits.scopes": [
+        "replay_subject"
     ]
 }
