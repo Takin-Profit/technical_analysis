@@ -13,6 +13,7 @@ void main() {
 
     test('First Test', () {
       final result = TA.sma(quotes, 'close');
+      final dur = TimeFrame.week.toDuration();
       expect(awesome.isAwesome, isTrue);
     });
   });

@@ -21,6 +21,7 @@ typedef Quote = ({
 });
 
 extension Quotes on Quote {
+
   static Either<String, Quote> createQuote(
       {required DateTime date,
       required Decimal open,
@@ -59,6 +60,7 @@ extension Quotes on Quote {
     };
   }
 
+  static Quote empty() => (date: DateTime.)
   static Quote fromMap(final Map<String, dynamic> map) {
     return (
       date: map['date'] as DateTime,
