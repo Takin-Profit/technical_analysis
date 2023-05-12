@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'quotes.dart';
 import './replay_subject/replay_subject.dart';
+import 'quotes.dart';
 
 typedef Series<T> = Stream<T>;
 

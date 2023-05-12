@@ -2,6 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// Copyright 2023 Takin Profit. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+import 'dart:convert';
+
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -85,11 +91,13 @@ extension Quotes on Quote {
   Map<String, dynamic> toMap() {
     return {
       'date': date,
-      'open': open,
-      'high': high,
-      'low': low,
-      'close': close,
-      'volume': volume,
+      'open': open.toDouble(),
+      'high': high.toDouble(),
+      'low': low.toDouble(),
+      'close': close.toDouble(),
+      'volume': volume.toDouble(),
     };
   }
+
+  String toJson() => json.encode(toMap());
 }
