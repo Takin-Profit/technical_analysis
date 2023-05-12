@@ -151,11 +151,3 @@ enum TimeFrame {
     };
   }
 }
-
-extension DateTimeExt on DateTime {
-  DateTime get min => DateTime.fromMicrosecondsSinceEpoch(0)
-      .subtract(Duration(days: 100000000));
-
-  DateTime get max =>
-      DateTime.fromMicrosecondsSinceEpoch(0).add(Duration(days: 100000000));
-}

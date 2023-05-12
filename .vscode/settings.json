@@ -11,6 +11,7 @@
         "vals"
     ],
     "conventionalCommits.scopes": [
-        "replay_subject"
+        "replay_subject",
+        "Quote"
     ]
 }

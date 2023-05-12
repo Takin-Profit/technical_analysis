@@ -11,6 +11,8 @@ import 'dart:convert';
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 
+import 'util.dart';
+
 typedef Quote = ({
   DateTime date,
   Decimal open,
@@ -21,7 +23,6 @@ typedef Quote = ({
 });
 
 extension Quotes on Quote {
-
   static Either<String, Quote> createQuote(
       {required DateTime date,
       required Decimal open,
@@ -60,7 +61,17 @@ extension Quotes on Quote {
     };
   }
 
-  static Quote empty() => (date: DateTime.)
+  static Quote get empty => (
+        date: Util.maxDate,
+        open: Decimal.zero,
+        high: Decimal.zero,
+        low: Decimal.zero,
+        close: Decimal.zero,
+        volume: Decimal.zero
+      );
+
+  bool get isEmpty => date == Util.maxDate;
+
   static Quote fromMap(final Map<String, dynamic> map) {
     return (
       date: map['date'] as DateTime,
