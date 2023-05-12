@@ -3,6 +3,6 @@
 /// More dartdocs go here.
 library;
 
-export 'src/technical_indicators_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/quotes.dart';
+export 'src/series.dart';
+export 'src/ta.dart';
