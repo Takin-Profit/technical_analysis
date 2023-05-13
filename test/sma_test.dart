@@ -1,7 +1,6 @@
 // Copyright 2023 Takin Profit. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
 import 'package:technical_indicators/technical_indicators.dart';
 import 'package:test/test.dart';
 
@@ -24,6 +23,22 @@ Future<void> main() async {
       final result = resultList.where((q) => !q.value.isNaN).toList();
       quotes.close();
       expect(result.length, 483);
+    });
+
+    test('Should return the correct calculation results', () async {
+      final res = TA.sma(quotes.closePrices);
+      final results = await res.toList();
+
+      final result18 = results[18];
+      final result19 = results[19];
+      final result24 = results[24];
+      final result149 = results[149];
+      final result249 = results[249];
+      final result501 = results[501];
+      quotes.close();
+
+      expect(result18.value.isNaN, true);
+      expect(result19.value, 214.5250);
     });
   });
 }

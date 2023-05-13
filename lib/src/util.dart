@@ -9,3 +9,9 @@ sealed class Util {
   static DateTime get maxDate =>
       DateTime.fromMicrosecondsSinceEpoch(0).add(Duration(days: 100000000));
 }
+
+extension DoubleExt on double {
+  double toPrecision(int precision) {
+    return double.parse(toStringAsFixed(precision));
+  }
+}

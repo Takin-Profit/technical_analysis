@@ -13,6 +13,7 @@
     "conventionalCommits.scopes": [
         "replay_subject",
         "Quote",
-        "TA"
+        "TA",
+        "Util"
     ]
 }
