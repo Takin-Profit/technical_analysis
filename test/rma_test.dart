@@ -15,7 +15,7 @@ Future<void> main() async {
       final res = TA.rma(quotes.closePrices);
       quotes.close();
       final result = await res.toList();
-      expect(result.length, 1000);
+      expect(result.length, 500);
     });
     test('quotes and results should have matching dates', () async {
       final res = TA.rma(quotes.closePrices);
@@ -24,16 +24,21 @@ Future<void> main() async {
       expect(results[210].date, data[210].date, reason: 'Dates should match');
       expect(results[23].date, data[23].date, reason: 'Dates should match');
       expect(results[98].date, data[98].date, reason: 'Dates should match');
-      expect(results[540].date, data[540].date, reason: 'Dates should match');
-      expect(results[720].date, data[720].date, reason: 'Dates should match');
-      expect(results[839].date, data[839].date, reason: 'Dates should match');
+      expect(results[240].date, data[240].date, reason: 'Dates should match');
+      expect(results[199].date, data[199].date, reason: 'Dates should match');
+      expect(results[387].date, data[387].date, reason: 'Dates should match');
     });
 
     test('should return correct Values for eth_rma.csv', () async {
       final res = TA.rma(quotes.closePrices);
       quotes.close();
       final results = await res.toList();
-      expect(results[23].value, 833.0694, reason: 'value should be');
+
+      expect(results[200].value.toPrecision(4), closeTo(1297.1244, 0.01),
+          reason: 'should be 1297.1244');
+
+      expect(results[345].value.toPrecision(4), 1280.8835,
+          reason: 'should be 1280.8835');
     });
   });
 }
