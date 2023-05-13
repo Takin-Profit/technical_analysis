@@ -18,12 +18,11 @@ Stream<PriceDataDouble> calcRMA(Stream<PriceDataDouble> series,
           in calcSMA(smaSeries, lookBack: lookBack)) {
         sum = smaData.value;
       }
-      yield (date: data.date, value: sum!);
     } else {
       // Calculate RMA for the rest of the elements
       sum = alpha * data.value + (1 - alpha) * sum;
     }
 
-    yield (date: data.date, value: sum);
+    yield (date: data.date, value: sum!);
   }
 }

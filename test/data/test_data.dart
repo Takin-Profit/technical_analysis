@@ -52,4 +52,10 @@ class TestData {
         .take(days)
         .toList();
   }
+
+  static Future<List<Quote>> getEthRMA({days = 1000}) async {
+    final file =
+        await File(p.absolute("test", "data", "eth_rma.csv")).readAsString();
+    return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
+  }
 }
