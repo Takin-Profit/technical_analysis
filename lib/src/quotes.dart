@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 
+import 'types.dart';
 import 'util.dart';
 
 typedef Quote = ({
@@ -20,6 +21,15 @@ typedef Quote = ({
   Decimal low,
   Decimal close,
   Decimal volume
+});
+
+typedef _QuoteD = ({
+  DateTime date,
+  double open,
+  double high,
+  double low,
+  double close,
+  double volume
 });
 
 extension Quotes on Quote {
@@ -70,6 +80,15 @@ extension Quotes on Quote {
         volume: Decimal.zero
       );
 
+  _QuoteD _toDoublePrecis() => (
+        date: date,
+        open: open.toDouble(),
+        close: close.toDouble(),
+        high: high.toDouble(),
+        low: low.toDouble(),
+        volume: volume.toDouble()
+      );
+
   bool get isEmpty => date == Util.maxDate;
 
   static Quote fromMap(final Map<String, dynamic> map) {
@@ -113,4 +132,16 @@ extension Quotes on Quote {
   }
 
   String toJson() => json.encode(toMap());
+
+  PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
+    return switch (candlePart) {
+      CandlePart.open => (date: date, value: close),
+      CandlePart.high => (date: date, value: high),
+            CandlePart.low => (date: date, value: low),
+            CandlePart.close => (date: date, value: close),
+            CandlePart.volume => (date: date, value: volume),
+    };
+
 }
+
+extension QuoteSeries on ReplaySubject<Quote> {}

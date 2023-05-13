@@ -4,12 +4,16 @@
 
 import 'dart:convert';
 
-typedef PriceData = ({DateTime date, double value});
+import 'package:decimal/decimal.dart';
+
+typedef PriceData = ({DateTime date, Decimal value});
+typedef PriceDataDouble = ({DateTime date, double value});
 
 extension PriceDataOps on PriceData {
+  PriceDataDouble get doublePrecis => (date: date, value: value.toDouble());
   PriceData copyWith({
     DateTime? date,
-    double? value,
+    Decimal? value,
   }) {
     return (
       date: date ?? this.date,
@@ -27,7 +31,7 @@ extension PriceDataOps on PriceData {
   static PriceData fromMap(Map<String, dynamic> map) {
     return (
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
-      value: map['value'] as double,
+      value: map['value'] as Decimal,
     );
   }
 
@@ -37,7 +41,20 @@ extension PriceDataOps on PriceData {
       fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-enum CandlePart { open, high, low, volume, hl2, hlc3, oc2, ohl3, ohlc4 }
+enum CandlePart {
+  open,
+  high,
+  low,
+  close,
+  volume,
+  hl2,
+  hlc3,
+  oc2,
+  ohl3,
+  ohlc4;
+
+  const CandlePart();
+}
 
 enum EndType { close, highLow }
 
