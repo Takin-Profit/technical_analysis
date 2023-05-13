@@ -44,5 +44,24 @@ Future<void> main() async {
       expect(result249.value.toPrecision(4), 255.5500);
       expect(result501.value.toPrecision(4), 251.8600);
     });
+    test('CandlePart.open tests', () async {
+      final res = TA.sma(quotes.closePrices);
+      final results = await res.toList();
+
+      final result18 = results[18];
+      final result19 = results[19];
+      final result24 = results[24];
+      final result149 = results[149];
+      final result249 = results[249];
+      final result501 = results[501];
+      quotes.close();
+
+      expect(result18.value.isNaN, true);
+      expect(result19.value.toPrecision(4), 214.5250);
+      expect(result24.value.toPrecision(4), 215.0310);
+      expect(result149.value.toPrecision(4), 234.9350);
+      expect(result249.value.toPrecision(4), 255.5500);
+      expect(result501.value.toPrecision(4), 251.8600);
+    });
   });
 }

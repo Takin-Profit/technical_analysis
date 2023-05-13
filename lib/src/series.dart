@@ -2,22 +2,38 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import 'package:collection/collection.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:technical_indicators/src/types.dart';
 
 import './replay_subject/replay_subject.dart';
 import 'quotes.dart';
+import 'util.dart';
 
 typedef Series<T> = Stream<T>;
 
 typedef QuoteSeries = ReplaySubject<Quote>;
 
-QuoteSeries createSeries(Iterable<Quote> quotes) {
-  final subj = ReplaySubject<Quote>();
-  for (final q in quotes) {
-    subj.add(q);
+Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
+  final sorted = quotes.sorted((a, b) => a.date.compareTo(b.date));
+  var lastDate = Util.minDate;
+  final dups = sorted.where((q) {
+    var foundDup = lastDate == q.date;
+    lastDate = q.date;
+    return foundDup;
+  });
+
+  if (dups.isEmpty) {
+    final subj = ReplaySubject<Quote>();
+    for (final q in sorted) {
+      subj.add(q);
+    }
+
+    return Right(subj);
+  } else {
+    return Left(
+        'Quotes with duplicate dates found ${dups.map((q) => q.date.toString()).join(', ')}');
   }
-  subj.close();
-  return subj;
 }
 
 extension QuoteStream on QuoteSeries {
@@ -26,4 +42,6 @@ extension QuoteStream on QuoteSeries {
 
   Stream<PriceDataDouble> get openPrices => stream
       .map((event) => event.toPriceDataDouble(candlePart: CandlePart.open));
+
+  bool isValid(quote) => values.where((q) => q.date == quote.date).isEmpty;
 }
