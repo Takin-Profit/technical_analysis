@@ -10,7 +10,7 @@ Future<void> main() async {
   final data = await TestData.getDefault();
   late QuoteSeries quotes;
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
-  group('TA tests', () {
+  group('TA.sma tests', () {
     test('Sma Result should have correct length', () async {
       final res = TA.sma(quotes.closePrices);
       quotes.close();
