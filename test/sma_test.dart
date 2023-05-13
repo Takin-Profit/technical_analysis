@@ -58,11 +58,31 @@ Future<void> main() async {
       final result501 = results[501];
 
       expect(result18.value.isNaN, true);
-      expect(result19.value.toPrecision(4), 214.5250);
-      expect(result24.value.toPrecision(4), 215.0310);
-      expect(result149.value.toPrecision(4), 234.9350);
-      expect(result249.value.toPrecision(4), 255.5500);
-      expect(result501.value.toPrecision(4), 251.8600);
+      expect(result19.value.toPrecision(4), 214.3795);
+      expect(result24.value.toPrecision(4), 214.9535);
+      expect(result149.value.toPrecision(4), 234.8280);
+      expect(result249.value.toPrecision(4), 255.6915);
+      expect(result501.value.toPrecision(4), 253.1725);
+    });
+
+    test('CandlePart.volume tests', () async {
+      final res = TA.sma(quotes.volume);
+      quotes.close();
+      final results = await res.toList();
+
+      expect(results.length, 502, reason: 'should be 502 total results');
+
+      final notNaN = results.where((q) => !q.value.isNaN);
+
+      expect(notNaN.length, 483, reason: 'should be 483 non NaN results');
+
+      final result24 = results[24];
+      final result290 = results[290];
+      final result501 = results[501];
+
+      expect(result24.value, 77293768.2, reason: 'should be 77293768.2');
+      expect(result290.value, 157958070.8, reason: 'should be 157958070.8');
+      expect(result501.value, 163695200, reason: 'should be 163695200');
     });
   });
 }

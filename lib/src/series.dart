@@ -43,5 +43,8 @@ extension QuoteStream on QuoteSeries {
   Stream<PriceDataDouble> get openPrices => stream
       .map((event) => event.toPriceDataDouble(candlePart: CandlePart.open));
 
+  Stream<PriceDataDouble> get volume => stream
+      .map((event) => event.toPriceDataDouble(candlePart: CandlePart.volume));
+
   bool isValid(quote) => values.where((q) => q.date == quote.date).isEmpty;
 }
