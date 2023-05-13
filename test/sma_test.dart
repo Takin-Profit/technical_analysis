@@ -38,7 +38,11 @@ Future<void> main() async {
       quotes.close();
 
       expect(result18.value.isNaN, true);
-      expect(result19.value, 214.5250);
+      expect(result19.value.toPrecision(4), 214.5250);
+      expect(result24.value.toPrecision(4), 215.0310);
+      expect(result149.value.toPrecision(4), 234.9350);
+      expect(result249.value.toPrecision(4), 255.5500);
+      expect(result501.value.toPrecision(4), 251.8600);
     });
   });
 }
