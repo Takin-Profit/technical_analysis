@@ -27,6 +27,8 @@ sealed class TA {
     return calcSMA(series, lookBack: lookBack);
   }
 
+  /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.
+  /// recommended warmup periods = 150.
   static Series<PriceDataDouble> rma(Stream<PriceDataDouble> series,
       {int lookBack = 14}) {
     _validateArg('RMA (Relative Moving Average)', lookBack);
