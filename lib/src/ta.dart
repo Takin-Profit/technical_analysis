@@ -12,7 +12,8 @@ sealed class TA {
     return 0;
   }
 
-  static Series<PriceData> sma(Series<PriceData> series, {int lookBack = 20}) {
+  static Series<PriceDataDouble> sma(Series<PriceDataDouble> series,
+      {int lookBack = 20}) {
     return calcSMA(series, lookBack: lookBack);
   }
 }

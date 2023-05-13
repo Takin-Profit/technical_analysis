@@ -14,7 +14,7 @@ import 'package:fpdart/fpdart.dart';
 import 'types.dart';
 import 'util.dart';
 
-final _d = (String s) => Decimal.parse(s);
+Decimal _d(String s) => Decimal.parse(s);
 
 typedef Quote = ({
   DateTime date,

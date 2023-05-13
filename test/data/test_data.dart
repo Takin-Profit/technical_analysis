@@ -5,6 +5,7 @@
 import "dart:io";
 
 import "package:decimal/decimal.dart";
+import 'package:path/path.dart' as p;
 import "package:technical_indicators/technical_indicators.dart";
 
 Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
@@ -32,14 +33,10 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
 
 class TestData {
   // DEFAULT: S&P 500 ~2 years of daily data
-  static Stream<Quote> getDefault({int days = 502}) {
-    return Stream.fromIterable(File('default.csv')
-        .readAsStringSync()
-        .split('\n')
-        .skip(1)
-        .map(quoteFromCsv)
-        .take(days)
-        .toList());
+  static Future<List<Quote>> getDefault({int days = 502}) async {
+    final file =
+        await File(p.absolute("test", "data", "default.csv")).readAsString();
+    return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
   }
 
   // ZEROS (200)

@@ -1,18 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// Copyright 2023 Takin Profit. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 import 'package:technical_indicators/src/circular_buffer.dart';
 import 'package:technical_indicators/src/series.dart';
 import 'package:technical_indicators/src/types.dart';
 
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-Series<PriceData> calcSMA(Series<PriceData> series,
+Series<PriceDataDouble> calcSMA(Series<PriceDataDouble> series,
     {int lookBack = 20}) async* {
-  final buffer = CircularBuffer<PriceData>(lookBack - 1);
+  final buffer = CircularBuffer<PriceDataDouble>(lookBack - 1);
 
-  await for (PriceData data in series) {
+  await for (PriceDataDouble data in series) {
     buffer.add(data);
 
     if (buffer.isFilled) {
