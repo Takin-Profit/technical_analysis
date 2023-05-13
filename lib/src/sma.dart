@@ -8,7 +8,7 @@ import 'package:technical_indicators/src/types.dart';
 
 Series<PriceDataDouble> calcSMA(Series<PriceDataDouble> series,
     {int lookBack = 20}) async* {
-  final buffer = CircularBuffer<PriceDataDouble>(lookBack - 1);
+  final buffer = CircularBuffer<PriceDataDouble>(lookBack);
 
   await for (PriceDataDouble data in series) {
     buffer.add(data);

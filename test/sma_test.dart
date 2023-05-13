@@ -18,5 +18,12 @@ Future<void> main() async {
       quotes.close();
       expect(result.length, 502);
     });
+    test('Should return the correct number of results without nan', () async {
+      final res = TA.sma(quotes.closePrices);
+      final resultList = await res.toList();
+      final result = resultList.where((q) => !q.value.isNaN).toList();
+      quotes.close();
+      expect(result.length, 483);
+    });
   });
 }
