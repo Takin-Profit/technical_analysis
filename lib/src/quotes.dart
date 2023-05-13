@@ -14,6 +14,8 @@ import 'package:fpdart/fpdart.dart';
 import 'types.dart';
 import 'util.dart';
 
+final _d = (String s) => Decimal.parse(s);
+
 typedef Quote = ({
   DateTime date,
   Decimal open,
@@ -134,14 +136,49 @@ extension Quotes on Quote {
   String toJson() => json.encode(toMap());
 
   PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
+    final hl2 = (high + low) / _d('2.0');
+    final hlc3 = (high + low + close) / _d('3.0');
+    final oc2 = (open + close) / _d('2.0');
+    final ohl3 = (open + high + low) / _d('3.0');
+    final ohl4 = (open + high + low + close) / _d('4.0');
+
     return switch (candlePart) {
-      CandlePart.open => (date: date, value: close),
+      CandlePart.open => (date: date, value: open),
       CandlePart.high => (date: date, value: high),
-            CandlePart.low => (date: date, value: low),
-            CandlePart.close => (date: date, value: close),
-            CandlePart.volume => (date: date, value: volume),
+      CandlePart.low => (date: date, value: low),
+      CandlePart.close => (date: date, value: close),
+      CandlePart.volume => (date: date, value: volume),
+      CandlePart.hl2 => (date: date, value: hl2.toDecimal()),
+      CandlePart.hlc3 => (date: date, value: hlc3.toDecimal()),
+      CandlePart.oc2 => (date: date, value: oc2.toDecimal()),
+      CandlePart.ohl3 => (date: date, value: ohl3.toDecimal()),
+      CandlePart.ohlc4 => (date: date, value: ohl4.toDecimal()),
     };
+  }
 
+  PriceDataDouble toPriceDataDouble(
+      {CandlePart candlePart = CandlePart.close}) {
+    final data = _toDoublePrecis();
+    return switch (candlePart) {
+      CandlePart.open => (date: date, value: data.open),
+      CandlePart.high => (date: date, value: data.high),
+      CandlePart.low => (date: date, value: data.low),
+      CandlePart.close => (date: date, value: data.close),
+      CandlePart.volume => (date: date, value: data.volume),
+      CandlePart.hl2 => (date: date, value: data.high + data.low / 2.0),
+      CandlePart.hlc3 => (
+          date: date,
+          value: data.high + data.low + data.close / 3.0
+        ),
+      CandlePart.oc2 => (date: date, value: data.open + data.close / 2.0),
+      CandlePart.ohl3 => (
+          date: date,
+          value: data.open + data.high + data.low / 3.0
+        ),
+      CandlePart.ohlc4 => (
+          date: date,
+          value: data.open + data.high + data.low + data.close / 4.0
+        ),
+    };
+  }
 }
-
-extension QuoteSeries on ReplaySubject<Quote> {}

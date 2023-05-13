@@ -11,6 +11,7 @@ typedef PriceDataDouble = ({DateTime date, double value});
 
 extension PriceDataOps on PriceData {
   PriceDataDouble get doublePrecis => (date: date, value: value.toDouble());
+
   PriceData copyWith({
     DateTime? date,
     Decimal? value,
