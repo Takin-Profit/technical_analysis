@@ -46,7 +46,7 @@ Future<void> main() async {
       expect(result501.value.toPrecision(4), 251.8600);
     });
     test('CandlePart.open tests', () async {
-      final res = TA.sma(quotes.closePrices);
+      final res = TA.sma(quotes.openPrices);
       quotes.close();
       final results = await res.toList();
 

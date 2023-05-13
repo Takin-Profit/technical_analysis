@@ -5,6 +5,13 @@ import 'series.dart';
 import 'sma.dart';
 import 'types.dart';
 
+void _validateArg(String indicator, int value) {
+  if (value < 0) {
+    throw ArgumentError(
+        'LookBack must be greater than 0 to calculate the $indicator');
+  }
+}
+
 sealed class TA {
   static void na() {}
   static void nz() {}
@@ -14,6 +21,7 @@ sealed class TA {
 
   static Series<PriceDataDouble> sma(Series<PriceDataDouble> series,
       {int lookBack = 20}) {
+    _validateArg('Simple Moving Average', lookBack);
     return calcSMA(series, lookBack: lookBack);
   }
 }
