@@ -8,17 +8,18 @@ import 'types.dart';
 
 sealed class Util {
   static DateTime get minDate => DateTime.fromMicrosecondsSinceEpoch(0)
-      .subtract(Duration(days: 100000000));
+      .subtract(const Duration(days: 100000000));
 
-  static DateTime get maxDate =>
-      DateTime.fromMicrosecondsSinceEpoch(0).add(Duration(days: 100000000));
+  static DateTime get maxDate => DateTime.fromMicrosecondsSinceEpoch(0)
+      .add(const Duration(days: 100000000));
 
-  static Series<PriceDataDouble> change(Series<PriceDataDouble> series,
-      {int length = 1}) async* {
-    CircularBuffer<PriceDataDouble> buffer =
-        CircularBuffer<PriceDataDouble>(length + 1);
+  static Series<PriceDataDouble> change(
+    Series<PriceDataDouble> series, {
+    int length = 1,
+  }) async* {
+    final buffer = CircularBuffer<PriceDataDouble>(length + 1);
 
-    await for (PriceDataDouble current in series) {
+    await for (final current in series) {
       buffer.add(current);
       if (buffer.isFilled) {
         yield (date: current.date, value: current.value - buffer.first.value);

@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 import 'data/test_data.dart';
 
 Future<void> main() async {
-  final data = await TestData.getDefault();
+  final data = await getDefault();
   late QuoteSeries quotes;
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.rsi tests', () {
@@ -33,21 +33,36 @@ Future<void> main() async {
       final result = resultList.toList();
 
       expect(result[12].value, isNaN, reason: 'should be NaN');
-      expect(result[14].value.toPrecision(4), closeTo(62.0541, 0.5),
-          reason: 'should be 62.0541');
-      expect(result[249].value.toPrecision(4), 70.9368,
-          reason: 'should equal 70.9368');
+      expect(
+        result[14].value.toPrecision(4),
+        closeTo(62.0541, 0.5),
+        reason: 'should be 62.0541',
+      );
+      expect(
+        result[249].value.toPrecision(4),
+        70.9368,
+        reason: 'should equal 70.9368',
+      );
 
-      expect(result[501].value.toPrecision(4), 42.0773,
-          reason: 'should equal 42.0773');
+      expect(
+        result[501].value.toPrecision(4),
+        42.0773,
+        reason: 'should equal 42.0773',
+      );
     });
     test('Should throw exception with small lookBack < 2', () async {
       quotes.close();
 
-      expect(() => TA.rsi(quotes.closePrices, lookBack: 1), throwsArgumentError,
-          reason: 'should throw');
-      expect(() => TA.rsi(quotes.closePrices, lookBack: 0), throwsArgumentError,
-          reason: 'should throw');
+      expect(
+        () => TA.rsi(quotes.closePrices, lookBack: 1),
+        throwsArgumentError,
+        reason: 'should throw',
+      );
+      expect(
+        () => TA.rsi(quotes.closePrices, lookBack: 0),
+        throwsArgumentError,
+        reason: 'should throw',
+      );
     });
   });
 }

@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import 'data/test_data.dart';
 
 Future<void> main() async {
-  final data = await TestData.getEthRMA();
+  final data = await getEthRMA();
   late QuoteSeries quotes;
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.rma tests', () {
@@ -34,26 +34,47 @@ Future<void> main() async {
       quotes.close();
       final results = await res.toList();
 
-      expect(results[200].value.toPrecision(4), closeTo(1297.1244, 0.01),
-          reason: 'should be close to 1297.1244');
+      expect(
+        results[200].value.toPrecision(4),
+        closeTo(1297.1244, 0.01),
+        reason: 'should be close to 1297.1244',
+      );
 
-      expect(results[345].value.toPrecision(4), 1280.8835,
-          reason: 'should be close to 1280.8835');
+      expect(
+        results[345].value.toPrecision(4),
+        1280.8835,
+        reason: 'should be close to 1280.8835',
+      );
 
-      expect(results[80].value.toPrecision(4), closeTo(2827.6204, 0.9),
-          reason: 'should be close to 2827.6204');
+      expect(
+        results[80].value.toPrecision(4),
+        closeTo(2827.6204, 0.9),
+        reason: 'should be close to 2827.6204',
+      );
 
-      expect(results[154].value.toPrecision(4), closeTo(2493.5138, 0.02),
-          reason: 'should be close to 2493.5138');
+      expect(
+        results[154].value.toPrecision(4),
+        closeTo(2493.5138, 0.02),
+        reason: 'should be close to 2493.5138',
+      );
 
-      expect(results[271].value.toPrecision(4), closeTo(1642.0148, 0.001),
-          reason: 'should be close to 1280.8835');
+      expect(
+        results[271].value.toPrecision(4),
+        closeTo(1642.0148, 0.001),
+        reason: 'should be close to 1280.8835',
+      );
 
-      expect(results[452].value.toPrecision(4), closeTo(1568.4215, 0.001),
-          reason: 'should be close to 1568.4215');
+      expect(
+        results[452].value.toPrecision(4),
+        closeTo(1568.4215, 0.001),
+        reason: 'should be close to 1568.4215',
+      );
 
-      expect(results[488].value.toPrecision(4), closeTo(1879.2303, 0.001),
-          reason: 'should be close to 1879.2303');
+      expect(
+        results[488].value.toPrecision(4),
+        closeTo(1879.2303, 0.001),
+        reason: 'should be close to 1879.2303',
+      );
     });
   });
 }

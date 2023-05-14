@@ -17,11 +17,13 @@ typedef QuoteSeries = ReplaySubject<Quote>;
 Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
   final sorted = quotes.sorted((a, b) => a.date.compareTo(b.date));
   var lastDate = Util.minDate;
-  final dups = sorted.where((q) {
-    var foundDup = lastDate == q.date;
-    lastDate = q.date;
-    return foundDup;
-  });
+  final dups = sorted.where(
+    (q) {
+      final foundDup = lastDate == q.date;
+      lastDate = q.date;
+      return foundDup;
+    },
+  );
 
   if (dups.isEmpty) {
     final subj = ReplaySubject<Quote>();
@@ -32,7 +34,8 @@ Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
     return Right(subj);
   } else {
     return Left(
-        'Quotes with duplicate dates found ${dups.map((q) => q.date.toString()).join(', ')}');
+      'Quotes with duplicate dates found ${dups.map((q) => q.date.toString()).join(', ')}',
+    );
   }
 }
 
@@ -46,5 +49,6 @@ extension QuoteStream on QuoteSeries {
   Stream<PriceDataDouble> get volume => stream
       .map((event) => event.toPriceDataDouble(candlePart: CandlePart.volume));
 
-  bool isValid(quote) => values.where((q) => q.date == quote.date).isEmpty;
+  bool isValid(Quote quote) =>
+      values.where((q) => q.date == quote.date).isEmpty;
 }

@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import 'data/test_data.dart';
 
 Future<void> main() async {
-  final data = await TestData.getDefault();
+  final data = await getDefault();
   late QuoteSeries quotes;
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.sma tests', () {

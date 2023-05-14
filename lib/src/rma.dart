@@ -11,12 +11,11 @@ import 'types.dart';
 /// recommended warmup periods = 150
 Series<PriceDataDouble> calcRMA(Series<PriceDataDouble> series,
     {int lookBack = 14}) async* {
-  double alpha = 1.0 / lookBack;
+  final double alpha = 1.0 / lookBack;
   double? sum;
-  CircularBuffer<PriceDataDouble> buf =
-      CircularBuffer<PriceDataDouble>(lookBack);
+  final buf = CircularBuffer<PriceDataDouble>(lookBack);
 
-  await for (PriceDataDouble data in series) {
+  await for (final data in series) {
     buf.add(data);
     if (buf.isFilled && sum == null) {
       // Calculate initial SMA

@@ -35,13 +35,14 @@ typedef _QuoteD = ({
 });
 
 extension Quotes on Quote {
-  static Either<String, Quote> createQuote(
-      {required DateTime date,
-      required Decimal open,
-      required Decimal high,
-      required Decimal low,
-      required Decimal close,
-      required Decimal volume}) {
+  static Either<String, Quote> createQuote({
+    required DateTime date,
+    required Decimal open,
+    required Decimal high,
+    required Decimal low,
+    required Decimal close,
+    required Decimal volume,
+  }) {
     final vals = [
       ("open", open),
       ("high", high),
@@ -55,21 +56,24 @@ extension Quotes on Quote {
     ].join(', ');
 
     return switch ((errMsg, date)) {
-      (var msg, _) when msg.isNotEmpty =>
+      (final msg, _) when msg.isNotEmpty =>
         Left("Invalid Data found $errMsg OLHCV values cannot be negative"),
-      (_, var dt)
+      (_, final dt)
           when dt.millisecondsSinceEpoch >
               DateTime.now().millisecondsSinceEpoch =>
         Left(
-            'TimeStamp $dt occurs in the future and cannot be added to the series.dart'),
-      (_, _) => Right((
-          date: date,
-          open: open,
-          close: close,
-          volume: volume,
-          high: high,
-          low: low
-        ))
+          'TimeStamp $dt occurs in the future and cannot be added to the series.dart',
+        ),
+      (_, _) => Right(
+          (
+            date: date,
+            open: open,
+            close: close,
+            volume: volume,
+            high: high,
+            low: low
+          ),
+        )
     };
   }
 
@@ -93,7 +97,7 @@ extension Quotes on Quote {
 
   bool get isEmpty => date == Util.maxDate;
 
-  static Quote fromMap(final Map<String, dynamic> map) {
+  static Quote fromMap(Map<String, dynamic> map) {
     return (
       date: map['date'] as DateTime,
       open: map['open'] as Decimal,
@@ -105,12 +109,12 @@ extension Quotes on Quote {
   }
 
   Quote copyWith({
-    final DateTime? date,
-    final Decimal? open,
-    final Decimal? high,
-    final Decimal? low,
-    final Decimal? close,
-    final Decimal? volume,
+    DateTime? date,
+    Decimal? open,
+    Decimal? high,
+    Decimal? low,
+    Decimal? close,
+    Decimal? volume,
   }) {
     return (
       date: date ?? this.date,
@@ -156,8 +160,9 @@ extension Quotes on Quote {
     };
   }
 
-  PriceDataDouble toPriceDataDouble(
-      {CandlePart candlePart = CandlePart.close}) {
+  PriceDataDouble toPriceDataDouble({
+    CandlePart candlePart = CandlePart.close,
+  }) {
     final data = _toDoublePrecis();
     return switch (candlePart) {
       CandlePart.open => (date: date, value: data.open),

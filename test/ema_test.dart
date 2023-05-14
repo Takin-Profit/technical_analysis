@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import 'data/test_data.dart';
 
 Future<void> main() async {
-  final data = await TestData.getDefault();
+  final data = await getDefault();
   late QuoteSeries quotes;
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.ema tests', () {
@@ -40,12 +40,21 @@ Future<void> main() async {
 
       expect(result0.value.isNaN, true);
       expect(result6.value.isNaN, true);
-      expect(result29.value.toPrecision(4), 216.6228,
-          reason: 'should be 216.6228');
-      expect(result249.value.toPrecision(4), 255.3873,
-          reason: 'should be 255.3873');
-      expect(result501.value.toPrecision(4), 249.3519,
-          reason: 'should be 249.3519');
+      expect(
+        result29.value.toPrecision(4),
+        216.6228,
+        reason: 'should be 216.6228',
+      );
+      expect(
+        result249.value.toPrecision(4),
+        255.3873,
+        reason: 'should be 255.3873',
+      );
+      expect(
+        result501.value.toPrecision(4),
+        249.3519,
+        reason: 'should be 249.3519',
+      );
     });
   });
 }

@@ -9,19 +9,19 @@ import 'types.dart';
 
 Series<PriceDataDouble> calcRSI(Series<PriceDataDouble> series,
     {int lookBack = 14}) async* {
-  CircularBuffer<double> gainBuffer = CircularBuffer<double>(lookBack);
-  CircularBuffer<double> lossBuffer = CircularBuffer<double>(lookBack);
+  final gainBuffer = CircularBuffer<double>(lookBack);
+  final lossBuffer = CircularBuffer<double>(lookBack);
 
   double? lastValue;
   double avgGain = 0;
   double avgLoss = 0;
 
-  await for (PriceDataDouble current in series) {
+  await for (final current in series) {
     double gain = 0;
     double loss = 0;
 
     if (lastValue != null) {
-      double change = current.value - lastValue;
+      final double change = current.value - lastValue;
       gain = max(0, change);
       loss = max(0, -change);
     }
@@ -40,7 +40,7 @@ Series<PriceDataDouble> calcRSI(Series<PriceDataDouble> series,
 
       double rsi;
       if (avgLoss > 0) {
-        double rs = avgGain / avgLoss;
+        final double rs = avgGain / avgLoss;
         rsi = 100 - (100 / (1 + rs));
       } else {
         rsi = 100;

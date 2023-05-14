@@ -34,28 +34,26 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
   );
 }
 
-class TestData {
-  // DEFAULT: S&P 500 ~2 years of daily data
-  static Future<List<Quote>> getDefault({int days = 502}) async {
-    final file =
-        await File(p.absolute("test", "data", "default.csv")).readAsString();
-    return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
-  }
+// DEFAULT: S&P 500 ~2 years of daily data
+Future<List<Quote>> getDefault({int days = 502}) async {
+  final file =
+      await File(p.absolute("test", "data", "default.csv")).readAsString();
+  return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
+}
 
-  // ZEROS (200)
-  static List<Quote> getZeroes({int days = 200}) {
-    return File('zeroes.csv')
-        .readAsStringSync()
-        .split('\n')
-        .skip(1)
-        .map(quoteFromCsv)
-        .take(days)
-        .toList();
-  }
+// ZEROS (200)
+List<Quote> getZeroes({int days = 200}) {
+  return File('zeroes.csv')
+      .readAsStringSync()
+      .split('\n')
+      .skip(1)
+      .map(quoteFromCsv)
+      .take(days)
+      .toList();
+}
 
-  static Future<List<Quote>> getEthRMA({days = 500}) async {
-    final file =
-        await File(p.absolute("test", "data", "eth_rma.csv")).readAsString();
-    return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
-  }
+Future<List<Quote>> getEthRMA({int days = 500}) async {
+  final file =
+      await File(p.absolute("test", "data", "eth_rma.csv")).readAsString();
+  return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
 }
