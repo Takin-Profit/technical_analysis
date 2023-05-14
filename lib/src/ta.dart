@@ -9,8 +9,8 @@ import 'sma.dart';
 import 'types.dart';
 import 'util.dart';
 
-void _validateArg(String indicator, int value) {
-  if (value < 0) {
+void _validateArg(String indicator, int value, int minValue) {
+  if (value < minValue) {
     throw ArgumentError(
         'LookBack must be greater than 0 to calculate the $indicator');
   }
@@ -41,7 +41,7 @@ sealed class TA {
 
   static Series<PriceDataDouble> sma(Series<PriceDataDouble> series,
       {int lookBack = 20}) {
-    _validateArg('SMA (Simple Moving Average)', lookBack);
+    _validateArg('SMA (Simple Moving Average)', lookBack, 1);
     return calcSMA(series, lookBack: lookBack);
   }
 
@@ -49,19 +49,19 @@ sealed class TA {
   /// recommended warmup periods = 150.
   static Series<PriceDataDouble> rma(Series<PriceDataDouble> series,
       {int lookBack = 14}) {
-    _validateArg('RMA (Relative Moving Average)', lookBack);
+    _validateArg('RMA (Relative Moving Average)', lookBack, 1);
     return calcRMA(series, lookBack: lookBack);
   }
 
   static Series<PriceDataDouble> ema(Series<PriceDataDouble> series,
       {int lookBack = 20}) {
-    _validateArg('EMA (Exponential Moving Average)', lookBack);
+    _validateArg('EMA (Exponential Moving Average)', lookBack, 1);
     return calcEMA(series, lookBack: lookBack);
   }
 
   static Series<PriceDataDouble> rsi(Series<PriceDataDouble> series,
       {int lookBack = 14}) {
-    _validateArg('RSI (Relative Strength Index)', lookBack);
+    _validateArg('RSI (Relative Strength Index)', lookBack, 2);
     return calcRSI(series, lookBack: lookBack);
   }
 }
