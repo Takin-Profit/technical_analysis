@@ -31,7 +31,7 @@ sealed class TA {
   }
 
   /// Compares the current [series] value to its value [length] bars ago and returns the difference.
-  static Series<double> change(Series<PriceDataDouble> series,
+  static Series<PriceDataDouble> change(Series<PriceDataDouble> series,
       {int length = 1}) {
     if (length < 1) {
       throw ArgumentError(
