@@ -12,7 +12,7 @@ sealed class Util {
 
   static DateTime get maxDate =>
       DateTime.fromMicrosecondsSinceEpoch(0).add(Duration(days: 100000000));
-
+  // TODO : change needs to return a PriceDataDouble
   static Series<double> change(Series<PriceDataDouble> series,
       {int length = 1}) async* {
     CircularBuffer<PriceDataDouble> buffer =
