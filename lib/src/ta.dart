@@ -80,18 +80,18 @@ sealed class TA {
 
   static Series<TsiResult> tsi(
     Series<PriceDataDouble> series, {
-    int longLength = 25,
-    int shortLength = 13,
-    int signalLength = 13,
+    int lookBack = 25,
+    int smoothLen = 13,
+    int signalLen = 13,
   }) {
-    _validateArg('TSI (True Strength Index)', longLength, 1);
-    _validateArg('TSI (True Strength Index)', shortLength, 1);
-    _validateArg('TSI (True Strength Index)', signalLength, 1);
+    _validateArg('TSI (True Strength Index)', lookBack, 1);
+    _validateArg('TSI (True Strength Index)', smoothLen, 1);
+    _validateArg('TSI (True Strength Index)', signalLen, 1);
     return calcTSI(
       series,
-      longLength: longLength,
-      shortLength: shortLength,
-      signalLength: signalLength,
+      lookBack: lookBack,
+      smoothLen: smoothLen,
+      signalLen: signalLen,
     );
   }
 }

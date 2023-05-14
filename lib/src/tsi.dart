@@ -5,17 +5,18 @@
 import 'dart:async';
 
 import 'ema.dart';
+import 'series.dart';
 import 'stream_zip/stream_zip.dart';
 import 'types.dart';
 import 'util.dart';
 
 typedef TsiResult = ({DateTime date, double value, double? signal});
 
-Stream<TsiResult> calcTSI(
-  Stream<PriceDataDouble> series, {
-  int longLength = 25,
-  int shortLength = 13,
-  int signalLength = 13,
+Series<TsiResult> calcTSI(
+  Series<PriceDataDouble> series, {
+  int lookBack = 25,
+  int smoothLen = 13,
+  int signalLen = 13,
 }) async* {
   // correct to this point
   Stream<PriceDataDouble> doubleSmooth(
@@ -31,10 +32,10 @@ Stream<TsiResult> calcTSI(
   final absChangeStream =
       changeStream.map((data) => (date: data.date, value: data.value.abs()));
 
-  final doubleSmoothedPc = doubleSmooth(changeStream, longLength, shortLength);
+  final doubleSmoothedPc = doubleSmooth(changeStream, lookBack, smoothLen);
 
   final doubleSmoothedAbsPc =
-      doubleSmooth(absChangeStream, longLength, shortLength);
+      doubleSmooth(absChangeStream, lookBack, smoothLen);
 
   final zippedStream = StreamZip([doubleSmoothedPc, doubleSmoothedAbsPc]);
 
@@ -51,8 +52,7 @@ Stream<TsiResult> calcTSI(
   final tsiPriceDataDoubleStream =
       tsiWithSignalStream.map((tsi) => (date: tsi.date, value: tsi.value));
 
-  final signalStream =
-      calcEMA(tsiPriceDataDoubleStream, lookBack: signalLength);
+  final signalStream = calcEMA(tsiPriceDataDoubleStream, lookBack: signalLen);
 
   final finalZippedStream = StreamZip([tsiWithSignalStream, signalStream]);
 
