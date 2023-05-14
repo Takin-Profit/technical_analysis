@@ -7,13 +7,13 @@ import 'types.dart';
 
 Stream<PriceDataDouble> calcEMA(Stream<PriceDataDouble> series,
     {int lookBack = 14}) async* {
-  CircularBuffer<PriceDataDouble> buffer =
+  final buffer =
       CircularBuffer<PriceDataDouble>(lookBack);
   double ema = double.nan;
-  double multiplier =
+  final double multiplier =
       2 / (lookBack + 1); // Multiplier: (2 / (Time periods + 1) )
 
-  await for (PriceDataDouble data in series) {
+  await for (final data in series) {
     buffer.add(data);
 
     if (buffer.isFilled) {

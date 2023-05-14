@@ -18,5 +18,11 @@ Future<void> main() async {
       final result = await res.toList();
       expect(result.length, 502);
     });
+    test('TSI Result should have correct length', () async {
+      final res = TA.tsi(quotes.closePrices);
+      quotes.close();
+      final result = await res.toList();
+      expect(result.length, 502);
+    });
   });
 }
