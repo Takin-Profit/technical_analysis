@@ -3,12 +3,13 @@
 // license that can be found in the LICENSE file.
 
 import 'circular_buffer.dart';
+import 'series.dart';
 import 'types.dart';
 
 /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.
 /// requires about 100 quotes before higher acuracy kicks in.
 /// recommended warmup periods = 150
-Stream<PriceDataDouble> calcRMA(Stream<PriceDataDouble> series,
+Series<PriceDataDouble> calcRMA(Series<PriceDataDouble> series,
     {int lookBack = 14}) async* {
   double alpha = 1.0 / lookBack;
   double? sum;

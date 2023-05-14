@@ -22,8 +22,16 @@ sealed class Util {
       buffer.add(current);
       if (buffer.isFilled) {
         yield current.value - buffer.first.value;
+      } else {
+        yield double.nan;
       }
     }
+  }
+
+  /// Replaces NaN values with zeros (or given value) in a series.
+  /// https://www.tradingview.com/pine-script-reference/v5/#fun_nz
+  static double nz(double value, {double replaceWith = 0}) {
+    return value.isNaN ? replaceWith : value;
   }
 }
 
