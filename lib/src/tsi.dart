@@ -20,7 +20,7 @@ Stream<PriceDataDouble> changeWithDate(Stream<PriceDataDouble> series) async* {
   }
 }
 
-Stream<TsiResult> calcTsi(Stream<PriceDataDouble> series,
+Stream<TsiResult> calcTSI(Stream<PriceDataDouble> series,
     {int longLength = 25, int shortLength = 13, int signalLength = 13}) async* {
   // correct to this point
   Stream<PriceDataDouble> doubleSmooth(
@@ -40,20 +40,27 @@ Stream<TsiResult> calcTsi(Stream<PriceDataDouble> series,
 
   final zippedStream = StreamZip([doubleSmoothedPc, doubleSmoothedAbsPc]);
 
-  final tsiStreamController = StreamController<TsiResult>();
+  Stream<TsiResult> tsiStream() async* {
+    await for (List<PriceDataDouble> data in zippedStream) {
+      double tsi = 100 * (data[0].value / data[1].value);
+      yield (date: data[0].date, value: tsi, signal: null);
+    }
+  }
 
-  zippedStream.listen((List<PriceDataDouble> data) {
-    double tsi = 100 * (data[0].value / data[1].value);
-    tsiStreamController.add((date: data[0].date, value: tsi, signal: null));
-  });
+  final tsiWithSignalStream = tsiStream().asBroadcastStream();
 
-  final tsiStream = tsiStreamController.stream
-      .map((tsiResult) => (date: tsiResult.date, value: tsiResult.value));
-  final signalStream = calcEMA(tsiStream, lookBack: signalLength);
+  // Convert to Stream<PriceDataDouble> before calculating EMA
+  final tsiPriceDataDoubleStream =
+      tsiWithSignalStream.map((tsi) => (date: tsi.date, value: tsi.value));
 
-  final finalZippedStream = StreamZip([tsiStream, signalStream]);
+  final signalStream =
+      calcEMA(tsiPriceDataDoubleStream, lookBack: signalLength);
 
-  await for (List<PriceDataDouble> data in finalZippedStream) {
-    yield (date: data[0].date, value: data[0].value, signal: data[1].value);
+  final finalZippedStream = StreamZip([tsiWithSignalStream, signalStream]);
+
+  await for (var data in finalZippedStream) {
+    TsiResult tsiData = data[0] as TsiResult;
+    PriceDataDouble signalData = data[1] as PriceDataDouble;
+    yield (date: tsiData.date, value: tsiData.value, signal: signalData.value);
   }
 }

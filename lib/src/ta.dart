@@ -6,6 +6,7 @@ import 'rma.dart';
 import 'rsi.dart';
 import 'series.dart';
 import 'sma.dart';
+import 'tsi.dart';
 import 'types.dart';
 import 'util.dart';
 
@@ -63,5 +64,16 @@ sealed class TA {
       {int lookBack = 14}) {
     _validateArg('RSI (Relative Strength Index)', lookBack, 2);
     return calcRSI(series, lookBack: lookBack);
+  }
+
+  static Series<TsiResult> tsi(Series<PriceDataDouble> series,
+      {int longLength = 25, int shortLength = 13, int signalLength = 13}) {
+    _validateArg('TSI (True Strength Index)', longLength, 1);
+    _validateArg('TSI (True Strength Index)', shortLength, 1);
+    _validateArg('TSI (True Strength Index)', signalLength, 1);
+    return calcTSI(series,
+        longLength: longLength,
+        shortLength: shortLength,
+        signalLength: signalLength);
   }
 }
