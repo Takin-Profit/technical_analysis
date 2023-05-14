@@ -6,6 +6,7 @@ import 'rma.dart';
 import 'series.dart';
 import 'sma.dart';
 import 'types.dart';
+import 'util.dart';
 
 void _validateArg(String indicator, int value) {
   if (value < 0) {
@@ -15,10 +16,26 @@ void _validateArg(String indicator, int value) {
 }
 
 sealed class TA {
-  static void na() {}
-  static void nz() {}
-  static double change() {
-    return 0;
+  /// This function is the same as double.isNaN property and exists only to
+  /// match the tradingview api.
+  static bool na(double value) {
+    return value.isNaN;
+  }
+
+  /// Replaces NaN values with zeros (or given value) in a series.
+  /// https://www.tradingview.com/pine-script-reference/v5/#fun_nz
+  static num nz(num value, {num replaceWith = 0}) {
+    return value.isNaN ? replaceWith : value;
+  }
+
+  /// Compares the current [series] value to its value [length] bars ago and returns the difference.
+  static Series<double> change(Series<PriceDataDouble> series,
+      {int length = 1}) {
+    if (length < 1) {
+      throw ArgumentError(
+          'Length must be greater than 0 to calculate the change');
+    }
+    return Util.change(series, length: length);
   }
 
   static Series<PriceDataDouble> sma(Series<PriceDataDouble> series,
