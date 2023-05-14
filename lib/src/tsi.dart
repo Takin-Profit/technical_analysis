@@ -7,18 +7,9 @@ import 'dart:async';
 import 'ema.dart';
 import 'stream_zip/stream_zip.dart';
 import 'types.dart';
+import 'util.dart';
 
 typedef TsiResult = ({DateTime date, double value, double? signal});
-
-Stream<PriceDataDouble> changeWithDate(Stream<PriceDataDouble> series) async* {
-  PriceDataDouble? previous;
-  await for (var current in series) {
-    if (previous != null) {
-      yield (date: current.date, value: current.value - previous.value);
-    }
-    previous = current;
-  }
-}
 
 Stream<TsiResult> calcTSI(Stream<PriceDataDouble> series,
     {int longLength = 25, int shortLength = 13, int signalLength = 13}) async* {
@@ -28,7 +19,7 @@ Stream<TsiResult> calcTSI(Stream<PriceDataDouble> series,
     return calcEMA(calcEMA(stream, lookBack: long), lookBack: short);
   }
 
-  final changeStream = changeWithDate(series).asBroadcastStream();
+  final changeStream = Util.change(series).asBroadcastStream();
 
   final absChangeStream =
       changeStream.map((data) => (date: data.date, value: data.value.abs()));
