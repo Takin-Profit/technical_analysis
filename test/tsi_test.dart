@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// ignore_for_file: prefer-correct-identifier-length,double-literal-format
+
 import 'package:fpdart/fpdart.dart';
 import 'package:technical_indicators/technical_indicators.dart';
 import 'package:test/test.dart';
@@ -15,34 +17,39 @@ Future<void> main() async {
   group('TA.tsi tests', () {
     test('TSI Result should have correct length', () async {
       final res = TA.tsi(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('TSI Result should have correct length', () async {
       final res = TA.tsi(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('TSI Result should have correct length of NaN results', () async {
       final res = TA.tsi(quotes.closePrices, signalLen: 7);
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
       final nonNaN = result.filter((x) => !x.value.isNaN);
       expect(nonNaN.length, 465, reason: 'should be 465 non NaN results');
     });
     test('TSI Signal should have correct length of NaN results', () async {
       final res = TA.tsi(quotes.closePrices, signalLen: 7);
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
+      // we are ignoring no null assertion for testsing.
+      // ignore: avoid-non-null-assertion
       final nonNaN = result.filter((x) => !x.signal!.isNaN);
-      expect(nonNaN.length, 459,
-          reason: 'should be 459 non NaN signal results');
+      expect(
+        nonNaN.length,
+        459,
+        reason: 'should be 459 non NaN signal results',
+      );
     });
     test('TSI should return correct results', () async {
       final res = TA.tsi(quotes.closePrices, signalLen: 7);
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
 
       expect(
