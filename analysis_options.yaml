@@ -17,19 +17,20 @@ include: package:lint/strict.yaml
 
 linter:
   rules:
-    - camel_case_types
+    always_use_package_imports: false
+      - prefer_relative_imports
 
 analyzer:
   errors:
     avoid_classes_with_only_static_members: ignore
+
   exclude:
     - 'example/**'
     - 'build/**'
     - '**/*.g.dart'
     - '**/*.freezed.dart'
-
   plugins:
-    - dart_code_metric
+    - dart_code_metrics
 
 dart_code_metrics:
   extends:
@@ -37,6 +38,8 @@ dart_code_metrics:
   metrics-exclude:
     - test/**
   rules:
+    - prefer-static-class: false
+    - no-magic-number: false
 # exclude:
 #     - path/to/excluded/files/**
 

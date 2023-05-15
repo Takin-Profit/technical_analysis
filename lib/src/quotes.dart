@@ -25,15 +25,6 @@ typedef Quote = ({
   Decimal volume
 });
 
-typedef _QuoteD = ({
-  DateTime date,
-  double open,
-  double high,
-  double low,
-  double close,
-  double volume
-});
-
 extension Quotes on Quote {
   static Either<String, Quote> createQuote({
     required DateTime date,
@@ -86,7 +77,14 @@ extension Quotes on Quote {
         volume: Decimal.zero
       );
 
-  _QuoteD _toDoublePrecis() => (
+  ({
+    DateTime date,
+    double open,
+    double high,
+    double low,
+    double close,
+    double volume
+  }) _toDoublePrecis() => (
         date: date,
         open: open.toDouble(),
         close: close.toDouble(),
@@ -157,33 +155,6 @@ extension Quotes on Quote {
       CandlePart.oc2 => (date: date, value: oc2.toDecimal()),
       CandlePart.ohl3 => (date: date, value: ohl3.toDecimal()),
       CandlePart.ohlc4 => (date: date, value: ohl4.toDecimal()),
-    };
-  }
-
-  PriceDataDouble toPriceDataDouble({
-    CandlePart candlePart = CandlePart.close,
-  }) {
-    final data = _toDoublePrecis();
-    return switch (candlePart) {
-      CandlePart.open => (date: date, value: data.open),
-      CandlePart.high => (date: date, value: data.high),
-      CandlePart.low => (date: date, value: data.low),
-      CandlePart.close => (date: date, value: data.close),
-      CandlePart.volume => (date: date, value: data.volume),
-      CandlePart.hl2 => (date: date, value: data.high + data.low / 2.0),
-      CandlePart.hlc3 => (
-          date: date,
-          value: data.high + data.low + data.close / 3.0
-        ),
-      CandlePart.oc2 => (date: date, value: data.open + data.close / 2.0),
-      CandlePart.ohl3 => (
-          date: date,
-          value: data.open + data.high + data.low / 3.0
-        ),
-      CandlePart.ohlc4 => (
-          date: date,
-          value: data.open + data.high + data.low + data.close / 4.0
-        ),
     };
   }
 }

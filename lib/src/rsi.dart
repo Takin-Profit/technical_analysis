@@ -7,8 +7,10 @@ import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
 
-Series<PriceDataDouble> calcRSI(Series<PriceDataDouble> series,
-    {int lookBack = 14}) async* {
+Series<PriceDataDouble> calcRSI(
+  Series<PriceDataDouble> series, {
+  int lookBack = 14,
+}) async* {
   final gainBuffer = CircularBuffer<double>(lookBack);
   final lossBuffer = CircularBuffer<double>(lookBack);
 

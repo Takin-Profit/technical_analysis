@@ -41,6 +41,7 @@ sealed class TA {
         'Length must be greater than 0 to calculate the change',
       );
     }
+
     return Util.change(series, length: length);
   }
 
@@ -49,6 +50,7 @@ sealed class TA {
     int lookBack = 20,
   }) {
     _validateArg('SMA (Simple Moving Average)', lookBack, 1);
+
     return calcSMA(series, lookBack: lookBack);
   }
 
@@ -59,6 +61,7 @@ sealed class TA {
     int lookBack = 14,
   }) {
     _validateArg('RMA (Relative Moving Average)', lookBack, 1);
+
     return calcRMA(series, lookBack: lookBack);
   }
 
@@ -67,6 +70,7 @@ sealed class TA {
     int lookBack = 20,
   }) {
     _validateArg('EMA (Exponential Moving Average)', lookBack, 1);
+
     return calcEMA(series, lookBack: lookBack);
   }
 
@@ -75,6 +79,7 @@ sealed class TA {
     int lookBack = 14,
   }) {
     _validateArg('RSI (Relative Strength Index)', lookBack, 2);
+
     return calcRSI(series, lookBack: lookBack);
   }
 
@@ -87,6 +92,7 @@ sealed class TA {
     _validateArg('TSI (True Strength Index)', lookBack, 1);
     _validateArg('TSI (True Strength Index)', smoothLen, 1);
     _validateArg('TSI (True Strength Index)', signalLen, 1);
+
     return calcTSI(
       series,
       lookBack: lookBack,
