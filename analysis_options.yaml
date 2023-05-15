@@ -38,6 +38,7 @@ dart_code_metrics:
   metrics-exclude:
     - test/**
   rules:
+    - avoid-late-keyword: false
     - prefer-static-class: false
     - no-magic-number: false
 # exclude:
