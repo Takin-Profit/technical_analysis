@@ -78,22 +78,28 @@ extension _QuoteExt on Quote {
     CandlePart candlePart = CandlePart.close,
   }) {
     final data = _toDoublePrecis();
+
+    final high = data.high;
+    final low = data.low;
+    final close = data.close;
+    final open = data.open;
+
     return switch (candlePart) {
       CandlePart.open => (
           date: date,
-          value: data.open,
+          value: open,
         ),
       CandlePart.high => (
           date: date,
-          value: data.high,
+          value: high,
         ),
       CandlePart.low => (
           date: date,
-          value: data.low,
+          value: low,
         ),
       CandlePart.close => (
           date: date,
-          value: data.close,
+          value: close,
         ),
       CandlePart.volume => (
           date: date,
@@ -101,21 +107,12 @@ extension _QuoteExt on Quote {
         ),
       CandlePart.hl2 => (
           date: date,
-          value: data.high + data.low / 2.0,
+          value: high + low / 2.0,
         ),
-      CandlePart.hlc3 => (
-          date: date,
-          value: data.high + data.low + data.close / 3.0
-        ),
-      CandlePart.oc2 => (date: date, value: data.open + data.close / 2.0),
-      CandlePart.ohl3 => (
-          date: date,
-          value: data.open + data.high + data.low / 3.0
-        ),
-      CandlePart.ohlc4 => (
-          date: date,
-          value: data.open + data.high + data.low + data.close / 4.0
-        ),
+      CandlePart.hlc3 => (date: date, value: high + low + close / 3.0),
+      CandlePart.oc2 => (date: date, value: open + close / 2.0),
+      CandlePart.ohl3 => (date: date, value: open + high + low / 3.0),
+      CandlePart.ohlc4 => (date: date, value: open + high + low + close / 4.0),
     };
   }
 
@@ -123,56 +120,55 @@ extension _QuoteExt on Quote {
     CandlePart candlePart = CandlePart.close,
   }) {
     final data = _toDoublePrecis();
+
+    final high = data.high;
+    final low = data.low;
+    final close = data.close;
+    final open = data.open;
+    final volume = data.volume;
+
     return switch (candlePart) {
       CandlePart.open => (
           date: date,
-          value: data.open,
-          vol: data.volume,
+          value: open,
+          vol: volume,
         ),
       CandlePart.high => (
           date: date,
-          value: data.high,
-          vol: data.volume,
+          value: high,
+          vol: volume,
         ),
       CandlePart.low => (
           date: date,
-          value: data.low,
-          vol: data.volume,
+          value: low,
+          vol: volume,
         ),
       CandlePart.close => (
           date: date,
-          value: data.close,
-          vol: data.volume,
+          value: close,
+          vol: volume,
         ),
       CandlePart.volume => (
           date: date,
-          value: data.volume,
-          vol: data.volume,
+          value: volume,
+          vol: volume,
         ),
-      CandlePart.hl2 => (
-          date: date,
-          value: data.high + data.low / 2.0,
-          vol: data.volume
-        ),
+      CandlePart.hl2 => (date: date, value: high + low / 2.0, vol: volume),
       CandlePart.hlc3 => (
           date: date,
-          value: data.high + data.low + data.close / 3.0,
-          vol: data.volume
+          value: high + low + close / 3.0,
+          vol: volume
         ),
-      CandlePart.oc2 => (
-          date: date,
-          value: data.open + data.close / 2.0,
-          vol: data.volume
-        ),
+      CandlePart.oc2 => (date: date, value: open + close / 2.0, vol: volume),
       CandlePart.ohl3 => (
           date: date,
-          value: data.open + data.high + data.low / 3.0,
-          vol: data.volume
+          value: open + high + low / 3.0,
+          vol: volume
         ),
       CandlePart.ohlc4 => (
           date: date,
-          value: data.open + data.high + data.low + data.close / 4.0,
-          vol: data.volume
+          value: open + high + low + close / 4.0,
+          vol: volume
         ),
     };
   }
