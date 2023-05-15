@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// ignore_for_file: prefer-correct-identifier-length
+
 import 'package:technical_indicators/technical_indicators.dart';
 import 'package:test/test.dart';
 
@@ -14,7 +16,7 @@ Future<void> main() async {
   group('QuotesSeries tests', () {
     test('Stream should have correct length', () async {
       final res = quotes.closePrices;
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
