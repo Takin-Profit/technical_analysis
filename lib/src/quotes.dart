@@ -11,10 +11,7 @@ import 'dart:convert';
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 
-import 'types.dart';
 import 'util.dart';
-
-Decimal _d(String s) => Decimal.parse(s);
 
 typedef Quote = ({
   DateTime date,
@@ -77,22 +74,6 @@ extension Quotes on Quote {
         volume: Decimal.zero
       );
 
-  ({
-    DateTime date,
-    double open,
-    double high,
-    double low,
-    double close,
-    double volume
-  }) _toDoublePrecis() => (
-        date: date,
-        open: open.toDouble(),
-        close: close.toDouble(),
-        high: high.toDouble(),
-        low: low.toDouble(),
-        volume: volume.toDouble()
-      );
-
   bool get isEmpty => date == Util.maxDate;
 
   static Quote fromMap(Map<String, dynamic> map) {
@@ -136,25 +117,4 @@ extension Quotes on Quote {
   }
 
   String toJson() => json.encode(toMap());
-
-  PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
-    final hl2 = (high + low) / _d('2.0');
-    final hlc3 = (high + low + close) / _d('3.0');
-    final oc2 = (open + close) / _d('2.0');
-    final ohl3 = (open + high + low) / _d('3.0');
-    final ohl4 = (open + high + low + close) / _d('4.0');
-
-    return switch (candlePart) {
-      CandlePart.open => (date: date, value: open),
-      CandlePart.high => (date: date, value: high),
-      CandlePart.low => (date: date, value: low),
-      CandlePart.close => (date: date, value: close),
-      CandlePart.volume => (date: date, value: volume),
-      CandlePart.hl2 => (date: date, value: hl2.toDecimal()),
-      CandlePart.hlc3 => (date: date, value: hlc3.toDecimal()),
-      CandlePart.oc2 => (date: date, value: oc2.toDecimal()),
-      CandlePart.ohl3 => (date: date, value: ohl3.toDecimal()),
-      CandlePart.ohlc4 => (date: date, value: ohl4.toDecimal()),
-    };
-  }
 }

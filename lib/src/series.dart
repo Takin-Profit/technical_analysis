@@ -2,13 +2,18 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// ignore_for_file: prefer-match-file-name,prefer-moving-to-variable
+
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:technical_indicators/src/types.dart';
 
 import './replay_subject/replay_subject.dart';
 import 'quotes.dart';
 import 'util.dart';
+
+Decimal _d(String s) => Decimal.parse(s);
 
 typedef Series<T> = Stream<T>;
 
@@ -21,6 +26,7 @@ Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
     (q) {
       final foundDup = lastDate == q.date;
       lastDate = q.date;
+
       return foundDup;
     },
   );
@@ -74,6 +80,43 @@ extension QuoteStream on QuoteSeries {
 }
 
 extension _QuoteExt on Quote {
+  PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
+    final hl2 = (high + low) / _d('2.0');
+    final hlc3 = (high + low + close) / _d('3.0');
+    final oc2 = (open + close) / _d('2.0');
+    final ohl3 = (open + high + low) / _d('3.0');
+    final ohl4 = (open + high + low + close) / _d('4.0');
+
+    return switch (candlePart) {
+      CandlePart.open => (date: date, value: open),
+      CandlePart.high => (date: date, value: high),
+      CandlePart.low => (date: date, value: low),
+      CandlePart.close => (date: date, value: close),
+      CandlePart.volume => (date: date, value: volume),
+      CandlePart.hl2 => (date: date, value: hl2.toDecimal()),
+      CandlePart.hlc3 => (date: date, value: hlc3.toDecimal()),
+      CandlePart.oc2 => (date: date, value: oc2.toDecimal()),
+      CandlePart.ohl3 => (date: date, value: ohl3.toDecimal()),
+      CandlePart.ohlc4 => (date: date, value: ohl4.toDecimal()),
+    };
+  }
+
+  ({
+    DateTime date,
+    double open,
+    double high,
+    double low,
+    double close,
+    double volume
+  }) _toDoublePrecis() => (
+        date: date,
+        open: open.toDouble(),
+        close: close.toDouble(),
+        high: high.toDouble(),
+        low: low.toDouble(),
+        volume: volume.toDouble()
+      );
+
   PriceDataDouble toPriceDataDouble({
     CandlePart candlePart = CandlePart.close,
   }) {

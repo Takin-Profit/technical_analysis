@@ -27,7 +27,7 @@ Future<void> main() async {
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
-      expect(result.length, 488);
+      expect(result.length, 489);
     });
   });
 }

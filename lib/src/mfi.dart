@@ -7,27 +7,37 @@
 import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
-import 'util.dart';
 
 Series<PriceDataDouble> calcMFI(Series<({DateTime date, double value, double vol})> series, {int lookBack = 14})
  async* {
   final buffer = CircularBuffer<({DateTime date, double value, double vol})>(lookBack);
+  final changeBuffer = CircularBuffer<PriceDataDouble>(lookBack);
 
-  await for (final data in series) {
+  ({DateTime date, double value, double vol})? previous;
+
+  await for (var data in series) {
     buffer.add(data);
+
+    if (previous != null) {
+      final changeValue = (date: data.date, value: data.value - previous.value);
+      changeBuffer.add(changeValue);
+    }
+    previous = data;
 
     if (buffer.isFilled) {
       double upper = 0;
       double lower = 0;
 
-      final changeStream = Util.change(series.map((event) => (date: event.date, value:event.value)), length: lookBack);
-      await for (final changeData in changeStream) {
-
-        upper += changeData.value <= 0 ? 0 : changeData.value * data.vol;
-        lower += changeData.value >= 0 ? 0 : changeData.value * data.vol;
+      for (var changeData in changeBuffer) {
+        double volume = buffer.firstWhere((element) => element.date == changeData.date).vol;
+        if (changeData.value > 0) {
+          upper += changeData.value * volume;
+        } else {
+          lower += changeData.value.abs() * volume;
+        }
       }
 
-      final double mfi = 100 - (100 / (1 + upper / lower));
+      double mfi = 100 - (100 / (1 + upper / lower));
 
       yield (date: data.date, value: mfi);
     } else {
