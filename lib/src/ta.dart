@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 import 'ema.dart';
+import 'mfi.dart';
 import 'rma.dart';
 import 'rsi.dart';
 import 'series.dart';
@@ -18,6 +19,8 @@ void _validateArg(String indicator, int value, int minValue) {
   }
 }
 
+//
+// ignore: prefer-correct-type-name
 sealed class TA {
   /// This function is the same as double.isNaN property and exists only to
   /// match the tradingview api.
@@ -99,5 +102,11 @@ sealed class TA {
       smoothLen: smoothLen,
       signalLen: signalLen,
     );
+  }
+
+  static Series<PriceDataDouble> mfi(Series<({DateTime date, double value, double vol})> series, {int lookBack = 14}) {
+    _validateArg('MFI (Money Flow Index)', lookBack, 1);
+
+    return calcMFI(series, lookBack: lookBack);
   }
 }
