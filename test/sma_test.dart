@@ -1,6 +1,9 @@
 // Copyright 2023 Takin Profit. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+
+// ignore_for_file: prefer-correct-identifier-length,double-literal-format
+
 import 'package:technical_indicators/technical_indicators.dart';
 import 'package:test/test.dart';
 
@@ -13,13 +16,13 @@ Future<void> main() async {
   group('TA.sma tests', () {
     test('Sma Result should have correct length', () async {
       final res = TA.sma(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('Should return the correct number of results without nan', () async {
       final res = TA.sma(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
       expect(result.length, 483);
@@ -27,7 +30,7 @@ Future<void> main() async {
 
     test('Should return the correct calculation results', () async {
       final res = TA.sma(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final results = await res.toList();
 
       final result18 = results[18];
@@ -36,7 +39,6 @@ Future<void> main() async {
       final result149 = results[149];
       final result249 = results[249];
       final result501 = results[501];
-      quotes.close();
 
       expect(result18.value.isNaN, true);
       expect(result19.value.toPrecision(4), 214.5250);
@@ -47,7 +49,7 @@ Future<void> main() async {
     });
     test('CandlePart.open tests', () async {
       final res = TA.sma(quotes.openPrices);
-      quotes.close();
+      final _ = await quotes.close();
       final results = await res.toList();
 
       final result18 = results[18];
@@ -67,7 +69,7 @@ Future<void> main() async {
 
     test('CandlePart.volume tests', () async {
       final res = TA.sma(quotes.volume);
-      quotes.close();
+      final _ = await quotes.close();
       final results = await res.toList();
 
       expect(results.length, 502, reason: 'should be 502 total results');
