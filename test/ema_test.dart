@@ -1,6 +1,9 @@
 // Copyright 2023 Takin Profit. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+
+// ignore_for_file: prefer-correct-identifier-length
+
 import 'package:technical_indicators/technical_indicators.dart';
 import 'package:test/test.dart';
 
@@ -13,13 +16,13 @@ Future<void> main() async {
   group('TA.ema tests', () {
     test('Ema Result should have correct length', () async {
       final res = TA.ema(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('Should return the correct number of results without nan', () async {
       final res = TA.ema(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
       expect(result.length, 483);
@@ -27,16 +30,14 @@ Future<void> main() async {
 
     test('Should return the correct calculation results', () async {
       final res = TA.ema(quotes.closePrices);
-      quotes.close();
+      final _ = await quotes.close();
       final results = await res.toList();
 
-      final result0 = results[0];
+      final result0 = results.first;
       final result6 = results[6];
       final result29 = results[29];
       final result249 = results[249];
       final result501 = results[501];
-
-      quotes.close();
 
       expect(result0.value.isNaN, true);
       expect(result6.value.isNaN, true);
