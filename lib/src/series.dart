@@ -79,7 +79,7 @@ extension QuoteStream on QuoteSeries {
       values.where((q) => q.date == quote.date).isEmpty;
 }
 
-extension _QuoteExt on Quote {
+extension QuoteExt on Quote {
   PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
     final hl2 = (high + low) / _d('2.0');
     final hlc3 = (high + low + close) / _d('3.0');
@@ -150,12 +150,12 @@ extension _QuoteExt on Quote {
         ),
       CandlePart.hl2 => (
           date: date,
-          value: high + low / 2.0,
+          value: high + low / 2,
         ),
-      CandlePart.hlc3 => (date: date, value: high + low + close / 3.0),
-      CandlePart.oc2 => (date: date, value: open + close / 2.0),
-      CandlePart.ohl3 => (date: date, value: open + high + low / 3.0),
-      CandlePart.ohlc4 => (date: date, value: open + high + low + close / 4.0),
+      CandlePart.hlc3 => (date: date, value: high + low + close / 3),
+      CandlePart.oc2 => (date: date, value: open + close / 2),
+      CandlePart.ohl3 => (date: date, value: open + high + low / 3),
+      CandlePart.ohlc4 => (date: date, value: open + high + low + close / 4),
     };
   }
 
@@ -196,21 +196,21 @@ extension _QuoteExt on Quote {
           value: volume,
           vol: volume,
         ),
-      CandlePart.hl2 => (date: date, value: high + low / 2.0, vol: volume),
+      CandlePart.hl2 => (date: date, value: high + low / 2, vol: volume),
       CandlePart.hlc3 => (
           date: date,
-          value: high + low + close / 3.0,
+          value: high + low + close / 3,
           vol: volume
         ),
-      CandlePart.oc2 => (date: date, value: open + close / 2.0, vol: volume),
+      CandlePart.oc2 => (date: date, value: open + close / 2, vol: volume),
       CandlePart.ohl3 => (
           date: date,
-          value: open + high + low / 3.0,
+          value: open + high + low / 3,
           vol: volume
         ),
       CandlePart.ohlc4 => (
           date: date,
-          value: open + high + low + close / 4.0,
+          value: open + high + low + close / 4,
           vol: volume
         ),
     };

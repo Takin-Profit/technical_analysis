@@ -52,7 +52,7 @@ Future<void> main() async {
         reason: 'should equal 42.0773',
       );
     });
-    test('Should throw exception with small lookBack < 2', () async {
+    test('Should throw exception with too small lookBack < 2', () async {
       final _ = await quotes.close();
 
       expect(

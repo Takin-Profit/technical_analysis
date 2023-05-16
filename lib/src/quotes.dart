@@ -36,11 +36,11 @@ extension Quotes on Quote {
       ("high", high),
       ("low", low),
       ("close", close),
-      ("volume", volume)
+      ("volume", volume),
     ];
     final errMsg = [
       for (final entry in vals)
-        if (entry.$2.toDouble() < 0) '${entry.$1} = ${entry.$2}'
+        if (entry.$2.toDouble() < 0) '${entry.$1} = ${entry.$2}',
     ].join(', ');
 
     return switch ((errMsg, date)) {

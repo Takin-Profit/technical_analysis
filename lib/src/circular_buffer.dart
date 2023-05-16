@@ -61,6 +61,7 @@ class CircularBuffer<T> with ListMixin<T> {
       // The internal buffer is not at its maximum size.  Grow it.
       assert(_start == 0, 'Internal buffer grown from a bad state');
       _buf.add(element);
+
       return;
     }
 

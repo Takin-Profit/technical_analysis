@@ -4,44 +4,59 @@
 
 // ignore_for_file: prefer-moving-to-variable,no-magic-number
 
+import 'package:collection/collection.dart';
+
 import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
 
-Series<PriceDataDouble> calcMFI(Series<({DateTime date, double value, double vol})> series, {int lookBack = 14})
- async* {
-  final buffer = CircularBuffer<({DateTime date, double value, double vol})>(lookBack);
-  final changeBuffer = CircularBuffer<PriceDataDouble>(lookBack);
+typedef PriceDataTriple = ({DateTime date, double value, double vol});
 
-  ({DateTime date, double value, double vol})? previous;
+Series<PriceDataDouble> calcMFI(
+  Series<PriceDataTriple> series, {
+  int lookBack = 14,
+}) async* {
+  final upperBuffer = CircularBuffer<double>(lookBack);
+  final lowerBuffer = CircularBuffer<double>(lookBack);
+  PriceDataTriple? prev;
 
-  await for (var data in series) {
-    buffer.add(data);
+  await for (final current in series) {
+    final change = (prev == null) || prev.value == current.value
+        ? 0.0
+        : current.value - prev.value;
+    final mf = current.vol * current.value; // Raw Money Flow
 
-    if (previous != null) {
-      final changeValue = (date: data.date, value: data.value - previous.value);
-      changeBuffer.add(changeValue);
+    double upper, lower;
+    if (change > 0) {
+      upper = mf;
+      lower = 0.0;
+    } else if (change < 0) {
+      upper = 0.0;
+      lower = mf;
+    } else {
+      upper = 0.0;
+      lower = 0.0;
     }
-    previous = data;
 
-    if (buffer.isFilled) {
-      double upper = 0;
-      double lower = 0;
+    upperBuffer.add(upper);
+    lowerBuffer.add(lower);
 
-      for (var changeData in changeBuffer) {
-        double volume = buffer.firstWhere((element) => element.date == changeData.date).vol;
-        if (changeData.value > 0) {
-          upper += changeData.value * volume;
-        } else {
-          lower += changeData.value.abs() * volume;
-        }
+    if (upperBuffer.isFilled && lowerBuffer.isFilled) {
+      final lowerSum = lowerBuffer.sum;
+
+      double mfi;
+      if (lowerSum != 0) {
+        double mfRatio = upperBuffer.sum / lowerSum;
+        mfi = 100 - (100 / (mfRatio + 1));
+      } else {
+        mfi = 100;
       }
 
-      double mfi = 100 - (100 / (1 + upper / lower));
-
-      yield (date: data.date, value: mfi);
+      yield (date: current.date, value: mfi);
     } else {
-      yield (date: data.date, value: double.nan);
+      yield (date: current.date, value: double.nan);
     }
+
+    prev = current;
   }
 }

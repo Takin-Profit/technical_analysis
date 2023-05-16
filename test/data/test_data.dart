@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// ignore_for_file: avoid-top-level-members-in-tests
+
 import "dart:io";
 
 import "package:decimal/decimal.dart";
@@ -16,8 +18,9 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
       DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
 
   final row = data.split(",");
-  final dt =
-      useTimeStamp ? fromTimeStamp(int.parse(row[0])) : DateTime.parse(row[0]);
+  final dt = useTimeStamp
+      ? fromTimeStamp(int.parse(row.first))
+      : DateTime.parse(row.first);
   final open = Decimal.parse(double.parse(row[1]).toString());
   final high = Decimal.parse(double.parse(row[2]).toString());
   final low = Decimal.parse(double.parse(row[3]).toString());
@@ -38,6 +41,7 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
 Future<List<Quote>> getDefault({int days = 502}) async {
   final file =
       await File(p.absolute("test", "data", "default.csv")).readAsString();
+
   return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
 }
 
@@ -55,5 +59,13 @@ List<Quote> getZeroes({int days = 200}) {
 Future<List<Quote>> getEthRMA({int days = 500}) async {
   final file =
       await File(p.absolute("test", "data", "eth_rma.csv")).readAsString();
+
+  return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
+}
+
+Future<List<Quote>> getBtcMFI({int days = 820}) async {
+  final file =
+      await File(p.absolute("test", "data", "btc_mfi.csv")).readAsString();
+
   return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
 }

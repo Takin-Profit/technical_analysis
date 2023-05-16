@@ -4,8 +4,6 @@
  * license that can be found in the LICENSE file.
  */
 
-// ignore_for_file: prefer-correct-identifier-length
-
 import 'package:collection/collection.dart';
 import 'package:technical_indicators/technical_indicators.dart';
 import 'package:test/test.dart';
@@ -18,7 +16,7 @@ Future<void> main() async {
   setUp(() => {
         quotes = createSeries(data).getOrElse((l) => emptySeries),
       });
-  group('TA.mfi tests', () {
+  group('Series tests', () {
     test('MFI Result should have correct length', () async {
       final res = TA.mfi(quotes.hlc3WithVol);
       final _ = await quotes.close();
