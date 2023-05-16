@@ -104,4 +104,104 @@ Future<void> main() async {
       expect(results.last.date, equals(expected.last.date));
     });
   });
+  group('TA.lowest tests', () {
+    test('lowest function', () async {
+      final testData = Stream.fromIterable([
+        (date: DateTime(2022, 1, 1), value: 10.0),
+        (date: DateTime(2022, 1, 2), value: 11.0),
+        (date: DateTime(2022, 1, 3), value: 12.0),
+        (date: DateTime(2022, 1, 4), value: 13.0),
+        (date: DateTime(2022, 1, 5), value: 9.0),
+        (date: DateTime(2022, 1, 6), value: 8.0),
+        (date: DateTime(2022, 1, 7), value: 14.0),
+      ]);
+      final results = TA.lowest(testData, length: 3);
+      final result = await results.toList();
+
+      expect(result.first.value, isNaN);
+      expect(result[1].value, isNaN);
+      expect(result[2].value, 10.0, reason: 'should be 10.0');
+      expect(result[3].value, 11.0, reason: 'should be 11.0');
+      expect(result[4].value, 9.0, reason: 'should be 9.0');
+      expect(result[5].value, 8.0, reason: 'should be 8.0');
+      expect(result[6].value, 8.0, reason: 'should be 8.0');
+    });
+    test('lowest function returns correct values', () async {
+      final testData = Stream.fromIterable([
+        (date: DateTime(2022, 1, 1), value: 10.0),
+        (date: DateTime(2022, 1, 2), value: 11.0),
+        (date: DateTime(2022, 1, 3), value: 12.0),
+        (date: DateTime(2022, 1, 4), value: 13.0),
+        (date: DateTime(2022, 1, 5), value: 9.0),
+        (date: DateTime(2022, 1, 6), value: 8.0),
+        (date: DateTime(2022, 1, 7), value: 14.0),
+      ]);
+
+      final result = await TA.lowest(testData, length: 3).toList();
+
+      expect(result.first.value.isNaN, true);
+      expect(result[1].value.isNaN, true);
+      expect(result[2].value, 10.0);
+      expect(result[3].value, 11.0);
+      expect(result[4].value, 9.0);
+      expect(result[5].value, 8.0);
+      expect(result[6].value, 8.0);
+    });
+
+    test('lowest function with larger lookBack period', () async {
+      final testData = Stream.fromIterable([
+        (date: DateTime(2022, 1, 1), value: 10.0),
+        (date: DateTime(2022, 1, 2), value: 11.0),
+        (date: DateTime(2022, 1, 3), value: 12.0),
+        (date: DateTime(2022, 1, 4), value: 13.0),
+        (date: DateTime(2022, 1, 5), value: 9.0),
+        (date: DateTime(2022, 1, 6), value: 8.0),
+        (date: DateTime(2022, 1, 7), value: 14.0),
+      ]);
+
+      final result = await TA.lowest(testData, length: 5).toList();
+
+      expect(result.first.value.isNaN, true);
+      expect(result[1].value.isNaN, true);
+      expect(result[2].value.isNaN, true);
+      expect(result[3].value.isNaN, true);
+      expect(result[4].value, 9.0);
+      expect(result[5].value, 8.0);
+      expect(result[6].value, 8.0);
+    });
+    test('lowest function with all equal values', () async {
+      final testData = Stream.fromIterable([
+        (date: DateTime(2022, 1, 1), value: 10.0),
+        (date: DateTime(2022, 1, 2), value: 10.0),
+        (date: DateTime(2022, 1, 3), value: 10.0),
+        (date: DateTime(2022, 1, 4), value: 10.0),
+        (date: DateTime(2022, 1, 5), value: 10.0),
+      ]);
+
+      final result = await TA.lowest(testData, length: 3).toList();
+
+      expect(result.first.value.isNaN, true);
+      expect(result[1].value.isNaN, true);
+      expect(result[2].value, 10.0);
+      expect(result[3].value, 10.0);
+      expect(result[4].value, 10.0);
+    });
+    test('lowest function with negative values', () async {
+      final testData = Stream.fromIterable([
+        (date: DateTime(2022, 1, 1), value: -10.0),
+        (date: DateTime(2022, 1, 2), value: -9.0),
+        (date: DateTime(2022, 1, 3), value: -8.0),
+        (date: DateTime(2022, 1, 4), value: -7.0),
+        (date: DateTime(2022, 1, 5), value: -6.0),
+      ]);
+
+      final result = await TA.lowest(testData, length: 3).toList();
+
+      expect(result.first.value.isNaN, true);
+      expect(result[1].value.isNaN, true);
+      expect(result[2].value, -10.0);
+      expect(result[3].value, -9.0);
+      expect(result[4].value, -8.0);
+    });
+  });
 }
