@@ -29,6 +29,27 @@ sealed class Util {
     }
   }
 
+  static Series<PriceDataDouble> highest(
+    Series<PriceDataDouble> series, {
+    int length = 1,
+  }) async* {
+    final buffer = CircularBuffer<PriceDataDouble>(length);
+
+    await for (final current in series) {
+      buffer.add(current);
+
+      if (buffer.isFilled) {
+        final maxVal = buffer.fold(
+          buffer.first.value,
+          (max, item) => item.value > max ? item.value : max,
+        );
+        yield (date: current.date, value: maxVal);
+      } else {
+        yield (date: current.date, value: double.nan);
+      }
+    }
+  }
+
   /// Replaces NaN values with zeros (or given value) in a series.
   /// https://www.tradingview.com/pine-script-reference/v5/#fun_nz
   static double nz(double value, {double replaceWith = 0}) {
