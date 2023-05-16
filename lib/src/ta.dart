@@ -10,6 +10,7 @@ import 'sma.dart';
 import 'tsi.dart';
 import 'types.dart';
 import 'util.dart';
+import 'wpr.dart';
 
 void _validateArg(String indicator, int value, int minValue) {
   if (value < minValue) {
@@ -134,5 +135,11 @@ sealed class TA {
     _validateArg('MFI (Money Flow Index)', lookBack, 1);
 
     return calcMFI(series, lookBack: lookBack);
+  }
+
+    static Series<PriceDataDouble> wpr(Series<PriceDataDouble> series, {int lookBack = 14}) {
+    _validateArg('WPR (Williams Percent Range)', lookBack, 1);
+
+    return calcWPR(series, lookBack: lookBack);
   }
 }
