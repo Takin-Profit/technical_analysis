@@ -71,5 +71,58 @@ Future<void> main() async {
         startsWith('Quotes with duplicate dates found ${date.toString()}'),
       );
     });
+    test('createSeries respects maxSize parameter', () async {
+      final quotes = List.generate(
+        20,
+        (index) => (
+          date: DateTime.now().add(Duration(days: index)),
+          open: Decimal.fromInt(1),
+          high: Decimal.fromInt(2),
+          low: Decimal.fromInt(1),
+          close: Decimal.fromInt(2),
+          volume: Decimal.fromInt(100),
+        ),
+      );
+      final maxSize = 10;
+      final result = createSeries(quotes, maxSize: maxSize);
+
+      expect(result.isRight(), equals(true));
+      result.fold((l) => null, (r) async {
+        expect(await r.length, equals(maxSize));
+      });
+    });
+
+    test('createSeries calls onListen and onCancel callbacks', () {
+      var onListenCalled = false;
+      var onCancelCalled = false;
+      void onListen() {
+        onListenCalled = true;
+      }
+
+      void onCancel() {
+        onCancelCalled = true;
+      }
+
+      final quotes = [
+        (
+          date: DateTime.now(),
+          open: Decimal.fromInt(1),
+          high: Decimal.fromInt(2),
+          low: Decimal.fromInt(1),
+          close: Decimal.fromInt(2),
+          volume: Decimal.fromInt(100),
+        ),
+      ];
+      final result =
+          createSeries(quotes, onListen: onListen, onCancel: onCancel);
+
+      expect(result.isRight(), equals(true));
+      result.fold((l) => null, (r) {
+        final subscription = r.listen((_) {});
+        expect(onListenCalled, equals(true));
+        subscription.cancel();
+        expect(onCancelCalled, equals(true));
+      });
+    });
   });
 }
