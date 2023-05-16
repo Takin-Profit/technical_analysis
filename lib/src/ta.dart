@@ -48,6 +48,32 @@ sealed class TA {
     return Util.change(series, length: length);
   }
 
+  static Series<PriceDataDouble> highest(
+    Series<PriceDataDouble> series, {
+    int length = 1,
+  }) {
+    if (length < 1) {
+      throw ArgumentError(
+        'Length must be greater than 0 to find the highest value',
+      );
+    }
+
+    return Util.highest(series, length: length);
+  }
+
+    static Series<PriceDataDouble> lowest(
+    Series<PriceDataDouble> series, {
+    int length = 1,
+  }) {
+    if (length < 1) {
+      throw ArgumentError(
+        'Length must be greater than 0 to find the lowest value',
+      );
+    }
+
+    return Util.lowest(series, length: length);
+  }
+
   static Series<PriceDataDouble> sma(
     Series<PriceDataDouble> series, {
     int lookBack = 20,

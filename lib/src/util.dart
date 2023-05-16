@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import 'dart:math' as math;
+
 import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
@@ -39,11 +41,27 @@ sealed class Util {
       buffer.add(current);
 
       if (buffer.isFilled) {
-        final maxVal = buffer.fold(
-          buffer.first.value,
-          (max, item) => item.value > max ? item.value : max,
-        );
+        final maxVal = buffer.map((x) => x.value).reduce(math.max);
         yield (date: current.date, value: maxVal);
+      } else {
+        yield (date: current.date, value: double.nan);
+      }
+    }
+  }
+
+  static Series<PriceDataDouble> lowest(
+    Series<PriceDataDouble> series, {
+    int length = 1,
+  }) async* {
+    final buffer = CircularBuffer<PriceDataDouble>(length);
+
+    await for (final current in series) {
+      buffer.add(current);
+
+      if (buffer.length >= length) {
+        final lowestValue = buffer.map((e) => e.value).reduce(math.min);
+
+        yield (date: current.date, value: lowestValue);
       } else {
         yield (date: current.date, value: double.nan);
       }

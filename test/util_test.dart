@@ -51,4 +51,57 @@ Future<void> main() async {
       );
     });
   });
+  group('TA.highest tests', () {
+    test('Highest function returns correct results', () async {
+      final inputSeries = Stream.fromIterable([
+        (date: DateTime(2023, 1, 1), value: 1.0),
+        (date: DateTime(2023, 1, 2), value: 2.0),
+        (date: DateTime(2023, 1, 3), value: 3.0),
+        (date: DateTime(2023, 1, 4), value: 2.0),
+        (date: DateTime(2023, 1, 5), value: 1.0),
+        (date: DateTime(2023, 1, 6), value: 4.0),
+        (date: DateTime(2023, 1, 7), value: 3.0),
+      ]);
+
+      final results = await TA.highest(inputSeries, length: 3).toList();
+
+      final expected = [
+        (date: DateTime(2023, 1, 1), value: double.nan),
+        (date: DateTime(2023, 1, 2), value: double.nan),
+        (date: DateTime(2023, 1, 3), value: 3.0),
+        (date: DateTime(2023, 1, 4), value: 3.0),
+        (date: DateTime(2023, 1, 5), value: 3.0),
+        (date: DateTime(2023, 1, 6), value: 4.0),
+        (date: DateTime(2023, 1, 7), value: 4.0),
+      ];
+
+      expect(results.first.date, equals(expected.first.date));
+    });
+
+    test('Highest function handles empty series', () async {
+      final inputSeries = Stream<PriceDataDouble>.empty();
+
+      final results = await TA.highest(inputSeries, length: 3).toList();
+
+      final expected = [];
+
+      expect(results, equals(expected));
+    });
+
+    test('Highest function handles series shorter than length', () async {
+      final inputSeries = Stream.fromIterable([
+        (date: DateTime(2023, 1, 1), value: 1.0),
+        (date: DateTime(2023, 1, 2), value: 2.0),
+      ]);
+
+      final results = await TA.highest(inputSeries, length: 3).toList();
+
+      final expected = [
+        (date: DateTime(2023, 1, 1), value: double.nan),
+        (date: DateTime(2023, 1, 2), value: double.nan),
+      ];
+
+      expect(results.last.date, equals(expected.last.date));
+    });
+  });
 }
