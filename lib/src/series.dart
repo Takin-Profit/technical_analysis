@@ -184,11 +184,20 @@ extension QuoteExt on Quote {
         ),
       CandlePart.hlc3 => (
           date: date,
-          value: toPriceData(candlePart: CandlePart.hlc3).value.toDouble()
+          value: toPriceData(candlePart: CandlePart.hlc3).value.toDouble(),
         ),
-      CandlePart.oc2 => (date: date, value: open + close / 2),
-      CandlePart.ohl3 => (date: date, value: open + high + low / 3),
-      CandlePart.ohlc4 => (date: date, value: open + high + low + close / 4),
+      CandlePart.oc2 => (
+          date: date,
+          value: toPriceData(candlePart: CandlePart.oc2).value.toDouble(),
+        ),
+      CandlePart.ohl3 => (
+          date: date,
+          value: toPriceData(candlePart: CandlePart.ohl3).value.toDouble(),
+        ),
+      CandlePart.ohlc4 => (
+          date: date,
+          value: toPriceData(candlePart: CandlePart.ohlc4).value.toDouble(),
+        ),
     };
   }
 
@@ -229,13 +238,21 @@ extension QuoteExt on Quote {
           value: volume,
           vol: volume,
         ),
-      CandlePart.hl2 => (date: date, value: high + low / 2, vol: volume),
+      CandlePart.hl2 => (
+          date: date,
+          value: toPriceDataDouble(candlePart: CandlePart.hl2).value,
+          vol: volume
+        ),
       CandlePart.hlc3 => (
           date: date,
           value: toPriceDataDouble(candlePart: CandlePart.hlc3).value,
           vol: volume
         ),
-      CandlePart.oc2 => (date: date, value: open + close / 2, vol: volume),
+      CandlePart.oc2 => (
+          date: date,
+          value: toPriceDataDouble(candlePart: CandlePart.oc2).value,
+          vol: volume
+        ),
       CandlePart.ohl3 => (
           date: date,
           value: toPriceDataDouble(candlePart: CandlePart.ohl3).value,
@@ -243,7 +260,7 @@ extension QuoteExt on Quote {
         ),
       CandlePart.ohlc4 => (
           date: date,
-          value: open + high + low + close / 4,
+          value: toPriceDataDouble(candlePart: CandlePart.ohlc4).value,
           vol: volume
         ),
     };
