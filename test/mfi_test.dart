@@ -55,7 +55,27 @@ Future<void> main() async {
       expect(
         result[439].value.toPrecision(4),
         69.0622,
-        reason: 'should be close to 69.0622 when price = ${data[439].close}',
+        reason: 'should be 69.0622',
+      );
+      expect(
+        result[501].value.toPrecision(4),
+        39.9494,
+        reason: 'should be 39.9494}',
+      );
+      expect(
+        result[473].value.toPrecision(4),
+        63.2747,
+        reason: 'should be 63.2746',
+      );
+      expect(
+        result[177].value.toPrecision(4),
+        74.7191,
+        reason: 'should be 74.7191',
+      );
+      expect(
+        result[325].value.toPrecision(4),
+        56.2805,
+        reason: 'should be 56.2805',
       );
     });
   });
