@@ -19,7 +19,13 @@ typedef Series<T> = Stream<T>;
 
 typedef QuoteSeries = ReplaySubject<Quote>;
 
-Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
+Either<String, QuoteSeries> createSeries(
+  Iterable<Quote> quotes, {
+  int? maxSize,
+  void Function()? onListen,
+  void Function()? onCancel,
+  bool sync = false,
+}) {
   final sorted = quotes.sorted((a, b) => a.date.compareTo(b.date));
   var lastDate = Util.minDate;
   final dups = sorted.where(
@@ -32,7 +38,12 @@ Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
   );
 
   if (dups.isEmpty) {
-    final subj = ReplaySubject<Quote>();
+    final subj = ReplaySubject<Quote>(
+      maxSize: maxSize,
+      onListen: onListen,
+      onCancel: onCancel,
+      sync: sync,
+    );
     for (final q in sorted) {
       subj.add(q);
     }
@@ -46,26 +57,56 @@ Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
 }
 
 extension QuoteStream on QuoteSeries {
-  Series<PriceDataDouble> get openPrices => stream.map(
+  Series<PriceDataDouble> get open => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.open,
         ),
       );
 
-  Series<PriceDataDouble> get highPrices => stream.map(
+  Series<({DateTime date, double value, double vol})> get openWithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
+          candlePart: CandlePart.open,
+        ),
+      );
+
+  Series<PriceDataDouble> get high => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.high,
         ),
       );
 
-  Series<PriceDataDouble> get lowPrices => stream.map(
+  Series<({DateTime date, double value, double vol})> get highWithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
+          candlePart: CandlePart.high,
+        ),
+      );
+
+  Series<PriceDataDouble> get low => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.low,
         ),
       );
 
-  Series<PriceDataDouble> get closePrices => stream.map(
+  Series<({DateTime date, double value, double vol})> get lowWithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
+          candlePart: CandlePart.low,
+        ),
+      );
+
+  /// This getter is named closes so that it does not clash with the
+  /// underlying stream.close method.
+  Series<PriceDataDouble> get closes => stream.map(
         (event) => event.toPriceDataDouble(),
+      );
+
+  Series<({DateTime date, double value, double vol})> get closeWithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
+          candlePart: CandlePart.close,
+        ),
       );
 
   Series<PriceDataDouble> get volume => stream.map(
@@ -80,8 +121,22 @@ extension QuoteStream on QuoteSeries {
         ),
       );
 
+  Series<({DateTime date, double value, double vol})> get hl2WithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
+          candlePart: CandlePart.hl2,
+        ),
+      );
+
   Series<PriceDataDouble> get hlc3 => stream.map(
         (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.hlc3,
+        ),
+      );
+
+  Series<({DateTime date, double value, double vol})> get hlc3WithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
           candlePart: CandlePart.hlc3,
         ),
       );
@@ -92,8 +147,22 @@ extension QuoteStream on QuoteSeries {
         ),
       );
 
+  Series<({DateTime date, double value, double vol})> get oc2WithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
+          candlePart: CandlePart.oc2,
+        ),
+      );
+
   Series<PriceDataDouble> get ohl3 => stream.map(
         (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.ohl3,
+        ),
+      );
+
+  Series<({DateTime date, double value, double vol})> get ohl3WithVol =>
+      stream.map(
+        (event) => event.toPriceDataDoubleWithVol(
           candlePart: CandlePart.ohl3,
         ),
       );
@@ -104,10 +173,10 @@ extension QuoteStream on QuoteSeries {
         ),
       );
 
-  Series<({DateTime date, double value, double vol})> get hlc3WithVol =>
+  Series<({DateTime date, double value, double vol})> get ohlc4WithVol =>
       stream.map(
         (event) => event.toPriceDataDoubleWithVol(
-          candlePart: CandlePart.hlc3,
+          candlePart: CandlePart.ohlc4,
         ),
       );
 

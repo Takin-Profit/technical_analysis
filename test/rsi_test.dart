@@ -15,13 +15,13 @@ Future<void> main() async {
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.rsi tests', () {
     test('RSI Result should have correct length', () async {
-      final res = TA.rsi(quotes.closePrices);
+      final res = TA.rsi(quotes.closes);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.rsi(quotes.closePrices);
+      final res = TA.rsi(quotes.closes);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
@@ -29,7 +29,7 @@ Future<void> main() async {
     });
 
     test('Should return the correct calculation values', () async {
-      final res = TA.rsi(quotes.closePrices);
+      final res = TA.rsi(quotes.closes);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.toList();
@@ -56,12 +56,12 @@ Future<void> main() async {
       final _ = await quotes.close();
 
       expect(
-        () => TA.rsi(quotes.closePrices, lookBack: 1),
+        () => TA.rsi(quotes.closes, lookBack: 1),
         throwsArgumentError,
         reason: 'should throw',
       );
       expect(
-        () => TA.rsi(quotes.closePrices, lookBack: 0),
+        () => TA.rsi(quotes.closes, lookBack: 0),
         throwsArgumentError,
         reason: 'should throw',
       );

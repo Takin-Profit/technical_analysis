@@ -1,6 +1,7 @@
 // Copyright 2023 Takin Profit. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+// ignore_for_file: prefer-correct-identifier-length,double-literal-format
 
 import 'package:technical_indicators/technical_indicators.dart';
 import 'package:test/test.dart';
@@ -13,8 +14,8 @@ Future<void> main() async {
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.change tests', () {
     test('should return correct result for 10 bars ago', () async {
-      final res = TA.change(quotes.closePrices, length: 10);
-      quotes.close();
+      final res = TA.change(quotes.closes, length: 10);
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(
         result.last.value.toPrecision(5),
@@ -23,8 +24,8 @@ Future<void> main() async {
       );
     });
     test('should return correct result for 50 bars ago', () async {
-      final res = TA.change(quotes.closePrices, length: 50);
-      quotes.close();
+      final res = TA.change(quotes.closes, length: 50);
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(
         result.last.value.toPrecision(5),
@@ -33,8 +34,8 @@ Future<void> main() async {
       );
     });
     test('should return correct result for 316 bars ago', () async {
-      final res = TA.change(quotes.closePrices, length: 316);
-      quotes.close();
+      final res = TA.change(quotes.closes, length: 316);
+      final _ = await quotes.close();
       final result = await res.toList();
       expect(
         result.last.value.toPrecision(5),
@@ -42,9 +43,9 @@ Future<void> main() async {
         reason: 'should be 5.68000',
       );
     });
-    test('should should throw exception for invalid length', () async {
+    test('should should throw exception for invalid length', () {
       expect(
-        () => TA.change(quotes.closePrices, length: 0),
+        () => TA.change(quotes.closes, length: 0),
         throwsArgumentError,
         reason: 'should throw argumentError',
       );

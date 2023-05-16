@@ -15,13 +15,13 @@ Future<void> main() async {
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.ema tests', () {
     test('Ema Result should have correct length', () async {
-      final res = TA.ema(quotes.closePrices);
+      final res = TA.ema(quotes.closes);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.ema(quotes.closePrices);
+      final res = TA.ema(quotes.closes);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
@@ -29,7 +29,7 @@ Future<void> main() async {
     });
 
     test('Should return the correct calculation results', () async {
-      final res = TA.ema(quotes.closePrices);
+      final res = TA.ema(quotes.closes);
       final _ = await quotes.close();
       final results = await res.toList();
 

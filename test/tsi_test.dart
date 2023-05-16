@@ -16,26 +16,26 @@ Future<void> main() async {
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.tsi tests', () {
     test('TSI Result should have correct length', () async {
-      final res = TA.tsi(quotes.closePrices);
+      final res = TA.tsi(quotes.closes);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('TSI Result should have correct length', () async {
-      final res = TA.tsi(quotes.closePrices);
+      final res = TA.tsi(quotes.closes);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('TSI Result should have correct length of NaN results', () async {
-      final res = TA.tsi(quotes.closePrices, signalLen: 7);
+      final res = TA.tsi(quotes.closes, signalLen: 7);
       final _ = await quotes.close();
       final result = await res.toList();
       final nonNaN = result.filter((x) => !x.value.isNaN);
       expect(nonNaN.length, 465, reason: 'should be 465 non NaN results');
     });
     test('TSI Signal should have correct length of NaN results', () async {
-      final res = TA.tsi(quotes.closePrices, signalLen: 7);
+      final res = TA.tsi(quotes.closes, signalLen: 7);
       final _ = await quotes.close();
       final result = await res.toList();
       // we are ignoring no null assertion for testsing.
@@ -48,7 +48,7 @@ Future<void> main() async {
       );
     });
     test('TSI should return correct results', () async {
-      final res = TA.tsi(quotes.closePrices, signalLen: 7);
+      final res = TA.tsi(quotes.closes, signalLen: 7);
       final _ = await quotes.close();
       final result = await res.toList();
 

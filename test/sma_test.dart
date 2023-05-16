@@ -15,13 +15,13 @@ Future<void> main() async {
   setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
   group('TA.sma tests', () {
     test('Sma Result should have correct length', () async {
-      final res = TA.sma(quotes.closePrices);
+      final res = TA.sma(quotes.closes);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.sma(quotes.closePrices);
+      final res = TA.sma(quotes.closes);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
@@ -29,7 +29,7 @@ Future<void> main() async {
     });
 
     test('Should return the correct calculation results', () async {
-      final res = TA.sma(quotes.closePrices);
+      final res = TA.sma(quotes.closes);
       final _ = await quotes.close();
       final results = await res.toList();
 
@@ -48,7 +48,7 @@ Future<void> main() async {
       expect(result501.value.toPrecision(4), 251.8600);
     });
     test('CandlePart.open tests', () async {
-      final res = TA.sma(quotes.openPrices);
+      final res = TA.sma(quotes.open);
       final _ = await quotes.close();
       final results = await res.toList();
 
