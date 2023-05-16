@@ -46,14 +46,26 @@ Either<String, QuoteSeries> createSeries(Iterable<Quote> quotes) {
 }
 
 extension QuoteStream on QuoteSeries {
-  Series<PriceDataDouble> get closePrices => stream.map(
-        (event) => event.toPriceDataDouble(),
-      );
-
   Series<PriceDataDouble> get openPrices => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.open,
         ),
+      );
+
+  Series<PriceDataDouble> get highPrices => stream.map(
+        (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.high,
+        ),
+      );
+
+  Series<PriceDataDouble> get lowPrices => stream.map(
+        (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.low,
+        ),
+      );
+
+  Series<PriceDataDouble> get closePrices => stream.map(
+        (event) => event.toPriceDataDouble(),
       );
 
   Series<PriceDataDouble> get volume => stream.map(
@@ -62,9 +74,33 @@ extension QuoteStream on QuoteSeries {
         ),
       );
 
+  Series<PriceDataDouble> get hl2 => stream.map(
+        (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.hl2,
+        ),
+      );
+
   Series<PriceDataDouble> get hlc3 => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.hlc3,
+        ),
+      );
+
+  Series<PriceDataDouble> get oc2 => stream.map(
+        (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.oc2,
+        ),
+      );
+
+  Series<PriceDataDouble> get ohl3 => stream.map(
+        (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.ohl3,
+        ),
+      );
+
+  Series<PriceDataDouble> get ohlc4 => stream.map(
+        (event) => event.toPriceDataDouble(
+          candlePart: CandlePart.ohlc4,
         ),
       );
 
