@@ -93,11 +93,41 @@ extension QuoteExt on Quote {
       CandlePart.low => (date: date, value: low),
       CandlePart.close => (date: date, value: close),
       CandlePart.volume => (date: date, value: volume),
-      CandlePart.hl2 => (date: date, value: hl2.toDecimal()),
-      CandlePart.hlc3 => (date: date, value: hlc3.toDecimal()),
-      CandlePart.oc2 => (date: date, value: oc2.toDecimal()),
-      CandlePart.ohl3 => (date: date, value: ohl3.toDecimal()),
-      CandlePart.ohlc4 => (date: date, value: ohl4.toDecimal()),
+      CandlePart.hl2 => (
+          date: date,
+          value: hl2.toDecimal(
+            scaleOnInfinitePrecision: 19,
+            toBigInt: (f) => f.toBigInt(),
+          )
+        ),
+      CandlePart.hlc3 => (
+          date: date,
+          value: hlc3.toDecimal(
+            scaleOnInfinitePrecision: 19,
+            toBigInt: (f) => f.toBigInt(),
+          )
+        ),
+      CandlePart.oc2 => (
+          date: date,
+          value: oc2.toDecimal(
+            scaleOnInfinitePrecision: 19,
+            toBigInt: (f) => f.toBigInt(),
+          )
+        ),
+      CandlePart.ohl3 => (
+          date: date,
+          value: ohl3.toDecimal(
+            scaleOnInfinitePrecision: 19,
+            toBigInt: (f) => f.toBigInt(),
+          )
+        ),
+      CandlePart.ohlc4 => (
+          date: date,
+          value: ohl4.toDecimal(
+            scaleOnInfinitePrecision: 19,
+            toBigInt: (f) => f.toBigInt(),
+          )
+        ),
     };
   }
 
@@ -150,9 +180,12 @@ extension QuoteExt on Quote {
         ),
       CandlePart.hl2 => (
           date: date,
-          value: high + low / 2,
+          value: toPriceData(candlePart: CandlePart.hl2).value.toDouble(),
         ),
-      CandlePart.hlc3 => (date: date, value: high + low + close / 3),
+      CandlePart.hlc3 => (
+          date: date,
+          value: toPriceData(candlePart: CandlePart.hlc3).value.toDouble()
+        ),
       CandlePart.oc2 => (date: date, value: open + close / 2),
       CandlePart.ohl3 => (date: date, value: open + high + low / 3),
       CandlePart.ohlc4 => (date: date, value: open + high + low + close / 4),
@@ -199,13 +232,13 @@ extension QuoteExt on Quote {
       CandlePart.hl2 => (date: date, value: high + low / 2, vol: volume),
       CandlePart.hlc3 => (
           date: date,
-          value: high + low + close / 3,
+          value: toPriceDataDouble(candlePart: CandlePart.hlc3).value,
           vol: volume
         ),
       CandlePart.oc2 => (date: date, value: open + close / 2, vol: volume),
       CandlePart.ohl3 => (
           date: date,
-          value: open + high + low / 3,
+          value: toPriceDataDouble(candlePart: CandlePart.ohl3).value,
           vol: volume
         ),
       CandlePart.ohlc4 => (

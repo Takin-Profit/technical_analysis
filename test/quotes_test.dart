@@ -38,12 +38,58 @@ void main() {
 
   group('Quote tests', () {
     test('Converting to double should return correct results', () {
-      final res = q.toPriceDataDouble(candlePart: CandlePart.open);
-
       expect(
-        res.value.toPrecision(10),
+        q.toPriceDataDouble(candlePart: CandlePart.open).value.toPrecision(10),
         o.toDouble().toPrecision(10),
         reason: 'should return correct open price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.high).value.toPrecision(10),
+        h.toDouble().toPrecision(10),
+        reason: 'should return correct high price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.low).value.toPrecision(10),
+        l.toDouble().toPrecision(10),
+        reason: 'should return correct low price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.close).value.toPrecision(10),
+        c.toDouble().toPrecision(10),
+        reason: 'should return correct close price',
+      );
+      expect(
+        q
+            .toPriceDataDouble(candlePart: CandlePart.volume)
+            .value
+            .toPrecision(10),
+        v.toDouble().toPrecision(10),
+        reason: 'should return correct volume price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.hl2).value.toPrecision(10),
+        hl2.toDouble().toPrecision(10),
+        reason: 'should return correct hl2 price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.hlc3).value.toPrecision(10),
+        hlc3.toDouble().toPrecision(10),
+        reason: 'should return correct hlc3 price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.oc2).value.toPrecision(10),
+        oc2.toDouble().toPrecision(10),
+        reason: 'should return correct oc2 price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.ohl3).value.toPrecision(10),
+        ohl3.toDouble().toPrecision(10),
+        reason: 'should return correct ohl3 price',
+      );
+      expect(
+        q.toPriceDataDouble(candlePart: CandlePart.ohlc4).value.toPrecision(10),
+        ohl4.toDouble().toPrecision(10),
+        reason: 'should return correct ohlc4 price',
       );
     });
   });
