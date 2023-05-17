@@ -11,22 +11,22 @@ import 'series.dart';
 import 'types.dart';
 
 Series<PriceDataDouble> calcWPR(
-  Series<PriceDataDouble> series, {
+  QuoteSeries series, {
   int lookBack = 14,
 }) async* {
-  final highestBuffer = CircularBuffer<PriceDataDouble>(lookBack);
-  final lowestBuffer = CircularBuffer<PriceDataDouble>(lookBack);
+  final highestBuffer = CircularBuffer<double>(lookBack);
+  final lowestBuffer = CircularBuffer<double>(lookBack);
 
   await for (final current in series) {
-    highestBuffer.add(current);
-    lowestBuffer.add(current);
+    highestBuffer.add(current.high.toDouble());
+    lowestBuffer.add(current.low.toDouble());
 
     if (highestBuffer.isFilled && lowestBuffer.isFilled) {
-      final maxHigh = highestBuffer.map((e) => e.value).reduce(max);
-      final minLow = lowestBuffer.map((e) => e.value).reduce(min);
-      final currentClose = current.value;
+      final highest = highestBuffer.reduce(max);
+      final lowest = lowestBuffer.reduce(min);
 
-      final percentR = 100 * (currentClose - maxHigh) / (maxHigh - minLow);
+      final percentR =
+          -100 * (highest - current.close.toDouble()) / (highest - lowest);
 
       yield (date: current.date, value: percentR);
     } else {

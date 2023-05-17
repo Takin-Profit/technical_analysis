@@ -137,7 +137,7 @@ sealed class TA {
     return calcMFI(series, lookBack: lookBack);
   }
 
-    static Series<PriceDataDouble> wpr(Series<PriceDataDouble> series, {int lookBack = 14}) {
+    static Series<PriceDataDouble> wpr(QuoteSeries series, {int lookBack = 14}) {
     _validateArg('WPR (Williams Percent Range)', lookBack, 1);
 
     return calcWPR(series, lookBack: lookBack);

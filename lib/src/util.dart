@@ -58,7 +58,7 @@ sealed class Util {
     await for (final current in series) {
       buffer.add(current);
 
-      if (buffer.length >= length) {
+      if (buffer.isFilled) {
         final lowestValue = buffer.map((e) => e.value).reduce(math.min);
 
         yield (date: current.date, value: lowestValue);
