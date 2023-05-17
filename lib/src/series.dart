@@ -54,22 +54,49 @@ Either<String, QuoteSeries> _fromIterable(
   }
 }
 
+QuoteSeries _fromStream(
+  Stream<Quote> quoteStream, {
+  int? maxSize,
+  void Function()? onListen,
+  void Function()? onCancel,
+  bool sync = false,
+}) {
+  final subj = ReplaySubject<Quote>(
+    maxSize: maxSize,
+    onListen: onListen,
+    onCancel: onCancel,
+    sync: sync,
+  );
+  subj.addStream(quoteStream);
+
+  return subj;
+}
+
 extension QuotesSeries on QuoteSeries {
+  static QuoteSeries fromStream(
+    Stream<Quote> quoteStream, {
+    int? maxSize,
+    void Function()? onListen,
+    void Function()? onCancel,
+    bool sync = false,
+  }) =>
+      _fromStream(quoteStream,
+          maxSize: maxSize, onListen: onListen, onCancel: onCancel, sync: sync);
+
   static Either<String, QuoteSeries> fromIterable(
     Iterable<Quote> quotes, {
     int? maxSize,
     void Function()? onListen,
     void Function()? onCancel,
     bool sync = false,
-  }) {
-    return _fromIterable(
-      quotes,
-      maxSize: maxSize,
-      onListen: onListen,
-      onCancel: onCancel,
-      sync: sync,
-    );
-  }
+  }) =>
+      _fromIterable(
+        quotes,
+        maxSize: maxSize,
+        onListen: onListen,
+        onCancel: onCancel,
+        sync: sync,
+      );
 
   Series<PriceDataDouble> get open => stream.map(
         (event) => event.toPriceDataDouble(
@@ -200,10 +227,12 @@ extension QuotesSeries on QuoteSeries {
 
 extension QuoteExt on Quote {
   PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
-    final hl2 = (high + low) / _d('2.0');
-    final hlc3 = (high + low + close) / _d('3.0');
-    final oc2 = (open + close) / _d('2.0');
-    final ohl3 = (open + high + low) / _d('3.0');
+    final d2 = _d('2.0');
+    final d3 = _d('3.0');
+    final hl2 = (high + low) / d2;
+    final hlc3 = (high + low + close) / d3;
+    final oc2 = (open + close) / d2;
+    final ohl3 = (open + high + low) / d3;
     final ohl4 = (open + high + low + close) / _d('4.0');
 
     return switch (candlePart) {
