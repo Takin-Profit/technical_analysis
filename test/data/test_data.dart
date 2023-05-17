@@ -4,12 +4,12 @@
 
 // ignore_for_file: avoid-top-level-members-in-tests
 
-import "dart:io";
+import 'dart:io';
 
-import "package:decimal/decimal.dart";
+import 'package:decimal/decimal.dart';
 import 'package:path/path.dart' as p;
-import "package:technical_indicators/src/replay_subject/replay_subject.dart";
-import "package:technical_indicators/technical_indicators.dart";
+import 'package:technical_indicators/src/replay_subject/replay_subject.dart';
+import 'package:technical_indicators/technical_indicators.dart';
 
 final emptySeries = ReplaySubject<Quote>();
 
@@ -17,7 +17,7 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
   fromTimeStamp(int timeStamp) =>
       DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
 
-  final row = data.split(",");
+  final row = data.split(',');
   final dt = useTimeStamp
       ? fromTimeStamp(int.parse(row.first))
       : DateTime.parse(row.first);
@@ -37,35 +37,25 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
   );
 }
 
-// DEFAULT: S&P 500 ~2 years of daily data
-Future<List<Quote>> getDefault({int days = 502}) async {
-  final file =
-      await File(p.absolute("test", "data", "default.csv")).readAsString();
+Future<List<Quote>> _getQuotes(String fileName, int days) async {
+  final file = await File(p.absolute('test', 'data', fileName)).readAsString();
 
   return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
 }
+
+// DEFAULT: S&P 500 ~2 years of daily data
+Future<List<Quote>> getDefault({int days = 502}) =>
+    _getQuotes('default.csv', days);
 
 // ZEROS (200)
-List<Quote> getZeroes({int days = 200}) {
-  return File('zeroes.csv')
-      .readAsStringSync()
-      .split('\n')
-      .skip(1)
-      .map(quoteFromCsv)
-      .take(days)
-      .toList();
-}
+Future<List<Quote>> getZeroes({int days = 200}) =>
+    _getQuotes('zeroes.csv', days);
 
-Future<List<Quote>> getEthRMA({int days = 500}) async {
-  final file =
-      await File(p.absolute("test", "data", "eth_rma.csv")).readAsString();
+Future<List<Quote>> getEthRMA({int days = 500}) =>
+    _getQuotes('eth_rma.csv', days);
 
-  return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
-}
+Future<List<Quote>> getBtcMFI({int days = 820}) =>
+    _getQuotes('btc_mfi.csv', days);
 
-Future<List<Quote>> getBtcMFI({int days = 820}) async {
-  final file =
-      await File(p.absolute("test", "data", "btc_mfi.csv")).readAsString();
-
-  return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
-}
+Future<List<Quote>> getLongish({int days = 5285}) =>
+    _getQuotes('longish.csv', days);

@@ -1,6 +1,8 @@
 // Copyright 2023 Takin Profit. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+import 'package:technical_indicators/src/std_dev.dart';
+
 import 'ema.dart';
 import 'mfi.dart';
 import 'rma.dart';
@@ -62,7 +64,7 @@ sealed class TA {
     return Util.highest(series, length: length);
   }
 
-    static Series<PriceDataDouble> lowest(
+  static Series<PriceDataDouble> lowest(
     Series<PriceDataDouble> series, {
     int length = 1,
   }) {
@@ -73,6 +75,19 @@ sealed class TA {
     }
 
     return Util.lowest(series, length: length);
+  }
+
+  static Series<PriceDataDouble> stdDev(
+    Series<PriceDataDouble> series, {
+    int length = 1,
+  }) {
+    if (length < 1) {
+      throw ArgumentError(
+        'Length must be greater than 0 to calculate the standard deviation',
+      );
+    }
+
+    return calcStdDev(series, length: length);
   }
 
   static Series<PriceDataDouble> sma(
@@ -131,13 +146,15 @@ sealed class TA {
     );
   }
 
-  static Series<PriceDataDouble> mfi(Series<({DateTime date, double value, double vol})> series, {int lookBack = 14}) {
+  static Series<PriceDataDouble> mfi(
+      Series<({DateTime date, double value, double vol})> series,
+      {int lookBack = 14}) {
     _validateArg('MFI (Money Flow Index)', lookBack, 1);
 
     return calcMFI(series, lookBack: lookBack);
   }
 
-    static Series<PriceDataDouble> wpr(QuoteSeries series, {int lookBack = 14}) {
+  static Series<PriceDataDouble> wpr(QuoteSeries series, {int lookBack = 14}) {
     _validateArg('WPR (Williams Percent Range)', lookBack, 1);
 
     return calcWPR(series, lookBack: lookBack);
