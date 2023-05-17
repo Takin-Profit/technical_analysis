@@ -12,7 +12,13 @@ import 'data/test_data.dart';
 Future<void> main() async {
   final data = await getEthRMA();
   late QuoteSeries quotes;
-  setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
+  setUp(
+    () => {
+      quotes = QuotesSeries.fromIterable(data).getOrElse(
+        (l) => emptySeries,
+      ),
+    },
+  );
   group('TA.rma tests', () {
     test('Sma Result should have correct length', () async {
       final res = TA.rma(quotes.closes);

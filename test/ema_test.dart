@@ -11,8 +11,13 @@ import 'data/test_data.dart';
 
 Future<void> main() async {
   final data = await getDefault();
+  final largeData = await getLongish();
   late QuoteSeries quotes;
-  setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
+  late QuoteSeries moreQuotes;
+  setUp(() => {
+        quotes = QuotesSeries.fromIterable(data).getOrElse((l) => emptySeries),
+        moreQuotes = fromIterable(largeData).getOrElse((l) => emptySeries),
+      });
   group('TA.ema tests', () {
     test('Ema Result should have correct length', () async {
       final res = TA.ema(quotes.closes);
@@ -56,6 +61,16 @@ Future<void> main() async {
         249.3519,
         reason: 'should be 249.3519',
       );
+    });
+    test('Should work correctly on large streams', () async {
+      final res = TA.ema(moreQuotes.closes);
+      final _ = await quotes.close();
+      final results = await res.toList();
+
+      final result0 = results.first;
+      final result6 = results.last;
+
+      expect(result0.value.isNaN, true);
     });
   });
 }

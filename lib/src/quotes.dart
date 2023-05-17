@@ -65,7 +65,7 @@ extension Quotes on Quote {
     };
   }
 
-  static Quote get empty => (
+  static Quote get emptyQuote => (
         date: Util.maxDate,
         open: Decimal.zero,
         high: Decimal.zero,

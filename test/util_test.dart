@@ -11,7 +11,13 @@ import 'data/test_data.dart';
 Future<void> main() async {
   final data = await getDefault();
   late QuoteSeries quotes;
-  setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
+  setUp(
+    () => {
+      quotes = QuotesSeries.fromIterable(data).getOrElse(
+        (l) => emptySeries,
+      ),
+    },
+  );
   group('TA.change tests', () {
     test('should return correct result for 10 bars ago', () async {
       final res = TA.change(quotes.closes, length: 10);

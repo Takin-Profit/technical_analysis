@@ -13,7 +13,13 @@ import 'data/test_data.dart';
 Future<void> main() async {
   final data = await getDefault();
   late QuoteSeries quotes;
-  setUp(() => {quotes = createSeries(data).getOrElse((l) => emptySeries)});
+  setUp(
+    () => {
+      quotes = QuotesSeries.fromIterable(data).getOrElse(
+        (l) => emptySeries,
+      ),
+    },
+  );
   group('TA.tsi tests', () {
     test('TSI Result should have correct length', () async {
       final res = TA.tsi(quotes.closes);

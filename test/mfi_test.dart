@@ -15,9 +15,11 @@ import 'data/test_data.dart';
 Future<void> main() async {
   final data = await getDefault();
   late QuoteSeries quotes;
-  setUp(() => {
-        quotes = createSeries(data).getOrElse((l) => emptySeries),
-      });
+  setUp(
+    () => {
+      quotes = QuotesSeries.fromIterable(data).getOrElse((l) => emptySeries),
+    },
+  );
   group('TA.mfi tests', () {
     test('MFI Result should have correct length', () async {
       final res = TA.mfi(quotes.hlc3WithVol);

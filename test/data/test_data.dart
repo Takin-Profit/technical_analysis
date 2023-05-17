@@ -4,6 +4,7 @@
 
 // ignore_for_file: avoid-top-level-members-in-tests
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:decimal/decimal.dart';
@@ -37,6 +38,14 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
   );
 }
 
+Stream<Quote> readFileStream(String fileName, {int days = 500}) =>
+    File(p.absolute('test', 'data', fileName))
+        .openRead()
+        .transform(utf8.decoder)
+        .transform(LineSplitter())
+        .map(quoteFromCsv)
+        .take(days);
+
 Future<List<Quote>> _getQuotes(String fileName, int days) async {
   final file = await File(p.absolute('test', 'data', fileName)).readAsString();
 
@@ -57,5 +66,5 @@ Future<List<Quote>> getEthRMA({int days = 500}) =>
 Future<List<Quote>> getBtcMFI({int days = 820}) =>
     _getQuotes('btc_mfi.csv', days);
 
-Future<List<Quote>> getLongish({int days = 5285}) =>
-    _getQuotes('longish.csv', days);
+Stream<Quote> getLongish({int days = 5285}) =>
+    readFileStream('longish.csv', days: days);

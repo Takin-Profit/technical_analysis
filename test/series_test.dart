@@ -29,7 +29,7 @@ Future<void> main() async {
           volume: Decimal.fromInt(200)
         ),
       ];
-      final result = createSeries(quotes);
+      final result = QuotesSeries.fromIterable(quotes);
 
       expect(result.isRight(), equals(true));
       result.fold((l) => null, (r) async {
@@ -63,7 +63,7 @@ Future<void> main() async {
           volume: Decimal.fromInt(200)
         ),
       ];
-      final result = createSeries(quotes);
+      final result = QuotesSeries.fromIterable(quotes);
 
       expect(result.isLeft(), equals(true));
       expect(
@@ -84,7 +84,7 @@ Future<void> main() async {
         ),
       );
       final maxSize = 10;
-      final result = createSeries(quotes, maxSize: maxSize);
+      final result = QuotesSeries.fromIterable(quotes, maxSize: maxSize);
 
       expect(result.isRight(), equals(true));
       result.fold((l) => null, (r) async {
@@ -113,8 +113,11 @@ Future<void> main() async {
           volume: Decimal.fromInt(100),
         ),
       ];
-      final result =
-          createSeries(quotes, onListen: onListen, onCancel: onCancel);
+      final result = QuotesSeries.fromIterable(
+        quotes,
+        onListen: onListen,
+        onCancel: onCancel,
+      );
 
       expect(result.isRight(), equals(true));
       result.fold((l) => null, (r) {

@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// ignore_for_file: prefer-match-file-name,prefer-moving-to-variable
-
 import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
@@ -19,7 +17,7 @@ typedef Series<T> = Stream<T>;
 
 typedef QuoteSeries = ReplaySubject<Quote>;
 
-Either<String, QuoteSeries> createSeries(
+Either<String, QuoteSeries> _fromIterable(
   Iterable<Quote> quotes, {
   int? maxSize,
   void Function()? onListen,
@@ -56,7 +54,23 @@ Either<String, QuoteSeries> createSeries(
   }
 }
 
-extension QuoteStream on QuoteSeries {
+extension QuotesSeries on QuoteSeries {
+  static Either<String, QuoteSeries> fromIterable(
+    Iterable<Quote> quotes, {
+    int? maxSize,
+    void Function()? onListen,
+    void Function()? onCancel,
+    bool sync = false,
+  }) {
+    return _fromIterable(
+      quotes,
+      maxSize: maxSize,
+      onListen: onListen,
+      onCancel: onCancel,
+      sync: sync,
+    );
+  }
+
   Series<PriceDataDouble> get open => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.open,
