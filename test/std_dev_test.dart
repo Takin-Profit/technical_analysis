@@ -189,6 +189,24 @@ Future<void> main() async {
           );
         },
       ),
+      test(
+        'Returns the correct result at index length of 10',
+        () async {
+          final output = TA.stdDev(
+            quotes.closes,
+            length: 10,
+            bias: StDev.sample,
+          );
+
+          final result = await output.elementAt(569);
+
+          expect(
+            result.value.toPrecision(4),
+            13.8537,
+            reason: 'should be 13.8537',
+          );
+        },
+      ),
     },
   );
 }
