@@ -207,6 +207,96 @@ Future<void> main() async {
           );
         },
       ),
+      test(
+        'Returns the correct result at index length of 10',
+        () async {
+          final output = TA.stdDev(
+            quotes.closes,
+            length: 10,
+            bias: StDev.sample,
+          );
+
+          final result = await output.elementAt(1441);
+
+          expect(
+            result.value.toPrecision(2),
+            4.99,
+            reason: 'should be 4.99',
+          );
+        },
+      ),
+      test(
+        'Returns the correct result at index length of 10',
+        () async {
+          final output = TA.stdDev(
+            quotes.closes,
+            length: 10,
+            bias: StDev.sample,
+          );
+
+          final result = await output.elementAt(2204);
+
+          expect(
+            result.value.toPrecision(6),
+            23.154715,
+            reason: 'should be 23.154715',
+          );
+        },
+      ),
+      test(
+        'Returns the correct result at index length of 50',
+        () async {
+          final output = TA.stdDev(
+            quotes.closes,
+            length: 50,
+            bias: StDev.sample,
+          );
+
+          final result = await output.elementAt(2204);
+
+          expect(
+            result.value.toPrecision(6),
+            24.663025,
+            reason: 'should be 24.663025',
+          );
+        },
+      ),
+      test(
+        'Returns the correct result at index length of 50',
+        () async {
+          final output = TA.stdDev(
+            quotes.closes,
+            length: 50,
+            bias: StDev.sample,
+          );
+
+          final result = await output.elementAt(2204);
+
+          expect(
+            result.value.toPrecision(6),
+            24.663025,
+            reason: 'should be 24.663025',
+          );
+        },
+      ),
+      test(
+        'Returns the correct result at index length of 50',
+        () async {
+          final output = TA.stdDev(
+            quotes.closes,
+            length: 50,
+            bias: StDev.sample,
+          );
+
+          final result = await output.elementAt(4006);
+
+          expect(
+            result.value.toPrecision(5),
+            19.87444,
+            reason: 'should be 19.87444',
+          );
+        },
+      ),
     },
   );
 }
