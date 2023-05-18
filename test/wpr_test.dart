@@ -42,7 +42,7 @@ Future<void> main() async {
     test('Should return the correct calculation values', () async {
       final res = TA.wpr(quotes);
       final _ = await quotes.close();
-      final q = await quotes.closes.toList();
+
       final resultList = await res.toList();
       final result = resultList.toList();
 
