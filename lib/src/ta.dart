@@ -13,6 +13,7 @@ import 'tsi.dart';
 import 'types.dart';
 import 'util.dart';
 import 'wpr.dart';
+import 'bb.dart';
 
 void _validateArg(String indicator, int value, int minValue) {
   if (value < minValue) {
@@ -148,16 +149,36 @@ sealed class TA {
   }
 
   static Series<PriceDataDouble> mfi(
-      Series<({DateTime date, double value, double vol})> series,
-      {int lookBack = 14}) {
+    Series<({DateTime date, double value, double vol})> series, {
+    int lookBack = 14,
+  }) {
     _validateArg('MFI (Money Flow Index)', lookBack, 1);
 
     return calcMFI(series, lookBack: lookBack);
   }
 
-  static Series<PriceDataDouble> wpr(QuoteSeries series, {int lookBack = 14}) {
+  static Series<PriceDataDouble> wpr(
+    QuoteSeries series, {
+    int lookBack = 14,
+  }) {
     _validateArg('WPR (Williams Percent Range)', lookBack, 1);
 
     return calcWPR(series, lookBack: lookBack);
+  }
+
+  static Series<BBResult> bb(
+  Series<PriceDataDouble> series, {
+  int lookBack = 20,
+  double multi = 2.0,
+}) {
+    _validateArg('BB (Bollinger Bands)', lookBack, 1);
+
+    if (multi < 1.0 ) {
+      throw ArgumentError(
+        'Bollinger Bands must be greater than 1',
+      );
+  }
+
+    return calcBB(series, lookBack: lookBack, multi: multi);
   }
 }

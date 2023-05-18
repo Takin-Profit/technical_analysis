@@ -12,10 +12,13 @@ import 'types.dart';
 
 typedef BBResult = ({double upper, double lower, double middle});
 
-Series<BBResult> calcBB(Series<PriceDataDouble> series,
-    {int length = 20, double multi = 2.0}) async* {
-  final smaBuffer = CircularBuffer<PriceDataDouble>(length);
-  final stdDevBuffer = CircularBuffer<PriceDataDouble>(length);
+Series<BBResult> calcBB(
+  Series<PriceDataDouble> series, {
+  int lookBack = 20,
+  double multi = 2.0,
+}) async* {
+  final smaBuffer = CircularBuffer<PriceDataDouble>(lookBack);
+  final stdDevBuffer = CircularBuffer<PriceDataDouble>(lookBack);
 
   await for (final data in series) {
     smaBuffer.add(data);
@@ -25,17 +28,17 @@ Series<BBResult> calcBB(Series<PriceDataDouble> series,
       // Calculate SMA for the middle band
       final sma =
           smaBuffer.map((el) => el.value).reduce((prev, next) => prev + next) /
-              length;
+              lookBack;
 
       // Calculate standard deviation for the deviation
       final mean = stdDevBuffer
               .map((el) => el.value)
               .reduce((prev, next) => prev + next) /
-          length;
+          lookBack;
       final variance = stdDevBuffer
               .map((el) => pow(el.value - mean, 2))
               .reduce((prev, next) => prev + next) /
-          length;
+          lookBack;
       final stdDev = sqrt(variance);
 
       // Calculate the upper and lower bands
