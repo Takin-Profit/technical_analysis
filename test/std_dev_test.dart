@@ -18,21 +18,133 @@ Future<void> main() async {
   late QuoteSeries quotes;
   setUp(
     () => {
-      quotes = QuotesSeries.fromIterable([]).getOrElse(
-        (l) => emptySeries,
+      quotes = QuotesSeries.fromStream(
+        getLongish(),
       ),
     },
   );
-  group('stdDev', () {
+  group('stdDev of population', () {
     test(
-      'Calculates standard deviation correctly for a simple series',
+      'Returns the correct result using population',
       () async {
-        final output = TA.stdDev(quotes.closes, length: 50);
+        final output = TA.stdDev(
+          quotes.closes,
+          length: 5285,
+        );
 
-        final _ = await quotes.close();
-        final results = await output.toList();
+        final result = await output.elementAt(5284);
 
-        expect(results.last.value.toPrecision(9), 633.932098287);
+        expect(
+          result.value.toPrecision(9),
+          633.932098287,
+          reason: 'should be 633.932098287',
+        );
+      },
+    );
+    test(
+      'Returns the correct result at index using population',
+      () async {
+        final output = TA.stdDev(
+          quotes.closes,
+          length: 10,
+        );
+
+        final result = await output.elementAt(10);
+
+        expect(
+          result.value.toPrecision(2),
+          13.82,
+          reason: 'should be 13.82',
+        );
+      },
+    );
+    test(
+      'Returns the correct result at index using population',
+      () async {
+        final output = TA.stdDev(
+          quotes.closes,
+          length: 10,
+        );
+
+        final result = await output.elementAt(133);
+
+        expect(
+          result.value.toPrecision(8),
+          28.15109818,
+          reason: 'should be 28.15109818',
+        );
+      },
+    );
+
+    test(
+      'Returns the correct result at index using population',
+      () async {
+        final output = TA.stdDev(
+          quotes.closes,
+          length: 10,
+        );
+
+        final result = await output.elementAt(296);
+
+        expect(
+          result.value.toPrecision(6),
+          25.679816,
+          reason: 'should be 25.679816',
+        );
+      },
+    );
+
+    test(
+      'Returns the correct result at index with length of 50',
+      () async {
+        final output = TA.stdDev(
+          quotes.closes,
+          length: 50,
+        );
+
+        final result = await output.elementAt(296);
+
+        expect(
+          result.value.toPrecision(2),
+          49.87,
+          reason: 'should be 49.87',
+        );
+      },
+    );
+
+    test(
+      'Returns the correct result at index with length of 50',
+      () async {
+        final output = TA.stdDev(
+          quotes.closes,
+          length: 50,
+        );
+
+        final result = await output.elementAt(4644);
+
+        expect(
+          result.value.toPrecision(6),
+          69.287489,
+          reason: 'should be 69.287489',
+        );
+      },
+    );
+
+    test(
+      'Returns the correct result at index length of 50',
+      () async {
+        final output = TA.stdDev(
+          quotes.closes,
+          length: 50,
+        );
+
+        final result = await output.elementAt(1454);
+
+        expect(
+          result.value.toPrecision(2),
+          21.19,
+          reason: 'should be 21.19',
+        );
       },
     );
 
@@ -41,13 +153,41 @@ Future<void> main() async {
         10000,
         (i) => (
           date: DateTime(2022, 1, 1).add(Duration(days: i)),
-          value: sin(i.toDouble())
+          value: sin(
+            i.toDouble(),
+          )
         ),
       ));
 
       final output = await TA.stdDev(input, length: 1000).toList();
 
-      expect(output.length, equals(10000));
+      expect(
+        output.length,
+        equals(10000),
+      );
     });
   });
+
+  group(
+    'stdDev of sample',
+    () => {
+      test(
+        'Returns the correct result at index length of 50',
+        () async {
+          final output = TA.stdDev(
+            quotes.closes,
+            length: 50,
+          );
+
+          final result = await output.elementAt(1454);
+
+          expect(
+            result.value.toPrecision(2),
+            21.19,
+            reason: 'should be 21.19',
+          );
+        },
+      ),
+    },
+  );
 }

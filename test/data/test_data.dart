@@ -43,6 +43,7 @@ Stream<Quote> readFileStream(String fileName, {int days = 500}) =>
         .openRead()
         .transform(utf8.decoder)
         .transform(LineSplitter())
+        .skip(1)
         .map(quoteFromCsv)
         .take(days);
 

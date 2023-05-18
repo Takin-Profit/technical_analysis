@@ -16,7 +16,9 @@ Future<void> main() async {
   late QuoteSeries quotes;
   setUp(
     () => {
-      quotes = QuotesSeries.fromIterable(data).getOrElse((l) => emptySeries),
+      quotes = QuotesSeries.fromIterable(data).getOrElse(
+        (l) => emptySeries,
+      ),
     },
   );
   group('TA.wpr tests', () {

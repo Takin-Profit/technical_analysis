@@ -80,6 +80,7 @@ sealed class TA {
   static Series<PriceDataDouble> stdDev(
     Series<PriceDataDouble> series, {
     int length = 1,
+    StDev bias = StDev.population,
   }) {
     if (length < 1) {
       throw ArgumentError(
@@ -87,7 +88,7 @@ sealed class TA {
       );
     }
 
-    return calcStdDev(series, length: length);
+    return calcStdDev(series, length: length, bias: bias);
   }
 
   static Series<PriceDataDouble> sma(

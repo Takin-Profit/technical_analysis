@@ -9,6 +9,8 @@ import 'package:decimal/decimal.dart';
 typedef PriceData = ({DateTime date, Decimal value});
 typedef PriceDataDouble = ({DateTime date, double value});
 
+enum StDev { population, sample }
+
 extension PriceDataOps on PriceData {
   PriceDataDouble get doublePrecis => (date: date, value: value.toDouble());
 
