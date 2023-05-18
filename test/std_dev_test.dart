@@ -172,19 +172,20 @@ Future<void> main() async {
     'stdDev of sample',
     () => {
       test(
-        'Returns the correct result at index length of 50',
+        'Returns the correct result at index length of 10',
         () async {
           final output = TA.stdDev(
             quotes.closes,
-            length: 50,
+            length: 10,
+            bias: StDev.sample,
           );
 
-          final result = await output.elementAt(1454);
+          final result = await output.elementAt(15);
 
           expect(
             result.value.toPrecision(2),
-            21.19,
-            reason: 'should be 21.19',
+            22.62,
+            reason: 'should be 22.62',
           );
         },
       ),
