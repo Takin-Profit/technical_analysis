@@ -9,6 +9,10 @@ import 'package:test/test.dart';
 
 import 'data/test_data.dart';
 
+/*
+* expected results are found directly in data/eth_rma.csv file.
+* Exported directly from tradingview.
+ */
 Future<void> main() async {
   final data = await getEthRMA();
   late QuoteSeries quotes;
