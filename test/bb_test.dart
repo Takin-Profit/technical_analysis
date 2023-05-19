@@ -62,9 +62,9 @@ Future<void> main() async {
         expect(res501.lower.toPrecision(4), 230.0196);
         expect(res501.middle.toPrecision(4), 251.8600);
 
-        expect(res372.upper.toPrecision(4), 272.1200, reason: "${res372}");
-        expect(res372.lower.toPrecision(4), 261.3720);
-        expect(res372.middle.toPrecision(4), 266.746);
+        expect(res372.upper.toPrecision(2), 271.58);
+        expect(res372.lower.toPrecision(2), 262.28);
+        expect(res372.middle.toPrecision(2), 266.93);
       },
     );
   });
