@@ -9,6 +9,11 @@ import 'package:test/test.dart';
 
 import 'data/test_data.dart';
 
+/**
+ *
+ * https://docs.google.com/spreadsheets/d/1lg7Fbz-986auSClakX9RS-Y-zrcDZYP8gfYSHQhHP4E/edit?usp=sharing
+ */
+
 Future<void> main() async {
   final data = await getDefault();
   late QuoteSeries quotes;
