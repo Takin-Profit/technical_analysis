@@ -9,6 +9,11 @@ import 'package:test/test.dart';
 
 import 'data/test_data.dart';
 
+/*
+ * expected results.
+ * https://docs.google.com/spreadsheets/d/1gmNLo1zB5jjFvgl_KDbs4QX5xSHw86SiSgJlMWM94XU/edit?usp=sharing
+ */
+
 Future<void> main() async {
   final data = await getDefault();
   late QuoteSeries quotes;
@@ -46,6 +51,19 @@ Future<void> main() async {
         closeTo(62.0541, 0.5),
         reason: 'should be 62.0541',
       );
+
+      expect(
+        result[104].value.toPrecision(4),
+        closeTo(70.4399, 0.5),
+        reason: 'should be 70.4399',
+      );
+
+      expect(
+        result[223].value.toPrecision(4),
+        closeTo(58.6021, 0.5),
+        reason: 'should be 58.6021',
+      );
+
       expect(
         result[249].value.toPrecision(4),
         70.9368,
