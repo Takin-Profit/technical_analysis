@@ -14,6 +14,11 @@ import 'package:test/test.dart';
 
 import 'data/test_data.dart';
 
+/*
+ * expected results.
+ * https://docs.google.com/spreadsheets/d/1WDhEJQASNBE1FgI-TIVwqw3QK_q3wiwNv4ltFmZFv6I/edit?usp=sharing
+ */
+
 Future<void> main() async {
   late QuoteSeries quotes;
   setUp(
