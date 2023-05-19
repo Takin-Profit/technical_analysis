@@ -10,7 +10,7 @@ import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
 
-typedef BBResult = ({double upper, double lower, double middle});
+typedef BBResult = ({DateTime date, double upper, double lower, double middle});
 
 Series<BBResult> calcBB(
   Series<PriceDataDouble> series, {
@@ -45,9 +45,19 @@ Series<BBResult> calcBB(
       final upper = sma + multi * stdDev;
       final lower = sma - multi * stdDev;
 
-      yield (upper: upper, lower: lower, middle: sma);
+      yield (
+        date: data.date,
+        upper: upper,
+        lower: lower,
+        middle: sma,
+      );
     } else {
-      yield (upper: double.nan, lower: double.nan, middle: double.nan);
+      yield (
+        date: data.date,
+        upper: double.nan,
+        lower: double.nan,
+        middle: double.nan,
+      );
     }
   }
 }
