@@ -41,8 +41,8 @@ Series<TsiResult> calcTSI(
 
   Stream<TsiResult> tsiStream() async* {
     await for (final data in zippedStream) {
-      final double tsi = 100 * (data[0].value / data[1].value);
-      yield (date: data[0].date, value: tsi, signal: null);
+      final double tsi = 100 * (data.first.value / data[1].value);
+      yield (date: data.first.date, value: tsi, signal: null);
     }
   }
 
@@ -57,7 +57,7 @@ Series<TsiResult> calcTSI(
   final finalZippedStream = StreamZip([tsiWithSignalStream, signalStream]);
 
   await for (final data in finalZippedStream) {
-    final tsiData = data[0] as TsiResult;
+    final tsiData = data.first as TsiResult;
     final signalData = data[1] as PriceDataDouble;
     yield (date: tsiData.date, value: tsiData.value, signal: signalData.value);
   }

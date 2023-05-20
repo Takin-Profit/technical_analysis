@@ -10,7 +10,7 @@ import 'dart:io';
 import 'package:decimal/decimal.dart';
 import 'package:path/path.dart' as p;
 import 'package:rxdart/rxdart.dart';
-import 'package:technical_indicators/technical_indicators.dart';
+import 'package:technical_analysis/technical_analysis.dart';
 
 final emptySeries = ReplaySubject<Quote>();
 

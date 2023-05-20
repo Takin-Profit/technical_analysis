@@ -3,10 +3,10 @@
 // license that can be found in the LICENSE file.
 
 import 'package:decimal/decimal.dart';
-import 'package:technical_indicators/src/series.dart';
+import 'package:technical_analysis/src/series.dart';
 // ignore_for_file: prefer-correct-identifier-length
 
-import 'package:technical_indicators/technical_indicators.dart';
+import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
 
 Decimal _d(String s) => Decimal.parse(s);

@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'package:technical_indicators/src/circular_buffer.dart';
-import 'package:technical_indicators/src/series.dart';
-import 'package:technical_indicators/src/types.dart';
+import 'circular_buffer.dart';
+import 'series.dart';
+import 'types.dart';
 
 Series<PriceDataDouble> calcSMA(
   Series<PriceDataDouble> series, {

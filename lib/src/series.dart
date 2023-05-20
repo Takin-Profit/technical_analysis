@@ -8,10 +8,7 @@ import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:technical_indicators/src/types.dart';
-
-import 'quotes.dart';
-import 'util.dart';
+import 'package:technical_analysis/technical_analysis.dart';
 
 Decimal _d(String s) => Decimal.parse(s);
 

@@ -5,7 +5,7 @@
  */
 
 import 'package:decimal/decimal.dart';
-import 'package:technical_indicators/technical_indicators.dart';
+import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
 
 Future<void> main() async {
