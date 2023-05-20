@@ -2,12 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import 'dart:async';
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:technical_indicators/src/types.dart';
 
-import './replay_subject/replay_subject.dart';
 import 'quotes.dart';
 import 'util.dart';
 
@@ -80,8 +83,13 @@ extension QuotesSeries on QuoteSeries {
     void Function()? onCancel,
     bool sync = false,
   }) =>
-      _fromStream(quoteStream,
-          maxSize: maxSize, onListen: onListen, onCancel: onCancel, sync: sync);
+      _fromStream(
+        quoteStream,
+        maxSize: maxSize,
+        onListen: onListen,
+        onCancel: onCancel,
+        sync: sync,
+      );
 
   static Either<String, QuoteSeries> fromIterable(
     Iterable<Quote> quotes, {
@@ -223,16 +231,90 @@ extension QuotesSeries on QuoteSeries {
 
   bool isValid(Quote quote) =>
       values.where((q) => q.date == quote.date).isEmpty;
+
+  Stream<List<Quote>> _toTimeFrame(TimeFrame timeFrame) {
+    DateTime bufferStartDate = Util.minDate;
+
+    return this.stream.bufferTest((quote) {
+      if (bufferStartDate == Util.minDate) {
+        bufferStartDate = quote.date;
+
+        return false;
+      } else if (quote.date.difference(bufferStartDate) >=
+          timeFrame.toDuration()) {
+        bufferStartDate = quote.date;
+
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+/*
+  Series<Quote> toTimeFrame(TimeFrame timeFrame) async* {
+     await for (final list in _toTimeFrame(timeFrame)) {
+       list.
+     }
+  }
+
+   */
+}
+
+Quote _aggregate(Duration duration, List<Quote> quotes) {
+  if (quotes.isEmpty) {
+    return Quotes.emptyQuote;
+  }
+  if (duration.isNegative || duration == Duration.zero) {
+    return Quotes.emptyQuote;
+  }
+
+  final qMap = quotes
+      .sorted(
+        (a, b) => a.date.compareTo(b.date),
+      )
+      .groupListsBy(
+        (element) => element.date.roundDown(duration),
+      )
+      .entries;
+
+  // Convert each MapEntry to a Quote
+  final quotesAggregated = qMap.map((element) {
+    final firstQuote = element.value.first;
+    final lastQuote = element.value.last;
+
+    final high = Decimal.parse(
+      element.value.map((q) => q.high.toDouble()).reduce(max).toString(),
+    );
+    final low = Decimal.parse(
+      element.value.map((q) => q.low.toDouble()).reduce(min).toString(),
+    );
+
+    final volume = element.value
+        .map((q) => q.volume)
+        .reduce((value, element) => value + element);
+
+    return (
+      date: firstQuote.date,
+      open: firstQuote.open,
+      high: high,
+      low: low,
+      close: lastQuote.close,
+      volume: volume,
+    );
+  }).toList();
+
+  // Assuming that you want to return the last Quote
+  return quotesAggregated.last;
 }
 
 extension QuoteExt on Quote {
   PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
-    final d2 = _d('2.0');
-    final d3 = _d('3.0');
-    final hl2 = (high + low) / d2;
-    final hlc3 = (high + low + close) / d3;
-    final oc2 = (open + close) / d2;
-    final ohl3 = (open + high + low) / d3;
+    final dc2 = _d('2.0');
+    final dc3 = _d('3.0');
+    final hl2 = (high + low) / dc2;
+    final hlc3 = (high + low + close) / dc3;
+    final oc2 = (open + close) / dc2;
+    final ohl3 = (open + high + low) / dc3;
     final ohl4 = (open + high + low + close) / _d('4.0');
 
     return switch (candlePart) {

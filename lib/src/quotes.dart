@@ -67,11 +67,11 @@ extension Quotes on Quote {
 
   static Quote get emptyQuote => (
         date: Util.maxDate,
-        open: Decimal.zero,
-        high: Decimal.zero,
-        low: Decimal.zero,
-        close: Decimal.zero,
-        volume: Decimal.zero
+        open: Decimals.nan,
+        high: Decimals.nan,
+        low: Decimals.nan,
+        close: Decimals.nan,
+        volume: Decimals.nan,
       );
 
   bool get isEmpty => date == Util.maxDate;

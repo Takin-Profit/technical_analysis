@@ -4,6 +4,8 @@
 
 import 'dart:math' as math;
 
+import 'package:decimal/decimal.dart';
+
 import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
@@ -79,4 +81,25 @@ extension DoubleExt on double {
   double toPrecision(int precision) {
     return double.parse(toStringAsFixed(precision));
   }
+}
+
+extension DateTimeRounding on DateTime {
+  DateTime roundDown(Duration duration) {
+    if (duration == Duration.zero) {
+      return this;
+    } else {
+      final intervalTicks = duration.inMicroseconds;
+      final dateTimeTicks = this.microsecondsSinceEpoch;
+
+      return DateTime.fromMicrosecondsSinceEpoch(
+        dateTimeTicks - (dateTimeTicks % intervalTicks),
+      );
+    }
+  }
+}
+
+extension Decimals on Decimal {
+  static Decimal get nan => Decimal.parse(
+        double.nan.toString(),
+      );
 }

@@ -9,7 +9,7 @@ import 'dart:io';
 
 import 'package:decimal/decimal.dart';
 import 'package:path/path.dart' as p;
-import 'package:technical_indicators/src/replay_subject/replay_subject.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:technical_indicators/technical_indicators.dart';
 
 final emptySeries = ReplaySubject<Quote>();

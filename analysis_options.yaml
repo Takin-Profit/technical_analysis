@@ -42,6 +42,7 @@ dart_code_metrics:
     - prefer-static-class: false
     - no-magic-number: false
     - format-comment: false
+    - avoid-dynamic: false
 # exclude:
 #     - path/to/excluded/files/**
 

@@ -43,7 +43,7 @@ Series<PriceDataDouble> calcRSI(
       double rsi;
       if (avgLoss > 0) {
         final double rs = avgGain / avgLoss;
-        rsi = 100 - (100 / (1 + rs));
+        rsi = 100 - (100 / (rs + 1));
       } else {
         rsi = 100;
       }
