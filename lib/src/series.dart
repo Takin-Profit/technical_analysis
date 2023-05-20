@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
@@ -232,6 +231,7 @@ extension QuotesSeries on QuoteSeries {
   bool isValid(Quote quote) =>
       values.where((q) => q.date == quote.date).isEmpty;
 
+  //  buffers the stream of quotes into lists, based on the timeframe given.
   Stream<List<Quote>> _toTimeFrame(TimeFrame timeFrame) {
     DateTime bufferStartDate = Util.minDate;
 
@@ -250,14 +250,12 @@ extension QuotesSeries on QuoteSeries {
       }
     });
   }
-/*
-  Series<Quote> toTimeFrame(TimeFrame timeFrame) async* {
-     await for (final list in _toTimeFrame(timeFrame)) {
-       list.
-     }
-  }
 
-   */
+  Series<Quote> toTimeFrame(TimeFrame timeFrame) async* {
+    await for (final list in _toTimeFrame(timeFrame)) {
+      yield _aggregate(timeFrame.toDuration(), list);
+    }
+  }
 }
 
 Quote _aggregate(Duration duration, List<Quote> quotes) {
@@ -268,43 +266,46 @@ Quote _aggregate(Duration duration, List<Quote> quotes) {
     return Quotes.emptyQuote;
   }
 
-  final qMap = quotes
-      .sorted(
-        (a, b) => a.date.compareTo(b.date),
-      )
+  return quotes
       .groupListsBy(
         (element) => element.date.roundDown(duration),
       )
-      .entries;
+      .entries
+      .map(
+        (element) {
+          final firstQuote = element.value.first;
+          final lastQuote = element.value.last;
 
-  // Convert each MapEntry to a Quote
-  final quotesAggregated = qMap.map((element) {
-    final firstQuote = element.value.first;
-    final lastQuote = element.value.last;
+          final high = element.value.map((q) => q.high).reduce(
+                (value, element) =>
+                    (value.compareTo(element) >= 0) ? value : element,
+              );
 
-    final high = Decimal.parse(
-      element.value.map((q) => q.high.toDouble()).reduce(max).toString(),
-    );
-    final low = Decimal.parse(
-      element.value.map((q) => q.low.toDouble()).reduce(min).toString(),
-    );
+          final low = element.value.map((q) => q.low).reduce(
+                (value, element) =>
+                    (value.compareTo(element) <= 0) ? value : element,
+              );
 
-    final volume = element.value
-        .map((q) => q.volume)
-        .reduce((value, element) => value + element);
+          final volume = element.value
+              .map(
+                (q) => q.volume,
+              )
+              .reduce(
+                (value, element) => value + element,
+              );
 
-    return (
-      date: firstQuote.date,
-      open: firstQuote.open,
-      high: high,
-      low: low,
-      close: lastQuote.close,
-      volume: volume,
-    );
-  }).toList();
-
-  // Assuming that you want to return the last Quote
-  return quotesAggregated.last;
+          return (
+            date: firstQuote.date,
+            open: firstQuote.open,
+            high: high,
+            low: low,
+            close: lastQuote.close,
+            volume: volume,
+          );
+        },
+      )
+      .toList()
+      .last;
 }
 
 extension QuoteExt on Quote {
