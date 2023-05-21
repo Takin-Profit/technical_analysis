@@ -1,6 +1,9 @@
 {
   "rules": [
-    "lib/*",
+    ".github/*",
+    ".vscode/",
+    "example/",
+    "lib/src/*",
     "test/*"
-   ]
+  ]
 }
