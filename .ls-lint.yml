@@ -1,5 +1,9 @@
 ls:
-  .dart: snake-case
+  .dart: snake_case
+
+  lib/src: snake_case
+
+  test: snake_case
 
 ignore:
   - .git
