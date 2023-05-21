@@ -167,17 +167,17 @@ sealed class TA {
   }
 
   static Series<BBResult> bb(
-  Series<PriceDataDouble> series, {
-  int lookBack = 20,
-  double multi = 2.0,
-}) {
+    Series<PriceDataDouble> series, {
+    int lookBack = 20,
+    double multi = 2.0,
+  }) {
     _validateArg('BB (Bollinger Bands)', lookBack, 1);
 
-    if (multi < 1.0 ) {
+    if (multi < 1.0) {
       throw ArgumentError(
         'Bollinger Bands must be greater than 1',
       );
-  }
+    }
 
     return calcBB(series, lookBack: lookBack, multi: multi);
   }
