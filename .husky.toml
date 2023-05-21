@@ -26,6 +26,8 @@ commit-msg = [
 [lint-staged]
 "*.dart" = [
     "dart format .",
+    "folderslint",
+    "ls-lint"
 ]
 
 # commit msg rule default support conventional commits

@@ -1,0 +1,8 @@
+ls:
+  .dart: snake-case
+
+ignore:
+  - .git
+  - .vscode
+  - .idea
+  - .github
