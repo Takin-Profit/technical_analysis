@@ -1,0 +1,2 @@
+test:
+    dart test

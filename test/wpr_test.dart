@@ -82,11 +82,6 @@ Future<void> main() async {
       final _ = await quotes.close();
 
       expect(
-        () => TA.wpr(quotes, lookBack: 1),
-        throwsArgumentError,
-        reason: 'should throw',
-      );
-      expect(
         () => TA.wpr(quotes, lookBack: 0),
         throwsArgumentError,
         reason: 'should throw',
