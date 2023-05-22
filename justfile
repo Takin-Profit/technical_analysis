@@ -26,6 +26,10 @@ lint:
     dart analyze
     @echo formatting files
     dart format .
+    @echo running ls-lint
+    ls-lint
+    @echo running folderslint
+    dart run folderslint
 
 publish: lint test
     dart pub publish
