@@ -12,7 +12,8 @@ import 'data/test_data.dart';
 // ignore_for_file: prefer-correct-identifier-length,double-literal-format
 /*
  * expected results.
- * https://docs.google.com/spreadsheets/d/1n3-bYh1V0JMStMBIJKE6CSJCLMMEP19tD7vGkRrtq6I/edit?usp=sharing
+ * https://docs.google.com/spreadsheets/d/1cn3vwgBhhNqkHDgg7JNSCBWFSaSPtZjxub1WQTvwA-Y/edit?usp=sharing
+ * data exported directly from tradingview.
  */
 
 Future<void> main() async {
@@ -74,7 +75,7 @@ Future<void> main() async {
         expect(
           result55.value.toPrecision(9),
           1466.118385714,
-          reason: 'should be 1935.009186',
+          reason: 'should be 1466.118385714',
         );
 
         expect(
