@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 import 'package:technical_analysis/src/std_dev.dart';
 
+import 'bb.dart';
 import 'ema.dart';
 import 'mfi.dart';
 import 'rma.dart';
@@ -12,8 +13,8 @@ import 'sma.dart';
 import 'tsi.dart';
 import 'types.dart';
 import 'util.dart';
+import 'wma.dart';
 import 'wpr.dart';
-import 'bb.dart';
 
 void _validateArg(String indicator, int value, int minValue) {
   if (value < minValue) {
@@ -180,5 +181,14 @@ sealed class TA {
     }
 
     return calcBB(series, lookBack: lookBack, multi: multi);
+  }
+
+  static Series<PriceDataDouble> wma(
+    Series<PriceDataDouble> series, {
+    int lookBack = 15,
+  }) {
+    _validateArg('WMA (Weighted Moving Average)', lookBack, 1);
+
+    return calcWMA(series, lookBack: lookBack);
   }
 }
