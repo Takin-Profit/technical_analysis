@@ -1,0 +1,24 @@
+version-file: "internal/version/version"
+
+hooks:
+
+  post-version:
+    - "sed -i -e 's/\"version\": \"[^\"]*\"/\"version\": \"{{ .Version }}\"/g' testdata/package.json"
+    - "sed -i -e 's/version: [^\\n]*/version: {{ .Version }}/g' testdata/pubspec.yaml"
+
+  pre-commit:
+    - "dart analyze"
+    - "husky lint-staged"
+
+  commit-msg:
+    - "husky lint-commit"
+
+lint-staged:
+  "*.dart":
+    - "dart format ."
+    - "dart run folderslint"
+    - "ls-lint"
+
+lint-commit:
+  email: "^(.+@gmail.com|.+@qq.com|.+@hotmail.com)$"
+  types: "^(feat|fix|build|chore|ci|docs|perf|refactor|revert|style|test|cleanup)$"
