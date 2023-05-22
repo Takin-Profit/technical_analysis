@@ -4,9 +4,10 @@
 
 import 'dart:async';
 
+import 'package:async/async.dart';
+
 import 'ema.dart';
 import 'series.dart';
-import 'stream_zip/stream_zip.dart';
 import 'types.dart';
 import 'util.dart';
 
