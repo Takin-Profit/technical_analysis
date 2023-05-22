@@ -5,6 +5,7 @@ import 'package:technical_analysis/src/std_dev.dart';
 
 import 'bb.dart';
 import 'ema.dart';
+import 'linreg.dart';
 import 'mfi.dart';
 import 'rma.dart';
 import 'rsi.dart';
@@ -190,5 +191,12 @@ sealed class TA {
     _validateArg('WMA (Weighted Moving Average)', lookBack, 1);
 
     return calcWMA(series, lookBack: lookBack);
+  }
+
+  static Series<PriceDataDouble> linReg(Series<PriceDataDouble> series,
+      {int lookBack = 1}) {
+    _validateArg('Linear Regression', lookBack, 1);
+
+    return calcLinReg(series, lookBack: lookBack);
   }
 }

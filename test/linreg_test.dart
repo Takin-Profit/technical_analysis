@@ -3,6 +3,7 @@
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
+
 import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
 
@@ -24,9 +25,9 @@ Future<void> main() async {
       ),
     },
   );
-  group('TA.wma tests', () {
+  group('TA.linreg tests', () {
     test('WMA Result should have correct length', () async {
-      final res = TA.wma(quotes.closes, lookBack: 20);
+      final res = TA.linReg(quotes.closes, lookBack: 20);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
