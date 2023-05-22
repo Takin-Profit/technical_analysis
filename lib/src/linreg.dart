@@ -35,8 +35,8 @@ class _SimpleLinearRegression {
 Series<PriceDataDouble> calcLinReg(
   Series<PriceDataDouble> series, {
   int lookBack = 9,
-  double pcAbove = 0.009,
-  double pcBelow = 0.009,
+  // double pcAbove = 0.009,
+  // double pcBelow = 0.009,
 }) async* {
   CircularBuffer<PriceDataDouble> buffer =
       CircularBuffer<PriceDataDouble>(lookBack);
@@ -44,26 +44,32 @@ Series<PriceDataDouble> calcLinReg(
   await for (PriceDataDouble data in series) {
     buffer.add(data);
 
-    if (buffer.length < lookBack) {
-      continue;
+    if (buffer.isFilled) {
+      List<double> x = List.generate(
+        buffer.length,
+        (index) => index.toDouble(),
+      );
+      List<double> y = buffer.map((item) => item.value).toList();
+
+      _SimpleLinearRegression lr = _SimpleLinearRegression(x, y);
+
+      double linReg = lr.predict((buffer.length - 1).toDouble());
+
+      // double pcAboveVal = 1 + pcAbove / 100.0;
+      // double pcBelowVal = 1 - pcBelow / 100.0;
+      // final last = buffer.last.value;
+      // bool sell = last > linReg * pcAboveVal;
+      // bool buy = last < linReg * pcBelowVal;
+
+      yield (
+        date: data.date,
+        value: linReg,
+      );
+    } else {
+      yield (
+        date: data.date,
+        value: double.nan,
+      );
     }
-
-    List<double> x = List.generate(buffer.length, (index) => index.toDouble());
-    List<double> y = buffer.map((item) => item.value).toList();
-
-    _SimpleLinearRegression lr = _SimpleLinearRegression(x, y);
-
-    double linReg = lr.predict((buffer.length - 1).toDouble());
-
-    // double pcAboveVal = 1 + pcAbove / 100.0;
-    // double pcBelowVal = 1 - pcBelow / 100.0;
-    // final last = buffer.last.value;
-    // bool sell = last > linReg * pcAboveVal;
-    // bool buy = last < linReg * pcBelowVal;
-
-    yield (
-      date: data.date,
-      value: linReg,
-    );
   }
 }

@@ -193,8 +193,10 @@ sealed class TA {
     return calcWMA(series, lookBack: lookBack);
   }
 
-  static Series<PriceDataDouble> linReg(Series<PriceDataDouble> series,
-      {int lookBack = 1}) {
+  static Series<PriceDataDouble> linReg(
+    Series<PriceDataDouble> series, {
+    int lookBack = 1,
+  }) {
     _validateArg('Linear Regression', lookBack, 1);
 
     return calcLinReg(series, lookBack: lookBack);

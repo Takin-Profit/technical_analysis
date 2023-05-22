@@ -67,5 +67,8 @@ Future<List<Quote>> getEthRMA({int days = 500}) =>
 Future<List<Quote>> getBtcMFI({int days = 820}) =>
     _getQuotes('btc_mfi.csv', days);
 
+Future<List<Quote>> getGoldLinReg({int days = 900}) =>
+    _getQuotes('gold_linreg.csv', days);
+
 Stream<Quote> getLongish({int days = 5285}) =>
     readFileStream('longish.csv', days: days);
