@@ -47,10 +47,21 @@ Stream<Quote> readFileStream(String fileName, {int days = 500}) =>
         .map(quoteFromCsv)
         .take(days);
 
-Future<List<Quote>> _getQuotes(String fileName, int days) async {
+Future<List<Quote>> _getQuotes(
+  String fileName,
+  int days, {
+  bool useTimeStamp = false,
+}) async {
   final file = await File(p.absolute('test', 'data', fileName)).readAsString();
 
-  return file.split('\n').skip(1).map(quoteFromCsv).take(days).toList();
+  return file
+      .split('\n')
+      .skip(1)
+      .map((data) => useTimeStamp
+          ? quoteFromCsv(data, useTimeStamp: true)
+          : quoteFromCsv(data))
+      .take(days)
+      .toList();
 }
 
 // DEFAULT: S&P 500 ~2 years of daily data
