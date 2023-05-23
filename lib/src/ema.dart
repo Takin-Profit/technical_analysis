@@ -3,10 +3,11 @@
 // license that can be found in the LICENSE file.
 
 import 'circular_buffer.dart';
+import 'series.dart';
 import 'types.dart';
 
-Stream<PriceDataDouble> calcEMA(
-  Stream<PriceDataDouble> series, {
+Series<PriceDataDouble> calcEMA(
+  Series<PriceDataDouble> series, {
   int lookBack = 14,
 }) async* {
   final buffer = CircularBuffer<PriceDataDouble>(lookBack);

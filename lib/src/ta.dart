@@ -11,6 +11,7 @@ import 'rma.dart';
 import 'rsi.dart';
 import 'series.dart';
 import 'sma.dart';
+import 'tci.dart';
 import 'tsi.dart';
 import 'types.dart';
 import 'util.dart';
@@ -200,5 +201,13 @@ sealed class TA {
     _validateArg('Linear Regression', lookBack, 1);
 
     return calcLinReg(series, lookBack: lookBack);
+  }
+
+  static Series<PriceDataDouble> tci(
+    Series<PriceDataDouble> series,
+  ) {
+    _validateArg('TCI', 9, 1);
+
+    return calcTCI(series);
   }
 }
