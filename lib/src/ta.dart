@@ -15,6 +15,7 @@ import 'tci.dart';
 import 'tsi.dart';
 import 'types.dart';
 import 'util.dart';
+import 'willy.dart';
 import 'wma.dart';
 import 'wpr.dart';
 
@@ -209,5 +210,13 @@ sealed class TA {
     _validateArg('TCI', 9, 1);
 
     return calcTCI(series);
+  }
+
+  static Series<PriceDataDouble> willy(
+    Series<PriceDataDouble> series,
+  ) {
+    _validateArg('WILLY', 9, 1);
+
+    return calcWilly(series);
   }
 }

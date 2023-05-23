@@ -12,7 +12,8 @@ import 'data/test_data.dart';
 /*
  *
  * expected results.
- * https://docs.google.com/spreadsheets/d/1lg7Fbz-986auSClakX9RS-Y-zrcDZYP8gfYSHQhHP4E/edit?usp=sharing
+ * https://docs.google.com/spreadsheets/d/1r2jm-TEUPYJN3a2-7Htw0P95hZmryqv-u8XspmdbV40/edit?usp=sharing
+ * data exported directly from tradingview.
  */
 
 Future<void> main() async {
