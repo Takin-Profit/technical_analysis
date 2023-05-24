@@ -17,11 +17,11 @@ sealed class Util {
   static DateTime get maxDate => DateTime.fromMicrosecondsSinceEpoch(0)
       .add(const Duration(days: 100000000));
 
-  static Series<PriceDataDouble> change(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> change(
+    Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = CircularBuffer<PriceDataDouble>(length + 1);
+    final buffer = CircularBuffer<PriceData>(length + 1);
 
     await for (final current in series) {
       buffer.add(current);
@@ -33,11 +33,11 @@ sealed class Util {
     }
   }
 
-  static Series<PriceDataDouble> highest(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> highest(
+    Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = CircularBuffer<PriceDataDouble>(length);
+    final buffer = CircularBuffer<PriceData>(length);
 
     await for (final current in series) {
       buffer.add(current);
@@ -51,11 +51,11 @@ sealed class Util {
     }
   }
 
-  static Series<PriceDataDouble> lowest(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> lowest(
+    Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = CircularBuffer<PriceDataDouble>(length);
+    final buffer = CircularBuffer<PriceData>(length);
 
     await for (final current in series) {
       buffer.add(current);

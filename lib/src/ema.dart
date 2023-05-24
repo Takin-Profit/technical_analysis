@@ -6,11 +6,11 @@ import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
 
-Series<PriceDataDouble> calcEMA(
-  Series<PriceDataDouble> series, {
+Series<PriceData> calcEMA(
+  Series<PriceData> series, {
   int lookBack = 14,
 }) async* {
-  final buffer = CircularBuffer<PriceDataDouble>(lookBack);
+  final buffer = CircularBuffer<PriceData>(lookBack);
   double ema = double.nan;
   final double multiplier =
       2 / (lookBack + 1); // Multiplier: (2 / (Time periods + 1) )

@@ -8,11 +8,11 @@ import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
 
-Series<PriceDataDouble> calcWMA(
-  Series<PriceDataDouble> series, {
+Series<PriceData> calcWMA(
+  Series<PriceData> series, {
   int lookBack = 15,
 }) async* {
-  final buffer = CircularBuffer<PriceDataDouble>(lookBack);
+  final buffer = CircularBuffer<PriceData>(lookBack);
   final divisor = lookBack.toDouble() * (lookBack + 1) / 2.0;
 
   await for (var data in series) {

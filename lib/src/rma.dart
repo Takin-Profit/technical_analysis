@@ -9,13 +9,13 @@ import 'types.dart';
 /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.
 /// requires about 100 quotes before higher acuracy kicks in.
 /// recommended warmup periods = 150
-Series<PriceDataDouble> calcRMA(
-  Series<PriceDataDouble> series, {
+Series<PriceData> calcRMA(
+  Series<PriceData> series, {
   int lookBack = 14,
 }) async* {
   final double alpha = 1.0 / lookBack;
   double? sum;
-  final buf = CircularBuffer<PriceDataDouble>(lookBack);
+  final buf = CircularBuffer<PriceData>(lookBack);
 
   await for (final data in series) {
     buf.add(data);

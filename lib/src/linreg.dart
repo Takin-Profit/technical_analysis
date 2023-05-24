@@ -9,16 +9,15 @@ import 'series.dart';
 import 'types.dart';
 import 'util.dart';
 
-Series<PriceDataDouble> calcLinReg(
-  Series<PriceDataDouble> series, {
+Series<PriceData> calcLinReg(
+  Series<PriceData> series, {
   int lookBack = 9,
   // double pcAbove = 0.009,
   // double pcBelow = 0.009,
 }) async* {
-  CircularBuffer<PriceDataDouble> buffer =
-      CircularBuffer<PriceDataDouble>(lookBack);
+  CircularBuffer<PriceData> buffer = CircularBuffer<PriceData>(lookBack);
 
-  await for (PriceDataDouble data in series) {
+  await for (PriceData data in series) {
     buffer.add(data);
 
     if (buffer.isFilled) {

@@ -85,7 +85,7 @@ Future<void> main() async {
     });
 
     test('Highest function handles empty series', () async {
-      final inputSeries = Stream<PriceDataDouble>.empty();
+      final inputSeries = Stream<PriceData>.empty();
 
       final results = await TA.highest(inputSeries, length: 3).toList();
 

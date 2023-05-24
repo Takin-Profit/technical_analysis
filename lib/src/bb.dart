@@ -13,12 +13,12 @@ import 'types.dart';
 typedef BBResult = ({DateTime date, double upper, double lower, double middle});
 
 Series<BBResult> calcBB(
-  Series<PriceDataDouble> series, {
+  Series<PriceData> series, {
   int lookBack = 20,
   double multi = 2.0,
 }) async* {
-  final smaBuffer = CircularBuffer<PriceDataDouble>(lookBack);
-  final stdDevBuffer = CircularBuffer<PriceDataDouble>(lookBack);
+  final smaBuffer = CircularBuffer<PriceData>(lookBack);
+  final stdDevBuffer = CircularBuffer<PriceData>(lookBack);
 
   await for (final data in series) {
     smaBuffer.add(data);

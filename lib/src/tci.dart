@@ -7,8 +7,8 @@
 import 'circular_buffer.dart';
 import 'types.dart';
 
-Stream<PriceDataDouble> calcTCI(Stream<PriceDataDouble> series) async* {
-  final buffer = CircularBuffer<PriceDataDouble>(9);
+Stream<PriceData> calcTCI(Stream<PriceData> series) async* {
+  final buffer = CircularBuffer<PriceData>(9);
   double emaSrc = double.nan;
   double emaDiffAbs = double.nan;
   double emaTCIRaw = double.nan;

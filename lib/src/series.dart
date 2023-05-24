@@ -102,7 +102,7 @@ extension QuotesSeries on QuoteSeries {
         sync: sync,
       );
 
-  Series<PriceDataDouble> get open => stream.map(
+  Series<PriceData> get open => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.open,
         ),
@@ -115,7 +115,7 @@ extension QuotesSeries on QuoteSeries {
         ),
       );
 
-  Series<PriceDataDouble> get high => stream.map(
+  Series<PriceData> get high => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.high,
         ),
@@ -128,7 +128,7 @@ extension QuotesSeries on QuoteSeries {
         ),
       );
 
-  Series<PriceDataDouble> get low => stream.map(
+  Series<PriceData> get low => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.low,
         ),
@@ -143,7 +143,7 @@ extension QuotesSeries on QuoteSeries {
 
   /// This getter is named closes so that it does not clash with the
   /// underlying stream.close method.
-  Series<PriceDataDouble> get closes => stream.map(
+  Series<PriceData> get closes => stream.map(
         (event) => event.toPriceDataDouble(),
       );
 
@@ -154,13 +154,13 @@ extension QuotesSeries on QuoteSeries {
         ),
       );
 
-  Series<PriceDataDouble> get volume => stream.map(
+  Series<PriceData> get volume => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.volume,
         ),
       );
 
-  Series<PriceDataDouble> get hl2 => stream.map(
+  Series<PriceData> get hl2 => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.hl2,
         ),
@@ -173,7 +173,7 @@ extension QuotesSeries on QuoteSeries {
         ),
       );
 
-  Series<PriceDataDouble> get hlc3 => stream.map(
+  Series<PriceData> get hlc3 => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.hlc3,
         ),
@@ -186,7 +186,7 @@ extension QuotesSeries on QuoteSeries {
         ),
       );
 
-  Series<PriceDataDouble> get oc2 => stream.map(
+  Series<PriceData> get oc2 => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.oc2,
         ),
@@ -199,7 +199,7 @@ extension QuotesSeries on QuoteSeries {
         ),
       );
 
-  Series<PriceDataDouble> get ohl3 => stream.map(
+  Series<PriceData> get ohl3 => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.ohl3,
         ),
@@ -212,7 +212,7 @@ extension QuotesSeries on QuoteSeries {
         ),
       );
 
-  Series<PriceDataDouble> get ohlc4 => stream.map(
+  Series<PriceData> get ohlc4 => stream.map(
         (event) => event.toPriceDataDouble(
           candlePart: CandlePart.ohlc4,
         ),
@@ -306,7 +306,7 @@ Quote _aggregate(Duration duration, List<Quote> quotes) {
 }
 
 extension QuoteExt on Quote {
-  PriceData toPriceData({CandlePart candlePart = CandlePart.close}) {
+  PriceDataDecimal toPriceData({CandlePart candlePart = CandlePart.close}) {
     final dc2 = _d('2.0');
     final dc3 = _d('3.0');
     final hl2 = (high + low) / dc2;
@@ -375,7 +375,7 @@ extension QuoteExt on Quote {
         volume: volume.toDouble()
       );
 
-  PriceDataDouble toPriceDataDouble({
+  PriceData toPriceDataDouble({
     CandlePart candlePart = CandlePart.close,
   }) {
     final data = _toDoublePrecis();

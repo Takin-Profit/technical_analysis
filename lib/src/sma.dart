@@ -6,11 +6,11 @@ import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
 
-Series<PriceDataDouble> calcSMA(
-  Series<PriceDataDouble> series, {
+Series<PriceData> calcSMA(
+  Series<PriceData> series, {
   int lookBack = 20,
 }) async* {
-  final buffer = CircularBuffer<PriceDataDouble>(lookBack);
+  final buffer = CircularBuffer<PriceData>(lookBack);
 
   await for (final data in series) {
     buffer.add(data);

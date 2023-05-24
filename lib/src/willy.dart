@@ -9,8 +9,8 @@ import "dart:math";
 import 'circular_buffer.dart';
 import 'types.dart';
 
-Stream<PriceDataDouble> calcWilly(Stream<PriceDataDouble> series) async* {
-  final buffer = CircularBuffer<PriceDataDouble>(6);
+Stream<PriceData> calcWilly(Stream<PriceData> series) async* {
+  final buffer = CircularBuffer<PriceData>(6);
 
   await for (final data in series) {
     buffer.add(data);

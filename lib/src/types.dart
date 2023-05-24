@@ -6,15 +6,48 @@ import 'dart:convert';
 
 import 'package:decimal/decimal.dart';
 
-typedef PriceData = ({DateTime date, Decimal value});
-typedef PriceDataDouble = ({DateTime date, double value});
+typedef PriceDataDecimal = ({DateTime date, Decimal value});
+typedef PriceData = ({DateTime date, double value});
 
 enum StDev { population, sample }
 
-extension PriceDataOps on PriceData {
-  PriceDataDouble get doublePrecis => (date: date, value: value.toDouble());
+extension PD on PriceData {
+  PriceData get doublePrecis => (date: date, value: value.toDouble());
 
   PriceData copyWith({
+    DateTime? date,
+    double? value,
+  }) {
+    return (
+      date: date ?? this.date,
+      value: value ?? this.value,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'date': date.millisecondsSinceEpoch,
+      'value': value,
+    };
+  }
+
+  static PriceDataDecimal fromMap(Map<String, dynamic> map) {
+    return (
+      date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
+      value: map['value'] as Decimal,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  static PriceDataDecimal fromJson(String source) =>
+      fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+extension PriceDataOps on PriceDataDecimal {
+  PriceData get doublePrecis => (date: date, value: value.toDouble());
+
+  PriceDataDecimal copyWith({
     DateTime? date,
     Decimal? value,
   }) {
@@ -31,7 +64,7 @@ extension PriceDataOps on PriceData {
     };
   }
 
-  static PriceData fromMap(Map<String, dynamic> map) {
+  static PriceDataDecimal fromMap(Map<String, dynamic> map) {
     return (
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
       value: map['value'] as Decimal,
@@ -40,7 +73,7 @@ extension PriceDataOps on PriceData {
 
   String toJson() => json.encode(toMap());
 
-  static PriceData fromJson(String source) =>
+  static PriceDataDecimal fromJson(String source) =>
       fromMap(json.decode(source) as Map<String, dynamic>);
 }
 

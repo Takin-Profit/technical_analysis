@@ -14,14 +14,14 @@ import 'util.dart';
 typedef TsiResult = ({DateTime date, double value, double? signal});
 
 Series<TsiResult> calcTSI(
-  Series<PriceDataDouble> series, {
+  Series<PriceData> series, {
   int lookBack = 25,
   int smoothLen = 13,
   int signalLen = 13,
 }) async* {
   // correct to this point
-  Stream<PriceDataDouble> doubleSmooth(
-    Stream<PriceDataDouble> stream,
+  Stream<PriceData> doubleSmooth(
+    Stream<PriceData> stream,
     int long,
     int short,
   ) {
@@ -59,7 +59,7 @@ Series<TsiResult> calcTSI(
 
   await for (final data in finalZippedStream) {
     final tsiData = data.first as TsiResult;
-    final signalData = data[1] as PriceDataDouble;
+    final signalData = data[1] as PriceData;
     yield (date: tsiData.date, value: tsiData.value, signal: signalData.value);
   }
 }

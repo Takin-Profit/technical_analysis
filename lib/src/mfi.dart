@@ -12,7 +12,7 @@ import 'types.dart';
 
 typedef PriceDataTriple = ({DateTime date, double value, double vol});
 
-Series<PriceDataDouble> calcMFI(
+Series<PriceData> calcMFI(
   Series<PriceDataTriple> series, {
   int lookBack = 14,
 }) async* {

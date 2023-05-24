@@ -10,12 +10,12 @@ import 'circular_buffer.dart';
 import 'series.dart';
 import 'types.dart';
 
-Series<PriceDataDouble> calcStdDev(
-  Series<PriceDataDouble> series, {
+Series<PriceData> calcStdDev(
+  Series<PriceData> series, {
   int length = 1,
   StDev bias = StDev.population,
 }) async* {
-  final buffer = CircularBuffer<PriceDataDouble>(length);
+  final buffer = CircularBuffer<PriceData>(length);
   // adjusts the divisor accordingly
   int divisor() {
     return bias == StDev.population

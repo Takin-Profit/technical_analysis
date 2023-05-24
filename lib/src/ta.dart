@@ -44,8 +44,8 @@ sealed class TA {
   }
 
   /// Compares the current [series] value to its value [length] bars ago and returns the difference.
-  static Series<PriceDataDouble> change(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> change(
+    Series<PriceData> series, {
     int length = 1,
   }) {
     if (length < 1) {
@@ -57,8 +57,8 @@ sealed class TA {
     return Util.change(series, length: length);
   }
 
-  static Series<PriceDataDouble> highest(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> highest(
+    Series<PriceData> series, {
     int length = 1,
   }) {
     if (length < 1) {
@@ -70,8 +70,8 @@ sealed class TA {
     return Util.highest(series, length: length);
   }
 
-  static Series<PriceDataDouble> lowest(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> lowest(
+    Series<PriceData> series, {
     int length = 1,
   }) {
     if (length < 1) {
@@ -83,8 +83,8 @@ sealed class TA {
     return Util.lowest(series, length: length);
   }
 
-  static Series<PriceDataDouble> stdDev(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> stdDev(
+    Series<PriceData> series, {
     int length = 1,
     StDev bias = StDev.population,
   }) {
@@ -97,8 +97,8 @@ sealed class TA {
     return calcStdDev(series, length: length, bias: bias);
   }
 
-  static Series<PriceDataDouble> sma(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> sma(
+    Series<PriceData> series, {
     int lookBack = 20,
   }) {
     _validateArg('SMA (Simple Moving Average)', lookBack, 1);
@@ -108,8 +108,8 @@ sealed class TA {
 
   /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.
   /// recommended warmup periods = 150.
-  static Series<PriceDataDouble> rma(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> rma(
+    Series<PriceData> series, {
     int lookBack = 14,
   }) {
     _validateArg('RMA (Relative Moving Average)', lookBack, 1);
@@ -117,8 +117,8 @@ sealed class TA {
     return calcRMA(series, lookBack: lookBack);
   }
 
-  static Series<PriceDataDouble> ema(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> ema(
+    Series<PriceData> series, {
     int lookBack = 20,
   }) {
     _validateArg('EMA (Exponential Moving Average)', lookBack, 1);
@@ -126,8 +126,8 @@ sealed class TA {
     return calcEMA(series, lookBack: lookBack);
   }
 
-  static Series<PriceDataDouble> rsi(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> rsi(
+    Series<PriceData> series, {
     int lookBack = 14,
   }) {
     _validateArg('RSI (Relative Strength Index)', lookBack, 2);
@@ -136,7 +136,7 @@ sealed class TA {
   }
 
   static Series<TsiResult> tsi(
-    Series<PriceDataDouble> series, {
+    Series<PriceData> series, {
     int lookBack = 25,
     int smoothLen = 13,
     int signalLen = 13,
@@ -153,7 +153,7 @@ sealed class TA {
     );
   }
 
-  static Series<PriceDataDouble> mfi(
+  static Series<PriceData> mfi(
     Series<({DateTime date, double value, double vol})> series, {
     int lookBack = 14,
   }) {
@@ -162,7 +162,7 @@ sealed class TA {
     return calcMFI(series, lookBack: lookBack);
   }
 
-  static Series<PriceDataDouble> wpr(
+  static Series<PriceData> wpr(
     QuoteSeries series, {
     int lookBack = 14,
   }) {
@@ -172,7 +172,7 @@ sealed class TA {
   }
 
   static Series<BBResult> bb(
-    Series<PriceDataDouble> series, {
+    Series<PriceData> series, {
     int lookBack = 20,
     double multi = 2.0,
   }) {
@@ -187,8 +187,8 @@ sealed class TA {
     return calcBB(series, lookBack: lookBack, multi: multi);
   }
 
-  static Series<PriceDataDouble> wma(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> wma(
+    Series<PriceData> series, {
     int lookBack = 15,
   }) {
     _validateArg('WMA (Weighted Moving Average)', lookBack, 1);
@@ -196,8 +196,8 @@ sealed class TA {
     return calcWMA(series, lookBack: lookBack);
   }
 
-  static Series<PriceDataDouble> linReg(
-    Series<PriceDataDouble> series, {
+  static Series<PriceData> linReg(
+    Series<PriceData> series, {
     int lookBack = 1,
   }) {
     _validateArg('Linear Regression', lookBack, 1);
@@ -205,16 +205,16 @@ sealed class TA {
     return calcLinReg(series, lookBack: lookBack);
   }
 
-  static Series<PriceDataDouble> tci(
-    Series<PriceDataDouble> series,
+  static Series<PriceData> tci(
+    Series<PriceData> series,
   ) {
     _validateArg('TCI', 9, 1);
 
     return calcTCI(series);
   }
 
-  static Series<PriceDataDouble> willy(
-    Series<PriceDataDouble> series,
+  static Series<PriceData> willy(
+    Series<PriceData> series,
   ) {
     _validateArg('WILLY', 9, 1);
 

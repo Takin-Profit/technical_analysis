@@ -154,7 +154,7 @@ Future<void> main() async {
     );
 
     test('Handles large amounts of data correctly', () async {
-      final input = Stream.fromIterable(List<PriceDataDouble>.generate(
+      final input = Stream.fromIterable(List<PriceData>.generate(
         10000,
         (i) => (
           date: DateTime(2022, 1, 1).add(Duration(days: i)),
