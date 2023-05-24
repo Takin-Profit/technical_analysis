@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import 'package:technical_analysis/src/percent_rank.dart';
+
 import 'bb.dart';
 import 'ema.dart';
 import 'linreg.dart';
@@ -81,6 +83,15 @@ sealed class TA {
     }
 
     return Util.lowest(series, length: length);
+  }
+
+  static Series<PriceData> percentRank(
+    Series<PriceData> series, {
+    int lookBack = 2,
+  }) {
+    _validateArg('Percent Rank', lookBack, 2);
+
+    return calcPercentRank(series, lookBack: lookBack);
   }
 
   static Series<PriceData> stdDev(
