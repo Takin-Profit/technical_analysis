@@ -2,9 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'package:collection/collection.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:technical_analysis/src/circular_buffer.dart';
 import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
 
@@ -13,98 +10,12 @@ import 'data/test_data.dart';
 /*
  *
  * expected results.
- * https://docs.google.com/spreadsheets/d/1Nio9ujRna5xJ3AhAHJS_BZLWp_xRGedwbxTGiuR_9dc/edit?usp=sharing
+ * https://docs.google.com/spreadsheets/d/1N7CzlqudWgHXad5UDaJzX93V06wZ2vdCgImugibhlQM/edit?usp=sharing
  * data exported directly from tradingview.
  */
 
-double _linReg(List<double> data) {
-  List<double> x = List.generate(
-    32,
-    (index) => index.toDouble(),
-  );
-
-  SimpleLinearRegression lr = SimpleLinearRegression(x, data);
-
-  return lr.predict((data.length - 1).toDouble());
-}
-
-typedef _PhxTestResult = ({
-  DateTime date,
-  double fast,
-  double slow,
-  double lsma,
-  double tci,
-  double mfi,
-  double willy,
-  double rsi,
-  double tsi,
-  double csi,
-});
-// for testing purposes
-Stream<_PhxTestResult> _calcPhxTest(QuoteSeries series) async* {
-  final hlc3 = series.hlc3.asBroadcastStream();
-  final tciStream = TA.tci(hlc3);
-  final mfiStream = TA.mfi(series.hlc3WithVol, lookBack: 3);
-  final willyStream = TA.willy(hlc3);
-  final rsiStream = TA.rsi(hlc3, lookBack: 3);
-  final tsiStream = TA
-      .tsi(series.open, lookBack: 9, smoothLen: 6)
-      .map((el) => (date: el.date, value: el.value));
-
-  final linRegBuf = CircularBuffer<double>(32);
-  final smaBuf = CircularBuffer<double>(6);
-
-  final zipStream = ZipStream.zip5(
-    tciStream,
-    mfiStream,
-    willyStream,
-    rsiStream,
-    tsiStream,
-    (a, b, c, d, e) => (
-      date: b.date,
-      tci: a.value,
-      mfi: b.value,
-      willy: c.value,
-      rsi: d.value,
-      tsi: e.value
-    ),
-  );
-
-  await for (final data in zipStream) {
-    final tci = data.tci;
-    final mfi = data.mfi;
-    final willy = data.willy;
-    final rsi = data.rsi;
-    final tsi = data.tsi / 100;
-
-    final csi = [rsi, (tsi * 50 + 50)].average;
-    final phx = [tci, csi, mfi, willy].average;
-    final trad = [tci, mfi, rsi].average;
-    final fast = [phx, trad].average;
-
-    smaBuf.add(fast);
-    linRegBuf.add(fast);
-
-    final linReg = linRegBuf.isFilled ? _linReg(linRegBuf) : double.nan;
-    final slow = smaBuf.isFilled ? smaBuf.average : double.nan;
-
-    yield (
-      date: data.date,
-      fast: fast,
-      slow: slow,
-      lsma: linReg,
-      tsi: tsi,
-      rsi: rsi,
-      csi: csi,
-      willy: willy,
-      mfi: mfi,
-      tci: tci
-    );
-  }
-}
-
 Future<void> main() async {
-  final data = await getGoldPhx();
+  final data = await getEurUsdPhx();
   late QuoteSeries quotes;
   setUp(
     () => {
@@ -115,10 +26,10 @@ Future<void> main() async {
   );
   group('TA.phx tests', () {
     test('Phx Result should have correct length', () async {
-      final res = _calcPhxTest(quotes);
+      final res = TA.phx(quotes);
       final _ = await quotes.close();
       final result = await res.toList();
-      expect(result.length, 1000);
+      expect(result.length, 700);
     });
     test('Should return the correct number of results without nan', () async {
       final res = TA.phx(quotes);
@@ -129,7 +40,7 @@ Future<void> main() async {
     });
 
     test('fast Should return the correct calculation results', () async {
-      final res = _calcPhxTest(quotes);
+      final res = TA.phx(quotes);
       final _ = await quotes.close();
       final results = await res.toList();
       for (var i = 0; i < results.length; i++) {
