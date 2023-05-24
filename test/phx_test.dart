@@ -86,5 +86,99 @@ Future<void> main() async {
         reason: 'should be 51.81038019',
       );
     });
+
+    test('slow Should return the correct results', () async {
+      final res = TA.phx(quotes);
+      final _ = await quotes.close();
+      final results = await res.toList();
+
+      final result0 = results.first;
+      final result7 = results[7];
+      final result77 = results[77];
+      final result136 = results[136];
+      final result244 = results[244];
+      final result478 = results[478];
+      final result679 = results[679];
+
+      expect(result0.slow.isNaN, true);
+      expect(
+        result7.slow,
+        isNaN,
+        reason: 'should be nan',
+      );
+      // still warming up data
+      expect(
+        result77.slow.toPrecision(8),
+        closeTo(79.74020294, 0.001),
+        reason: 'should be 79.74020294',
+      );
+      expect(
+        result136.slow.toPrecision(8),
+        40.59035747,
+        reason: 'should be 40.59035747',
+      );
+      expect(
+        result244.slow.toPrecision(8),
+        33.94287088,
+        reason: 'should be 33.94287088',
+      );
+      expect(
+        result478.slow.toPrecision(8),
+        8.78840145,
+        reason: 'should be 8.78840145',
+      );
+      expect(
+        result679.slow.toPrecision(8),
+        68.04603741,
+        reason: 'should be 68.04603741',
+      );
+    });
+
+    test('lsma Should return the correct results', () async {
+      final res = TA.phx(quotes);
+      final _ = await quotes.close();
+      final results = await res.toList();
+
+      final result0 = results.first;
+      final result7 = results[7];
+      final result77 = results[77];
+      final result136 = results[136];
+      final result244 = results[244];
+      final result478 = results[478];
+      final result679 = results[679];
+
+      expect(result0.lsma.isNaN, true);
+      expect(
+        result7.lsma,
+        isNaN,
+        reason: 'should be nan',
+      );
+      // still warming up data
+      expect(
+        result77.lsma.toPrecision(8),
+        closeTo(82.62484227, 0.001),
+        reason: 'should be 82.62484227',
+      );
+      expect(
+        result136.lsma.toPrecision(8),
+        37.89349497,
+        reason: 'should be 37.89349497',
+      );
+      expect(
+        result244.lsma.toPrecision(8),
+        53.06003847,
+        reason: 'should be 53.06003847',
+      );
+      expect(
+        result478.lsma.toPrecision(8),
+        13.78061112,
+        reason: 'should be 13.78061112',
+      );
+      expect(
+        result679.lsma.toPrecision(8),
+        72.07285066,
+        reason: 'should be 72.07285066',
+      );
+    });
   });
 }
