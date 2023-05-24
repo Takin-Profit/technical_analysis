@@ -103,3 +103,27 @@ extension Decimals on Decimal {
         double.nan.toString(),
       );
 }
+
+class SimpleLinearRegression {
+  late double slope;
+  late double intercept;
+
+  SimpleLinearRegression(List<double> x, List<double> y) {
+    if (x.length != y.length) {
+      throw Exception('Input vectors should have the same length');
+    }
+
+    double xSum = 0, ySum = 0, xxSum = 0, xySum = 0;
+    for (int i = 0; i < x.length; i++) {
+      xSum += x[i];
+      ySum += y[i];
+      xxSum += x[i] * x[i];
+      xySum += x[i] * y[i];
+    }
+
+    slope = (x.length * xySum - xSum * ySum) / (x.length * xxSum - xSum * xSum);
+    intercept = (ySum - slope * xSum) / x.length;
+  }
+
+  double predict(double x) => slope * x + intercept;
+}
