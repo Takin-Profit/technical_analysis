@@ -87,5 +87,11 @@ Future<List<Quote>> getGoldTci({int days = 900}) =>
 Future<List<Quote>> getGoldWilly({int days = 1000}) =>
     _getQuotes('gold_willy.csv', days);
 
+Future<List<Quote>> getGoldPhx({int days = 1000}) =>
+    _getQuotes('gold_phx.csv', days);
+
+Future<List<Quote>> getGoldPhxInternal({int days = 1000}) =>
+    _getQuotes('gold_phx_internal.csv', days);
+
 Stream<Quote> getLongish({int days = 5285}) =>
     readFileStream('longish.csv', days: days);

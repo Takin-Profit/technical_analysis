@@ -1,16 +1,17 @@
 // Copyright 2023 Takin Profit. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-import 'package:technical_analysis/src/std_dev.dart';
 
 import 'bb.dart';
 import 'ema.dart';
 import 'linreg.dart';
 import 'mfi.dart';
+import 'phx.dart';
 import 'rma.dart';
 import 'rsi.dart';
 import 'series.dart';
 import 'sma.dart';
+import 'std_dev.dart';
 import 'tci.dart';
 import 'tsi.dart';
 import 'types.dart';
@@ -218,5 +219,11 @@ sealed class TA {
     _validateArg('WILLY', 9, 1);
 
     return calcWilly(series);
+  }
+
+  static Series<PhxResult> phx(
+    QuoteSeries series,
+  ) {
+    return calcPhx(series);
   }
 }
