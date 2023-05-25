@@ -8,8 +8,8 @@
 
 import 'dart:convert';
 
-import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:statistics/statistics.dart';
 
 import 'util.dart';
 

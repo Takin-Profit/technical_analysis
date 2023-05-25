@@ -7,9 +7,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:decimal/decimal.dart';
 import 'package:path/path.dart' as p;
 import 'package:rxdart/rxdart.dart';
+import 'package:statistics/statistics.dart';
 import 'package:technical_analysis/technical_analysis.dart';
 
 final emptySeries = ReplaySubject<Quote>();
@@ -22,11 +22,11 @@ Quote quoteFromCsv(String data, {bool useTimeStamp = false}) {
   final dt = useTimeStamp
       ? fromTimeStamp(int.parse(row.first))
       : DateTime.parse(row.first);
-  final open = Decimal.parse(double.parse(row[1]).toString());
-  final high = Decimal.parse(double.parse(row[2]).toString());
-  final low = Decimal.parse(double.parse(row[3]).toString());
-  final close = Decimal.parse(double.parse(row[4]).toString());
-  final volume = Decimal.parse(double.parse(row[5]).toString());
+  final open = Decimal.parse(row[1]).compactedPrecision;
+  final high = Decimal.parse(row[2]).compactedPrecision;
+  final low = Decimal.parse(row[3]).compactedPrecision;
+  final close = Decimal.parse(row[4]).compactedPrecision;
+  final volume = Decimal.parse(row[5]).compactedPrecision;
 
   return (
     date: dt,

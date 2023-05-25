@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import 'package:decimal/decimal.dart';
+import 'package:statistics/statistics.dart';
 import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
 

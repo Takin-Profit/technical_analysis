@@ -5,12 +5,10 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:decimal/decimal.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:statistics/statistics.dart';
 import 'package:technical_analysis/technical_analysis.dart';
-
-Decimal _d(String s) => Decimal.parse(s);
 
 typedef Series<T> = Stream<T>;
 
@@ -307,13 +305,14 @@ Quote _aggregate(Duration duration, List<Quote> quotes) {
 
 extension QuoteExt on Quote {
   PriceDataDecimal toPriceData({CandlePart candlePart = CandlePart.close}) {
-    final dc2 = _d('2.0');
-    final dc3 = _d('3.0');
+    final dc2 = 2.0.toDecimal().compactedPrecision;
+    final dc3 = 3.0.toDecimal().compactedPrecision;
     final hl2 = (high + low) / dc2;
     final hlc3 = (high + low + close) / dc3;
     final oc2 = (open + close) / dc2;
     final ohl3 = (open + high + low) / dc3;
-    final ohl4 = (open + high + low + close) / _d('4.0');
+    final ohl4 =
+        (open + high + low + close) / 4.0.toDecimal().compactedPrecision;
 
     return switch (candlePart) {
       CandlePart.open => (date: date, value: open),
@@ -321,41 +320,11 @@ extension QuoteExt on Quote {
       CandlePart.low => (date: date, value: low),
       CandlePart.close => (date: date, value: close),
       CandlePart.volume => (date: date, value: volume),
-      CandlePart.hl2 => (
-          date: date,
-          value: hl2.toDecimal(
-            scaleOnInfinitePrecision: 19,
-            toBigInt: (f) => f.toBigInt(),
-          )
-        ),
-      CandlePart.hlc3 => (
-          date: date,
-          value: hlc3.toDecimal(
-            scaleOnInfinitePrecision: 19,
-            toBigInt: (f) => f.toBigInt(),
-          )
-        ),
-      CandlePart.oc2 => (
-          date: date,
-          value: oc2.toDecimal(
-            scaleOnInfinitePrecision: 19,
-            toBigInt: (f) => f.toBigInt(),
-          )
-        ),
-      CandlePart.ohl3 => (
-          date: date,
-          value: ohl3.toDecimal(
-            scaleOnInfinitePrecision: 19,
-            toBigInt: (f) => f.toBigInt(),
-          )
-        ),
-      CandlePart.ohlc4 => (
-          date: date,
-          value: ohl4.toDecimal(
-            scaleOnInfinitePrecision: 19,
-            toBigInt: (f) => f.toBigInt(),
-          )
-        ),
+      CandlePart.hl2 => (date: date, value: hl2.compactedPrecision),
+      CandlePart.hlc3 => (date: date, value: hlc3.compactedPrecision),
+      CandlePart.oc2 => (date: date, value: oc2.compactedPrecision),
+      CandlePart.ohl3 => (date: date, value: ohl3.compactedPrecision),
+      CandlePart.ohlc4 => (date: date, value: ohl4.compactedPrecision),
     };
   }
 

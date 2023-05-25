@@ -4,7 +4,8 @@
 
 import 'dart:math' as math;
 
-import 'package:decimal/decimal.dart';
+import 'package:collection/collection.dart';
+import 'package:statistics/statistics.dart';
 
 import 'circular_buffer.dart';
 import 'series.dart';
@@ -75,6 +76,9 @@ sealed class Util {
   static double nz(double value, {double replaceWith = 0}) {
     return value.isNaN ? replaceWith : value;
   }
+
+  static double sma(List<PriceData> data) =>
+      data.map((priceData) => priceData.value).average;
 }
 
 extension DoubleExt on double {

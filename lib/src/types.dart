@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:decimal/decimal.dart';
+import 'package:statistics/statistics.dart';
 
 typedef PriceDataDecimal = ({DateTime date, Decimal value});
 typedef PriceData = ({DateTime date, double value});

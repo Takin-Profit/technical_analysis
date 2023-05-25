@@ -14,3 +14,11 @@ class PriceData {
 
   PriceData({required this.value, required this.date}) {}
 }
+
+enum MaType {
+  ema,
+  sma,
+  smma,
+  tema,
+  wma,
+}
