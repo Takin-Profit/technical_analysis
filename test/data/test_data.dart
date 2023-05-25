@@ -94,7 +94,7 @@ Future<List<Quote>> getCrudePercentRank({int days = 630}) =>
     _getQuotes('%_rank_crude.csv', days);
 
 Future<List<Quote>> getEthBbw({int days = 630}) =>
-    _getQuotes('%_rank_crude.csv', days);
+    _getQuotes('eth_bbw.csv', days);
 
 Stream<Quote> getLongish({int days = 5285}) =>
     readFileStream('longish.csv', days: days);

@@ -36,9 +36,9 @@ Series<PriceData> calcBBW(
   await for (final data in series) {
     buffer.add(data.value);
     if (buffer.isFilled) {
-      double basis = _sma(buffer.toList(), lookBack);
-      double dev = multi * _stdev(buffer.toList(), lookBack);
-      double bbwValue = ((basis + dev) - (basis - dev)) / basis;
+      double basis = _sma(buffer, lookBack);
+      double dev = multi * _stdev(buffer, lookBack);
+      double bbwValue = (dev * 2) / basis;
       yield (value: bbwValue, date: data.date);
     } else {
       yield (value: double.nan, date: data.date);
