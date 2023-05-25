@@ -5,6 +5,7 @@
 import 'package:technical_analysis/src/percent_rank.dart';
 
 import 'bb.dart';
+import 'bbw.dart';
 import 'ema.dart';
 import 'linreg.dart';
 import 'mfi.dart';
@@ -196,6 +197,17 @@ sealed class TA {
     }
 
     return calcBB(series, lookBack: lookBack, multi: multi);
+  }
+
+  static Series<PriceData> bbw(
+    Series<PriceData> series, {
+    int lookBack = 5,
+    int multi = 4,
+  }) {
+    _validateArg('BBW (Bollinger Bands Width)', lookBack, 1);
+    _validateArg('BBW (Bollinger Bands Width)', multi, 1);
+
+    return calcBBW(series, lookBack: lookBack, multi: multi);
   }
 
   static Series<PriceData> wma(

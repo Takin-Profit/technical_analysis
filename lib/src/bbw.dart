@@ -26,7 +26,7 @@ double _stdev(List<double> data, int period) {
   return sqrt(sum / period);
 }
 
-Series<PriceData> bbw(
+Series<PriceData> calcBBW(
   Series<PriceData> series, {
   int lookBack = 5,
   int multi = 4,
@@ -35,11 +35,13 @@ Series<PriceData> bbw(
 
   await for (final data in series) {
     buffer.add(data.value);
-    if (buffer.length >= lookBack) {
+    if (buffer.isFilled) {
       double basis = _sma(buffer.toList(), lookBack);
       double dev = multi * _stdev(buffer.toList(), lookBack);
       double bbwValue = ((basis + dev) - (basis - dev)) / basis;
       yield (value: bbwValue, date: data.date);
+    } else {
+      yield (value: double.nan, date: data.date);
     }
   }
 }
