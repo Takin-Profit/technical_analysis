@@ -4,6 +4,7 @@
 
 import 'package:technical_analysis/src/percent_rank.dart';
 
+import 'alma.dart';
 import 'bb.dart';
 import 'bbw.dart';
 import 'ema.dart';
@@ -136,6 +137,17 @@ sealed class TA {
     _validateArg('EMA (Exponential Moving Average)', lookBack, 1);
 
     return calcEMA(series, lookBack: lookBack);
+  }
+
+  static Series<PriceData> alma(
+    Series<PriceData> series, {
+    int lookBack = 9,
+    double offset = 0.85,
+    double sigma = 6,
+  }) {
+    _validateArg('ALMA (Arnaud Legoux Moving Average.)', lookBack, 1);
+
+    return calcAlma(series, lookBack: lookBack, offset: offset, sigma: sigma);
   }
 
   static Series<PriceData> rsi(
