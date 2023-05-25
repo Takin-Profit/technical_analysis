@@ -6,7 +6,7 @@
 
 import "dart:math";
 
-import 'circular_buffer.dart';
+import 'circular_buffers.dart';
 import 'types.dart';
 
 Stream<PriceData> calcWilly(Stream<PriceData> series) async* {

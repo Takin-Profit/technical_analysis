@@ -6,7 +6,7 @@
 
 import 'package:collection/collection.dart';
 
-import 'circular_buffer.dart';
+import 'circular_buffers.dart';
 import 'series.dart';
 import 'types.dart';
 

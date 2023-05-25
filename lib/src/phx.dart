@@ -10,7 +10,7 @@ import 'package:technical_analysis/src/rsi.dart';
 import 'package:technical_analysis/src/tsi.dart';
 import 'package:technical_analysis/src/willy.dart';
 
-import 'circular_buffer.dart';
+import 'circular_buffers.dart';
 import 'mfi.dart';
 import 'series.dart';
 import 'tci.dart';

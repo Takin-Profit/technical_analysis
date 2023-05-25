@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 import 'dart:math';
 
-import 'circular_buffer.dart';
+import 'circular_buffers.dart';
 import 'series.dart';
 import 'types.dart';
 

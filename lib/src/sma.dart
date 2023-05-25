@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'circular_buffer.dart';
+import 'circular_buffers.dart';
 import 'list_ext.dart';
 import 'series.dart';
 import 'types.dart';

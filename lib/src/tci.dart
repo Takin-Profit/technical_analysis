@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import 'circular_buffer.dart';
+import 'circular_buffers.dart';
 import 'types.dart';
 
 Stream<PriceData> calcTCI(Stream<PriceData> series) async* {

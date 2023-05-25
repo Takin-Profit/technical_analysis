@@ -7,7 +7,7 @@ import 'dart:math' as math;
 import 'package:collection/collection.dart';
 import 'package:statistics/statistics.dart';
 
-import 'circular_buffer.dart';
+import 'circular_buffers.dart';
 import 'series.dart';
 import 'types.dart';
 
