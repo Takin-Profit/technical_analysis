@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import 'circular_buffer.dart';
+import 'list_ext.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -10,16 +11,13 @@ Series<PriceData> calcSMA(
   Series<PriceData> series, {
   int lookBack = 20,
 }) async* {
-  final buffer = CircularBuffer<PriceData>(lookBack);
+  final buffer = CircularBuffer<double>(lookBack);
 
   await for (final data in series) {
-    buffer.add(data);
+    buffer.add(data.value);
 
     if (buffer.isFilled) {
-      final sma =
-          buffer.map((el) => el.value).reduce((prev, next) => prev + next) /
-              lookBack;
-      yield (date: data.date, value: sma);
+      yield (date: data.date, value: buffer.sma);
     } else {
       yield (date: data.date, value: double.nan);
     }

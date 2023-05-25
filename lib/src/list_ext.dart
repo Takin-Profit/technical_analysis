@@ -6,6 +6,8 @@
 
 import 'dart:math';
 
+import 'package:collection/collection.dart';
+
 import 'types.dart';
 
 extension Indicators on List<double> {
@@ -26,6 +28,8 @@ extension Indicators on List<double> {
 
     return sum / norm;
   }
+
+  double get sma => average;
 }
 
 extension PriceDataIndicators on List<PriceData> {
@@ -47,4 +51,6 @@ extension PriceDataIndicators on List<PriceData> {
 
     return sum / norm;
   }
+
+  double get sma => map((data) => data.value).average;
 }
