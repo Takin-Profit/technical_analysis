@@ -13,18 +13,18 @@ Series<PriceData> calcPercentRank(
   Series<PriceData> series, {
   int lookBack = 20,
 }) async* {
-  final buffer = circularBuf(
+  final buffer = CircularBuf(
     size: lookBack + 1,
   ); // +1 to accommodate the current value
 
   await for (final data in series) {
     buffer.put(data.value);
 
-    if (buffer.length >= lookBack) {
+    if (buffer.isFull) {
       int count = 0;
       for (int i = 1; i < lookBack; i++) {
         // start from index 1
-        if (buffer[i] <= data.value) {
+        if (buffer.values[i] <= data.value) {
           count++;
         }
       }

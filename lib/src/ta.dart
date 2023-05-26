@@ -99,7 +99,7 @@ sealed class TA {
   static Series<PriceData> stdDev(
     Series<PriceData> series, {
     int length = 1,
-    StDev bias = StDev.population,
+    StDevOf bias = StDevOf.population,
   }) {
     if (length < 1) {
       throw ArgumentError(
@@ -147,7 +147,7 @@ sealed class TA {
   }) {
     _validateArg('ALMA (Arnaud Legoux Moving Average.)', lookBack, 1);
 
-    return calcAlma(series, lookBack: lookBack, offset: offset, sigma: sigma);
+    return calcAlma(series, len: lookBack, offset: offset, sigma: sigma);
   }
 
   static Series<PriceData> rsi(

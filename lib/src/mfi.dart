@@ -16,8 +16,8 @@ Series<PriceData> calcMFI(
   Series<PriceDataTriple> series, {
   int lookBack = 14,
 }) async* {
-  final upperBuffer = circularBuf(size: lookBack);
-  final lowerBuffer = circularBuf(size: lookBack);
+  final upperBuffer = CircularBuf(size: lookBack);
+  final lowerBuffer = CircularBuf(size: lookBack);
   PriceDataTriple? prev;
 
   await for (final current in series) {
@@ -41,12 +41,12 @@ Series<PriceData> calcMFI(
     upperBuffer.put(upper);
     lowerBuffer.put(lower);
 
-    if (upperBuffer.isFilled && lowerBuffer.isFilled) {
-      final lowerSum = lowerBuffer.sum;
+    if (upperBuffer.isFull && lowerBuffer.isFull) {
+      final lowerSum = lowerBuffer.values.sum;
 
       double mfi;
       if (lowerSum != 0) {
-        double mfRatio = upperBuffer.sum / lowerSum;
+        double mfRatio = upperBuffer.values.sum / lowerSum;
         mfi = 100 - (100 / (mfRatio + 1));
       } else {
         mfi = 100;

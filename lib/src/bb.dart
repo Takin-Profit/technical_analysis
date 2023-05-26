@@ -20,21 +20,21 @@ Series<BBResult> calcBB(
   int lookBack = 20,
   double multi = 2.0,
 }) async* {
-  final smaBuf = circularBuf(size: lookBack);
-  final stdDevBuf = circularBuf(size: lookBack);
+  final smaBuf = CircularBuf(size: lookBack);
+  final stdDevBuf = CircularBuf(size: lookBack);
 
   await for (final data in series) {
     smaBuf.put(data.value);
     stdDevBuf.put(data.value);
 
-    if (smaBuf.isFilled) {
+    if (smaBuf.isFull) {
       // Calculate SMA for the middle band
-      final sma = smaBuf.sma;
+      final sma = smaBuf.values.sma;
 
       // Calculate standard deviation for the deviation
-      final mean = stdDevBuf.average;
+      final mean = stdDevBuf.values.average;
 
-      final variance = stdDevBuf.map((el) => pow(el - mean, 2)).average;
+      final variance = stdDevBuf.values.map((el) => pow(el - mean, 2)).average;
 
       final stdDev = sqrt(variance);
 

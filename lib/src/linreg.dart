@@ -15,18 +15,18 @@ Series<PriceData> calcLinReg(
   // double pcAbove = 0.009,
   // double pcBelow = 0.009,
 }) async* {
-  final buf = circularBuf(size: lookBack);
+  final buf = CircularBuf(size: lookBack);
 
   await for (PriceData data in series) {
     buf.put(data.value);
 
-    if (buf.isFilled) {
+    if (buf.isFull) {
       List<double> x = List.generate(
         buf.length,
         (index) => index.toDouble(),
       );
 
-      SimpleLinearRegression lr = SimpleLinearRegression(x, buf);
+      SimpleLinearRegression lr = SimpleLinearRegression(x, buf.values);
 
       double linReg = lr.predict((buf.length - 1).toDouble());
 

@@ -31,14 +31,14 @@ Series<PriceData> calcBBW(
   int lookBack = 5,
   int multi = 4,
 }) async* {
-  final buf = circularBuf(size: lookBack);
+  final buf = CircularBuf(size: lookBack);
 
   await for (final data in series) {
     buf.put(data.value);
 
-    if (buf.isFilled) {
-      double basis = _sma(buf, lookBack);
-      double dev = multi * _stdev(buf, lookBack);
+    if (buf.isFull) {
+      double basis = _sma(buf.values, lookBack);
+      double dev = multi * _stdev(buf.values, lookBack);
       double bbwValue = (dev * 2) / basis;
       yield (value: bbwValue, date: data.date);
     } else {
