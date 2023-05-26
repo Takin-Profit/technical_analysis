@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'list_ext.dart';
+import 'package:collection/collection.dart';
+
 import 'series.dart';
 import 'types.dart';
 
@@ -28,7 +29,7 @@ double Function(double data) getEma({int len = 20}) {
       var _ = window.removeAt(0);
     }
     if (lastEma == null && window.length == len) {
-      lastEma = window.sma;
+      lastEma = window.average;
     } else if (lastEma != null) {
       lastEma = alpha * data + (1 - alpha) * lastEma!;
     }

@@ -7,7 +7,6 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:technical_analysis/src/list_ext.dart';
 
 import 'circular_buf.dart';
 import 'series.dart';
@@ -29,7 +28,7 @@ Series<BBResult> calcBB(
 
     if (smaBuf.isFull) {
       // Calculate SMA for the middle band
-      final sma = smaBuf.values.sma;
+      final _sma = smaBuf.values.average;
 
       // Calculate standard deviation for the deviation
       final mean = stdDevBuf.values.average;
@@ -39,14 +38,14 @@ Series<BBResult> calcBB(
       final stdDev = sqrt(variance);
 
       // Calculate the upper and lower bands
-      final upper = sma + multi * stdDev;
-      final lower = sma - multi * stdDev;
+      final upper = _sma + multi * stdDev;
+      final lower = _sma - multi * stdDev;
 
       yield (
         date: data.date,
         upper: upper,
         lower: lower,
-        middle: sma,
+        middle: _sma,
       );
     } else {
       yield (

@@ -10,8 +10,6 @@ import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
-enum StDevOf { population, sample }
-
 Series<PriceData> calcStdDev(
   Series<PriceData> series, {
   int len = 20,

@@ -16,7 +16,7 @@ import 'series.dart';
 import 'tci.dart';
 import 'util.dart';
 
-double _linReg(List<double> data) {
+double _linReg(Iterable<double> data) {
   List<double> x = List.generate(
     32,
     (index) => index.toDouble(),
@@ -38,8 +38,8 @@ Stream<PhxResult> calcPhx(QuoteSeries series) async* {
   final tsiStream = calcTSI(series.open, lookBack: 9, smoothLen: 6)
       .map((el) => (date: el.date, value: el.value));
 
-  final linRegBuf = circularBuf(size: 32);
-  final smaBuf = circularBuf(size: 6);
+  final linRegBuf = CircularBuf(size: 32);
+  final smaBuf = CircularBuf(size: 6);
 
   final zipStream = ZipStream.zip5(
     tciStream,
@@ -72,8 +72,9 @@ Stream<PhxResult> calcPhx(QuoteSeries series) async* {
     smaBuf.put(fast);
     linRegBuf.put(fast);
 
-    final linReg = linRegBuf.isFilled ? _linReg(linRegBuf) : double.nan;
-    final slow = smaBuf.isFilled ? smaBuf.average : double.nan;
+    final linReg =
+        linRegBuf.isFull ? _linReg(linRegBuf.orderedValues) : double.nan;
+    final slow = smaBuf.isFull ? smaBuf.values.average : double.nan;
 
     yield (date: data.date, fast: fast, slow: slow, lsma: linReg);
   }

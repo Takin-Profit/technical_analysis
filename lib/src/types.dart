@@ -9,6 +9,8 @@ import 'package:statistics/statistics.dart';
 typedef PriceDataDecimal = ({DateTime date, Decimal value});
 typedef PriceData = ({DateTime date, double value});
 
+enum StDevOf { population, sample }
+
 extension PD on PriceData {
   PriceData get doublePrecis => (date: date, value: value.toDouble());
 

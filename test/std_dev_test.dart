@@ -182,7 +182,7 @@ Future<void> main() async {
           final output = TA.stdDev(
             quotes.closes,
             length: 10,
-            bias: StDev.sample,
+            bias: StDevOf.sample,
           );
 
           final result = await output.elementAt(15);
@@ -200,7 +200,7 @@ Future<void> main() async {
           final output = TA.stdDev(
             quotes.closes,
             length: 10,
-            bias: StDev.sample,
+            bias: StDevOf.sample,
           );
 
           final result = await output.elementAt(569);
@@ -218,7 +218,7 @@ Future<void> main() async {
           final output = TA.stdDev(
             quotes.closes,
             length: 10,
-            bias: StDev.sample,
+            bias: StDevOf.sample,
           );
 
           final result = await output.elementAt(1441);
@@ -236,7 +236,7 @@ Future<void> main() async {
           final output = TA.stdDev(
             quotes.closes,
             length: 10,
-            bias: StDev.sample,
+            bias: StDevOf.sample,
           );
 
           final result = await output.elementAt(2204);
@@ -254,7 +254,7 @@ Future<void> main() async {
           final output = TA.stdDev(
             quotes.closes,
             length: 50,
-            bias: StDev.sample,
+            bias: StDevOf.sample,
           );
 
           final result = await output.elementAt(2204);
@@ -272,7 +272,7 @@ Future<void> main() async {
           final output = TA.stdDev(
             quotes.closes,
             length: 50,
-            bias: StDev.sample,
+            bias: StDevOf.sample,
           );
 
           final result = await output.elementAt(2204);
@@ -290,7 +290,7 @@ Future<void> main() async {
           final output = TA.stdDev(
             quotes.closes,
             length: 50,
-            bias: StDev.sample,
+            bias: StDevOf.sample,
           );
 
           final result = await output.elementAt(4006);

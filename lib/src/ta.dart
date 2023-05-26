@@ -107,7 +107,7 @@ sealed class TA {
       );
     }
 
-    return calcStdDev(series, length: length, bias: bias);
+    return calcStdDev(series, len: length, bias: bias);
   }
 
   static Series<PriceData> sma(
@@ -116,7 +116,7 @@ sealed class TA {
   }) {
     _validateArg('SMA (Simple Moving Average)', lookBack, 1);
 
-    return calcSMA(series, lookBack: lookBack);
+    return calcSMA(series, len: lookBack);
   }
 
   /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.

@@ -14,16 +14,16 @@ Series<PriceData> calcWPR(
   QuoteSeries series, {
   int lookBack = 14,
 }) async* {
-  final highestBuffer = circularBuf(size: lookBack);
-  final lowestBuffer = circularBuf(size: lookBack);
+  final highestBuffer = CircularBuf(size: lookBack);
+  final lowestBuffer = CircularBuf(size: lookBack);
 
   await for (final current in series) {
     highestBuffer.put(current.high.toDouble());
     lowestBuffer.put(current.low.toDouble());
 
-    if (highestBuffer.isFilled && lowestBuffer.isFilled) {
-      final highest = highestBuffer.reduce(max);
-      final lowest = lowestBuffer.reduce(min);
+    if (highestBuffer.isFull && lowestBuffer.isFull) {
+      final highest = highestBuffer.values.reduce(max);
+      final lowest = lowestBuffer.values.reduce(min);
 
       final percentR =
           -100 * (highest - current.close.toDouble()) / (highest - lowest);

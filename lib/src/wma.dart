@@ -12,16 +12,16 @@ Series<PriceData> calcWMA(
   Series<PriceData> series, {
   int lookBack = 15,
 }) async* {
-  final buffer = circularBuf(size: lookBack);
+  final buffer = CircularBuf(size: lookBack);
   final divisor = lookBack.toDouble() * (lookBack + 1) / 2.0;
 
   await for (var data in series) {
     buffer.put(data.value);
-    if (buffer.isFilled) {
+    if (buffer.isFull) {
       double sum = 0.0;
       for (var i = 0; i < lookBack; i++) {
         var weight = lookBack - i;
-        sum += buffer[lookBack - i - 1] * weight;
+        sum += buffer.values[lookBack - i - 1] * weight;
       }
       yield (date: data.date, value: sum / divisor);
     } else {

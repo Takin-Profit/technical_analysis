@@ -8,7 +8,7 @@ import 'circular_buf.dart';
 import 'types.dart';
 
 Stream<PriceData> calcTCI(Stream<PriceData> series) async* {
-  final buffer = circularBuf(size: 9);
+  final buffer = CircularBuf(size: 9);
   double emaSrc = double.nan;
   double emaDiffAbs = double.nan;
   double emaTCIRaw = double.nan;
@@ -19,14 +19,14 @@ Stream<PriceData> calcTCI(Stream<PriceData> series) async* {
   await for (final data in series) {
     buffer.put(data.value);
 
-    if (buffer.isFilled) {
+    if (buffer.isFull) {
       if (emaSrc.isNaN) {
-        emaSrc = buffer.reduce((prev, next) => prev + next) / 9;
-        emaDiffAbs = buffer
+        emaSrc = buffer.values.reduce((prev, next) => prev + next) / 9;
+        emaDiffAbs = buffer.values
                 .map((el) => (el - emaSrc).abs())
                 .reduce((prev, next) => prev + next) /
             9;
-        emaTCIRaw = buffer
+        emaTCIRaw = buffer.values
                 .map((el) => (el - emaSrc) / (0.025 * (el - emaSrc).abs()))
                 .reduce((prev, next) => prev + next) /
             6;

@@ -3,6 +3,8 @@
 // license that can be found in the LICENSE file.
 import 'dart:math';
 
+import 'package:collection/collection.dart';
+
 import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
@@ -11,8 +13,8 @@ Series<PriceData> calcRSI(
   Series<PriceData> series, {
   int lookBack = 14,
 }) async* {
-  final gainBuffer = circularBuf(size: lookBack);
-  final lossBuffer = circularBuf(size: lookBack);
+  final gainBuffer = CircularBuf(size: lookBack);
+  final lossBuffer = CircularBuf(size: lookBack);
 
   double? lastValue;
   double avgGain = 0;
@@ -31,10 +33,10 @@ Series<PriceData> calcRSI(
     gainBuffer.put(gain);
     lossBuffer.put(loss);
 
-    if (gainBuffer.isFilled) {
+    if (gainBuffer.isFull) {
       if (avgGain == 0 && avgLoss == 0) {
-        avgGain = gainBuffer.reduce((a, b) => a + b) / lookBack;
-        avgLoss = lossBuffer.reduce((a, b) => a + b) / lookBack;
+        avgGain = gainBuffer.values.average;
+        avgLoss = lossBuffer.values.average;
       } else {
         avgGain = ((avgGain * (lookBack - 1)) + gain) / lookBack;
         avgLoss = ((avgLoss * (lookBack - 1)) + loss) / lookBack;

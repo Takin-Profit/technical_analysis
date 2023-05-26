@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'dart:math' as math;
-
 import 'package:collection/collection.dart';
 import 'package:statistics/statistics.dart';
 
@@ -22,12 +20,12 @@ sealed class Util {
     Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = circularBuf(size: length + 1);
+    final buffer = CircularBuf(size: length + 1);
 
     await for (final current in series) {
       buffer.put(current.value);
 
-      if (buffer.isFilled) {
+      if (buffer.isFull) {
         yield (date: current.date, value: current.value - buffer.first);
       } else {
         yield (date: current.date, value: double.nan);
@@ -39,13 +37,13 @@ sealed class Util {
     Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = circularBuf(size: length);
+    final buffer = CircularBuf(size: length);
 
     await for (final current in series) {
       buffer.put(current.value);
 
-      if (buffer.isFilled) {
-        final maxVal = buffer.reduce(math.max);
+      if (buffer.isFull) {
+        final maxVal = buffer.values.max;
         yield (date: current.date, value: maxVal);
       } else {
         yield (date: current.date, value: double.nan);
@@ -57,13 +55,13 @@ sealed class Util {
     Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = circularBuf(size: length);
+    final buffer = CircularBuf(size: length);
 
     await for (final current in series) {
       buffer.put(current.value);
 
-      if (buffer.isFilled) {
-        final lowestValue = buffer.reduce(math.min);
+      if (buffer.isFull) {
+        final lowestValue = buffer.values.min;
 
         yield (date: current.date, value: lowestValue);
       } else {
@@ -113,21 +111,27 @@ class SimpleLinearRegression {
   late double slope;
   late double intercept;
 
-  SimpleLinearRegression(List<double> x, List<double> y) {
+  SimpleLinearRegression(Iterable<double> x, Iterable<double> y) {
     if (x.length != y.length) {
       throw Exception('Input vectors should have the same length');
     }
 
     double xSum = 0, ySum = 0, xxSum = 0, xySum = 0;
-    for (int i = 0; i < x.length; i++) {
-      xSum += x[i];
-      ySum += y[i];
-      xxSum += x[i] * x[i];
-      xySum += x[i] * y[i];
+    int count = 0;
+
+    final xIter = x.iterator;
+    final yIter = y.iterator;
+
+    while (xIter.moveNext() && yIter.moveNext()) {
+      xSum += xIter.current;
+      ySum += yIter.current;
+      xxSum += xIter.current * xIter.current;
+      xySum += xIter.current * yIter.current;
+      count++;
     }
 
-    slope = (x.length * xySum - xSum * ySum) / (x.length * xxSum - xSum * xSum);
-    intercept = (ySum - slope * xSum) / x.length;
+    slope = (count * xySum - xSum * ySum) / (count * xxSum - xSum * xSum);
+    intercept = (ySum - slope * xSum) / count;
   }
 
   double predict(double x) => slope * x + intercept;
