@@ -43,10 +43,10 @@ Future<void> main() async {
       final resultList = await res.toList();
       final upper = resultList.whereNot((q) => q.upper.isNaN).toList();
       final lower = resultList.whereNot((q) => q.upper.isNaN).toList();
-      final middle = resultList.whereNot((q) => q.upper.isNaN).toList();
+      final avg = resultList.whereNot((q) => q.upper.isNaN).toList();
       expect(upper.length, 483);
       expect(lower.length, 483);
-      expect(middle.length, 483);
+      expect(avg.length, 483);
     });
     test(
       'Should return the correct values for upper band calculated',
@@ -60,15 +60,15 @@ Future<void> main() async {
 
         expect(res249.upper.toPrecision(4), 259.5642);
         expect(res249.lower.toPrecision(4), 251.5358);
-        expect(res249.middle.toPrecision(4), 255.5500);
+        expect(res249.avg.toPrecision(4), 255.5500);
 
         expect(res501.upper.toPrecision(4), 273.7004);
         expect(res501.lower.toPrecision(4), 230.0196);
-        expect(res501.middle.toPrecision(4), 251.8600);
+        expect(res501.avg.toPrecision(4), 251.8600);
 
         expect(res372.upper.toPrecision(2), 271.58);
         expect(res372.lower.toPrecision(2), 262.28);
-        expect(res372.middle.toPrecision(2), 266.93);
+        expect(res372.avg.toPrecision(2), 266.93);
       },
     );
   });

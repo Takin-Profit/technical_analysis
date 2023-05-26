@@ -56,9 +56,6 @@ Future<void> main() async {
       final result501 = results[501];
       final result628 = results[628];
 
-      for (var i = 0; i < results.length; i++) {
-        print('$i , ${results[i].value}');
-      }
       expect(
         result6.value.toPrecision(7),
         0.5883643,

@@ -197,10 +197,10 @@ sealed class TA {
 
   static Series<BBResult> bb(
     Series<PriceData> series, {
-    int lookBack = 20,
+    int len = 20,
     double multi = 2.0,
   }) {
-    _validateArg('BB (Bollinger Bands)', lookBack, 1);
+    _validateArg('BB (Bollinger Bands)', len, 1);
 
     if (multi < 1.0) {
       throw ArgumentError(
@@ -208,7 +208,7 @@ sealed class TA {
       );
     }
 
-    return calcBB(series, lookBack: lookBack, multi: multi);
+    return calcBB(series, len: len, multi: multi);
   }
 
   static Series<PriceData> bbw(

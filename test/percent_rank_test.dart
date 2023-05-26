@@ -48,10 +48,6 @@ Future<void> main() async {
       final _ = await quotes.close();
       final results = await res.toList();
 
-      for (var i = 0; i < results.length; i++) {
-        print('$i = ${results[i].value}');
-      }
-
       final result6 = results[6];
       final result29 = results[29];
       final result247 = results[247];
