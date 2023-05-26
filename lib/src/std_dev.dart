@@ -6,7 +6,8 @@
 
 import 'dart:math';
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
+import 'list_ext.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -15,7 +16,7 @@ Series<PriceData> calcStdDev(
   int length = 1,
   StDev bias = StDev.population,
 }) async* {
-  final buffer = CircularBuffer<PriceData>(length);
+  final buffer = circularBuf(size: length);
   // adjusts the divisor accordingly
   int divisor() {
     return bias == StDev.population
@@ -26,14 +27,13 @@ Series<PriceData> calcStdDev(
   }
 
   await for (final data in series) {
-    buffer.add(data);
+    buffer.put(data.value);
 
     if (buffer.isFilled) {
-      final mean =
-          buffer.map((el) => el.value).reduce((prev, next) => prev + next) /
-              length;
+      final mean = buffer.sma;
+
       final variance = buffer
-              .map((el) => pow(el.value - mean, 2))
+              .map((el) => pow(el - mean, 2))
               .reduce((prev, next) => prev + next) /
           divisor(); // use adjusted divisor for variance calculation
       final stdDev = sqrt(variance);

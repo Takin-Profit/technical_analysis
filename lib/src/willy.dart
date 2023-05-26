@@ -6,18 +6,18 @@
 
 import "dart:math";
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'types.dart';
 
 Stream<PriceData> calcWilly(Stream<PriceData> series) async* {
-  final buffer = CircularBuffer<PriceData>(6);
+  final buffer = circularBuf(size: 6);
 
   await for (final data in series) {
-    buffer.add(data);
+    buffer.put(data.value);
 
     if (buffer.isFilled) {
-      final high = buffer.map((el) => el.value).reduce(max);
-      final low = buffer.map((el) => el.value).reduce(min);
+      final high = buffer.reduce(max);
+      final low = buffer.reduce(min);
       final willy = 60 * (data.value - high) / (high - low) + 80;
 
       yield (date: data.date, value: willy);

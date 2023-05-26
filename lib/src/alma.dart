@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'list_ext.dart';
 import 'series.dart';
 import 'types.dart';
@@ -15,13 +15,13 @@ Series<PriceData> calcAlma(
   double offset = 0.85,
   double sigma = 6,
 }) async* {
-  CircularBuffer<double> buffer = CircularBuffer<double>(lookBack);
+  final buf = circularBuf(size: lookBack);
 
   await for (PriceData data in series) {
-    buffer.add(data.value);
+    buf.put(data.value);
 
-    if (buffer.isFilled) {
-      yield (value: buffer.alma(offset: offset, sigma: sigma), date: data.date);
+    if (buf.isFilled) {
+      yield (value: buf.alma(offset: offset, sigma: sigma), date: data.date);
     } else {
       yield (value: double.nan, date: data.date);
     }

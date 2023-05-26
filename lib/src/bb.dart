@@ -6,7 +6,10 @@
 
 import 'dart:math';
 
-import 'circular_buffers.dart';
+import 'package:collection/collection.dart';
+import 'package:technical_analysis/src/list_ext.dart';
+
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -17,28 +20,22 @@ Series<BBResult> calcBB(
   int lookBack = 20,
   double multi = 2.0,
 }) async* {
-  final smaBuffer = CircularBuffer<PriceData>(lookBack);
-  final stdDevBuffer = CircularBuffer<PriceData>(lookBack);
+  final smaBuf = circularBuf(size: lookBack);
+  final stdDevBuf = circularBuf(size: lookBack);
 
   await for (final data in series) {
-    smaBuffer.add(data);
-    stdDevBuffer.add(data);
+    smaBuf.put(data.value);
+    stdDevBuf.put(data.value);
 
-    if (smaBuffer.isFilled) {
+    if (smaBuf.isFilled) {
       // Calculate SMA for the middle band
-      final sma =
-          smaBuffer.map((el) => el.value).reduce((prev, next) => prev + next) /
-              lookBack;
+      final sma = smaBuf.sma;
 
       // Calculate standard deviation for the deviation
-      final mean = stdDevBuffer
-              .map((el) => el.value)
-              .reduce((prev, next) => prev + next) /
-          lookBack;
-      final variance = stdDevBuffer
-              .map((el) => pow(el.value - mean, 2))
-              .reduce((prev, next) => prev + next) /
-          lookBack;
+      final mean = stdDevBuf.average;
+
+      final variance = stdDevBuf.map((el) => pow(el - mean, 2)).average;
+
       final stdDev = sqrt(variance);
 
       // Calculate the upper and lower bands

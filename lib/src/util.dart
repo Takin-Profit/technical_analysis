@@ -7,7 +7,7 @@ import 'dart:math' as math;
 import 'package:collection/collection.dart';
 import 'package:statistics/statistics.dart';
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -22,12 +22,13 @@ sealed class Util {
     Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = CircularBuffer<PriceData>(length + 1);
+    final buffer = circularBuf(size: length + 1);
 
     await for (final current in series) {
-      buffer.add(current);
+      buffer.put(current.value);
+
       if (buffer.isFilled) {
-        yield (date: current.date, value: current.value - buffer.first.value);
+        yield (date: current.date, value: current.value - buffer.first);
       } else {
         yield (date: current.date, value: double.nan);
       }
@@ -38,13 +39,13 @@ sealed class Util {
     Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = CircularBuffer<PriceData>(length);
+    final buffer = circularBuf(size: length);
 
     await for (final current in series) {
-      buffer.add(current);
+      buffer.put(current.value);
 
       if (buffer.isFilled) {
-        final maxVal = buffer.map((x) => x.value).reduce(math.max);
+        final maxVal = buffer.reduce(math.max);
         yield (date: current.date, value: maxVal);
       } else {
         yield (date: current.date, value: double.nan);
@@ -56,13 +57,13 @@ sealed class Util {
     Series<PriceData> series, {
     int length = 1,
   }) async* {
-    final buffer = CircularBuffer<PriceData>(length);
+    final buffer = circularBuf(size: length);
 
     await for (final current in series) {
-      buffer.add(current);
+      buffer.put(current.value);
 
       if (buffer.isFilled) {
-        final lowestValue = buffer.map((e) => e.value).reduce(math.min);
+        final lowestValue = buffer.reduce(math.min);
 
         yield (date: current.date, value: lowestValue);
       } else {

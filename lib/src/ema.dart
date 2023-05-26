@@ -2,32 +2,39 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'circular_buffers.dart';
+import 'list_ext.dart';
 import 'series.dart';
 import 'types.dart';
 
 Series<PriceData> calcEMA(
   Series<PriceData> series, {
-  int lookBack = 14,
+  int len = 14,
 }) async* {
-  final buffer = CircularBuffer<PriceData>(lookBack);
-  double ema = double.nan;
-  final double multiplier =
-      2 / (lookBack + 1); // Multiplier: (2 / (Time periods + 1) )
+  final ema = getEma(len: len);
 
   await for (final data in series) {
-    buffer.add(data);
-
-    if (buffer.isFilled) {
-      ema = ema.isNaN
-          ? buffer.map((el) => el.value).reduce((prev, next) => prev + next) /
-              lookBack
-          : (data.value - ema) * multiplier + ema;
-
-      yield (date: data.date, value: ema);
-    } else {
-      // Not enough data to calculate EMA
-      yield (date: data.date, value: double.nan);
-    }
+    yield (date: data.date, value: ema(data.value));
   }
+}
+
+double Function(double data) getEma({int len = 20}) {
+  List<double> window = [];
+  double? lastEma;
+  double alpha = 2 / (len + 1);
+
+  double calculateEma(double data) {
+    window.add(data);
+    if (window.length > len) {
+      var _ = window.removeAt(0);
+    }
+    if (lastEma == null && window.length == len) {
+      lastEma = window.sma;
+    } else if (lastEma != null) {
+      lastEma = alpha * data + (1 - alpha) * lastEma!;
+    }
+
+    return lastEma ?? double.nan;
+  }
+
+  return calculateEma;
 }

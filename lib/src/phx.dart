@@ -10,7 +10,7 @@ import 'package:technical_analysis/src/rsi.dart';
 import 'package:technical_analysis/src/tsi.dart';
 import 'package:technical_analysis/src/willy.dart';
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'mfi.dart';
 import 'series.dart';
 import 'tci.dart';
@@ -38,8 +38,8 @@ Stream<PhxResult> calcPhx(QuoteSeries series) async* {
   final tsiStream = calcTSI(series.open, lookBack: 9, smoothLen: 6)
       .map((el) => (date: el.date, value: el.value));
 
-  final linRegBuf = CircularBuffer<double>(32);
-  final smaBuf = CircularBuffer<double>(6);
+  final linRegBuf = circularBuf(size: 32);
+  final smaBuf = circularBuf(size: 6);
 
   final zipStream = ZipStream.zip5(
     tciStream,
@@ -69,8 +69,8 @@ Stream<PhxResult> calcPhx(QuoteSeries series) async* {
     final trad = [tci, mfi, rsi].average;
     final fast = [phx, trad].average;
 
-    smaBuf.add(fast);
-    linRegBuf.add(fast);
+    smaBuf.put(fast);
+    linRegBuf.put(fast);
 
     final linReg = linRegBuf.isFilled ? _linReg(linRegBuf) : double.nan;
     final slow = smaBuf.isFilled ? smaBuf.average : double.nan;

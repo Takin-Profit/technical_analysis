@@ -6,7 +6,7 @@
 
 import 'dart:math';
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -14,12 +14,12 @@ Series<PriceData> calcWPR(
   QuoteSeries series, {
   int lookBack = 14,
 }) async* {
-  final highestBuffer = CircularBuffer<double>(lookBack);
-  final lowestBuffer = CircularBuffer<double>(lookBack);
+  final highestBuffer = circularBuf(size: lookBack);
+  final lowestBuffer = circularBuf(size: lookBack);
 
   await for (final current in series) {
-    highestBuffer.add(current.high.toDouble());
-    lowestBuffer.add(current.low.toDouble());
+    highestBuffer.put(current.high.toDouble());
+    lowestBuffer.put(current.low.toDouble());
 
     if (highestBuffer.isFilled && lowestBuffer.isFilled) {
       final highest = highestBuffer.reduce(max);

@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 import 'util.dart';
@@ -15,25 +15,24 @@ Series<PriceData> calcLinReg(
   // double pcAbove = 0.009,
   // double pcBelow = 0.009,
 }) async* {
-  CircularBuffer<PriceData> buffer = CircularBuffer<PriceData>(lookBack);
+  final buf = circularBuf(size: lookBack);
 
   await for (PriceData data in series) {
-    buffer.add(data);
+    buf.put(data.value);
 
-    if (buffer.isFilled) {
+    if (buf.isFilled) {
       List<double> x = List.generate(
-        buffer.length,
+        buf.length,
         (index) => index.toDouble(),
       );
-      List<double> y = buffer.map((item) => item.value).toList();
 
-      SimpleLinearRegression lr = SimpleLinearRegression(x, y);
+      SimpleLinearRegression lr = SimpleLinearRegression(x, buf);
 
-      double linReg = lr.predict((buffer.length - 1).toDouble());
+      double linReg = lr.predict((buf.length - 1).toDouble());
 
       // double pcAboveVal = 1 + pcAbove / 100.0;
       // double pcBelowVal = 1 - pcBelow / 100.0;
-      // final last = buffer.last.value;
+      // final last = buf.last.value;
       // bool sell = last > linReg * pcAboveVal;
       // bool buy = last < linReg * pcBelowVal;
 

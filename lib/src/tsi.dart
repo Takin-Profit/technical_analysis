@@ -25,7 +25,7 @@ Series<TsiResult> calcTSI(
     int long,
     int short,
   ) {
-    return calcEMA(calcEMA(stream, lookBack: long), lookBack: short);
+    return calcEMA(calcEMA(stream, len: long), len: short);
   }
 
   final changeStream = Util.change(series).asBroadcastStream();
@@ -53,7 +53,7 @@ Series<TsiResult> calcTSI(
   final tsiPriceDataDoubleStream =
       tsiWithSignalStream.map((tsi) => (date: tsi.date, value: tsi.value));
 
-  final signalStream = calcEMA(tsiPriceDataDoubleStream, lookBack: signalLen);
+  final signalStream = calcEMA(tsiPriceDataDoubleStream, len: signalLen);
 
   final finalZippedStream = StreamZip([tsiWithSignalStream, signalStream]);
 

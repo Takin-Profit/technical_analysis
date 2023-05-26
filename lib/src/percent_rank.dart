@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -13,12 +13,12 @@ Series<PriceData> calcPercentRank(
   Series<PriceData> series, {
   int lookBack = 20,
 }) async* {
-  final buffer = CircularBuffer<double>(
-    lookBack + 1,
+  final buffer = circularBuf(
+    size: lookBack + 1,
   ); // +1 to accommodate the current value
 
   await for (final data in series) {
-    buffer.add(data.value);
+    buffer.put(data.value);
 
     if (buffer.length >= lookBack) {
       int count = 0;

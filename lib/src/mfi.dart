@@ -6,7 +6,7 @@
 
 import 'package:collection/collection.dart';
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -16,8 +16,8 @@ Series<PriceData> calcMFI(
   Series<PriceDataTriple> series, {
   int lookBack = 14,
 }) async* {
-  final upperBuffer = CircularBuffer<double>(lookBack);
-  final lowerBuffer = CircularBuffer<double>(lookBack);
+  final upperBuffer = circularBuf(size: lookBack);
+  final lowerBuffer = circularBuf(size: lookBack);
   PriceDataTriple? prev;
 
   await for (final current in series) {
@@ -38,8 +38,8 @@ Series<PriceData> calcMFI(
       lower = 0.0;
     }
 
-    upperBuffer.add(upper);
-    lowerBuffer.add(lower);
+    upperBuffer.put(upper);
+    lowerBuffer.put(lower);
 
     if (upperBuffer.isFilled && lowerBuffer.isFilled) {
       final lowerSum = lowerBuffer.sum;

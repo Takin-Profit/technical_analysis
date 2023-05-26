@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
+import 'list_ext.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -15,14 +16,13 @@ Series<PriceData> calcRMA(
 }) async* {
   final double alpha = 1.0 / lookBack;
   double? sum;
-  final buf = CircularBuffer<PriceData>(lookBack);
+  final buf = circularBuf(size: lookBack);
 
   await for (final data in series) {
-    buf.add(data);
+    buf.put(data.value);
     if (buf.isFilled && sum == null) {
       // Calculate initial SMA
-      sum = buf.map((el) => el.value).reduce((prev, next) => prev + next) /
-          lookBack;
+      sum = buf.sma;
     } else if (sum != null) {
       // Apply RMA calculation
       sum = alpha * data.value + (1 - alpha) * sum;

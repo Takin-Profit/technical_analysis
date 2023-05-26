@@ -136,7 +136,7 @@ sealed class TA {
   }) {
     _validateArg('EMA (Exponential Moving Average)', lookBack, 1);
 
-    return calcEMA(series, lookBack: lookBack);
+    return calcEMA(series, len: lookBack);
   }
 
   static Series<PriceData> alma(

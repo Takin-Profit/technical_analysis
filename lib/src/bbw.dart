@@ -6,7 +6,7 @@
 
 import 'dart:math';
 
-import 'circular_buffers.dart';
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -31,13 +31,14 @@ Series<PriceData> calcBBW(
   int lookBack = 5,
   int multi = 4,
 }) async* {
-  final buffer = CircularBuffer<double>(lookBack);
+  final buf = circularBuf(size: lookBack);
 
   await for (final data in series) {
-    buffer.add(data.value);
-    if (buffer.isFilled) {
-      double basis = _sma(buffer, lookBack);
-      double dev = multi * _stdev(buffer, lookBack);
+    buf.put(data.value);
+
+    if (buf.isFilled) {
+      double basis = _sma(buf, lookBack);
+      double dev = multi * _stdev(buf, lookBack);
       double bbwValue = (dev * 2) / basis;
       yield (value: bbwValue, date: data.date);
     } else {
