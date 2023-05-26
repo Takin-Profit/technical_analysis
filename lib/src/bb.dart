@@ -14,7 +14,7 @@ typedef BBResult = ({DateTime date, double upper, double lower, double avg});
 Series<BBResult> calcBB(
   Series<PriceData> series, {
   int len = 20,
-  double multi = 2.0,
+  int multi = 2,
 }) async* {
   final bb = getBB(len: len, multi: multi);
 
@@ -27,7 +27,7 @@ Series<BBResult> calcBB(
 
 ({double upper, double lower, double avg}) Function(double) getBB({
   int len = 20,
-  double multi = 2.0,
+  int multi = 2,
 }) {
   int counter = 0;
   final sma = getSma(len: len);

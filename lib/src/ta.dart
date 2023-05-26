@@ -198,7 +198,7 @@ sealed class TA {
   static Series<BBResult> bb(
     Series<PriceData> series, {
     int len = 20,
-    double multi = 2.0,
+    int multi = 2,
   }) {
     _validateArg('BB (Bollinger Bands)', len, 1);
 
@@ -219,7 +219,7 @@ sealed class TA {
     _validateArg('BBW (Bollinger Bands Width)', lookBack, 1);
     _validateArg('BBW (Bollinger Bands Width)', multi, 1);
 
-    return calcBBW(series, lookBack: lookBack, multi: multi);
+    return calcBBW(series, len: lookBack, multi: multi);
   }
 
   static Series<PriceData> wma(
