@@ -3,58 +3,55 @@
 // license that can be found in the LICENSE file.
 import 'dart:math';
 
-import 'package:collection/collection.dart';
-
-import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
 Series<PriceData> calcRSI(
   Series<PriceData> series, {
-  int lookBack = 14,
+  int len = 14,
 }) async* {
-  final gainBuffer = CircularBuf(size: lookBack);
-  final lossBuffer = CircularBuf(size: lookBack);
+  final rsi = getRSI(len: len);
 
+  await for (final data in series) {
+    yield (date: data.date, value: rsi(data.value));
+  }
+}
+
+double Function(double) getRSI({int len = 14}) {
   double? lastValue;
-  double avgGain = 0;
-  double avgLoss = 0;
+  double avgGain = 0.0;
+  double avgLoss = 0.0;
+  int count = 0;
 
-  await for (final current in series) {
-    double gain = 0;
-    double loss = 0;
+  return (double currentValue) {
+    double gain = 0.0;
+    double loss = 0.0;
 
     if (lastValue != null) {
-      final double change = current.value - lastValue;
+      double change = currentValue - lastValue!;
       gain = max(0, change);
       loss = max(0, -change);
     }
 
-    gainBuffer.put(gain);
-    lossBuffer.put(loss);
-
-    if (gainBuffer.isFull) {
-      if (avgGain == 0 && avgLoss == 0) {
-        avgGain = gainBuffer.values.average;
-        avgLoss = lossBuffer.values.average;
-      } else {
-        avgGain = ((avgGain * (lookBack - 1)) + gain) / lookBack;
-        avgLoss = ((avgLoss * (lookBack - 1)) + loss) / lookBack;
-      }
-
-      double rsi;
-      if (avgLoss > 0) {
-        final double rs = avgGain / avgLoss;
-        rsi = 100 - (100 / (rs + 1));
-      } else {
-        rsi = 100;
-      }
-
-      yield (date: current.date, value: rsi);
+    if (count < len) {
+      // Calculating the first average gain and loss
+      avgGain = ((avgGain * count) + gain) / (count + 1);
+      avgLoss = ((avgLoss * count) + loss) / (count + 1);
     } else {
-      yield (date: current.date, value: double.nan);
+      // Calculating the subsequent average gain and loss
+      avgGain = ((avgGain * (len - 1)) + gain) / len;
+      avgLoss = ((avgLoss * (len - 1)) + loss) / len;
     }
 
-    lastValue = current.value;
-  }
+    count++;
+    lastValue = currentValue;
+
+    if (count < len) {
+      return double.nan;
+    } else {
+      double rs = avgGain / avgLoss;
+
+      return 100 - (100 / (rs + 1));
+    }
+  };
 }

@@ -34,7 +34,7 @@ Stream<PhxResult> calcPhx(QuoteSeries series) async* {
   final tciStream = calcTCI(hlc3);
   final mfiStream = calcMFI(series.hlc3WithVol, len: 3);
   final willyStream = calcWilly(hlc3);
-  final rsiStream = calcRSI(hlc3, lookBack: 3);
+  final rsiStream = calcRSI(hlc3, len: 3);
   final tsiStream = calcTSI(series.open, lookBack: 9, smoothLen: 6)
       .map((el) => (date: el.date, value: el.value));
 

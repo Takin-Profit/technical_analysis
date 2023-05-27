@@ -155,7 +155,7 @@ sealed class TA {
   }) {
     _validateArg('RSI (Relative Strength Index)', lookBack, 2);
 
-    return calcRSI(series, lookBack: lookBack);
+    return calcRSI(series, len: lookBack);
   }
 
   static Series<TsiResult> tsi(
