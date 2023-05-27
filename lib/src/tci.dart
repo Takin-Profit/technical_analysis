@@ -7,42 +7,51 @@
 import 'circular_buf.dart';
 import 'types.dart';
 
-Stream<PriceData> calcTCI(Stream<PriceData> series) async* {
-  final buffer = CircularBuf(size: 9);
-  double emaSrc = double.nan;
-  double emaDiffAbs = double.nan;
-  double emaTCIRaw = double.nan;
-  final double multiplierSrc = 2 / (9 + 1);
-  final double multiplierDiffAbs = 2 / (9 + 1);
-  final double multiplierTCIRaw = 2 / (6 + 1);
+Stream<PriceData> calcTCI(
+  Stream<PriceData> series, {
+  int len = 9,
+}) async* {
+  final tci = getTCI(len: len);
 
   await for (final data in series) {
-    buffer.put(data.value);
+    yield (date: data.date, value: tci(data.value));
+  }
+}
 
-    if (buffer.isFull) {
-      if (emaSrc.isNaN) {
-        emaSrc = buffer.values.reduce((prev, next) => prev + next) / 9;
-        emaDiffAbs = buffer.values
-                .map((el) => (el - emaSrc).abs())
-                .reduce((prev, next) => prev + next) /
-            9;
-        emaTCIRaw = buffer.values
-                .map((el) => (el - emaSrc) / (0.025 * (el - emaSrc).abs()))
-                .reduce((prev, next) => prev + next) /
-            6;
+double Function(double) getTCI({int len = 9}) {
+  double emaSrc = double.maxFinite;
+  double emaDiffAbs = double.maxFinite;
+  double emaTCIRaw = double.maxFinite;
+  final CircularBuf dataBuffer = CircularBuf(size: len);
+
+  return (double data) {
+    dataBuffer.put(data);
+
+    if (dataBuffer.isFull) {
+      if (emaSrc == double.maxFinite) {
+        // Initialize emaSrc, emaDiffAbs and emaTCIRaw using SMA
+        emaSrc = dataBuffer.orderedValues.reduce((a, b) => a + b) / len;
+        double diffSum = dataBuffer.orderedValues
+            .map((val) => (val - emaSrc).abs())
+            .reduce((a, b) => a + b);
+        emaDiffAbs = diffSum / len;
+        double tciRawSum = dataBuffer.orderedValues
+            .map((val) => (val - emaSrc) / (0.025 * (val - emaSrc).abs()))
+            .reduce((a, b) => a + b);
+        emaTCIRaw = tciRawSum / 6;
       } else {
-        final val = data.value;
-
-        emaSrc = (val - emaSrc) * multiplierSrc + emaSrc;
-        final diffAbs = (data.value - emaSrc).abs();
-        emaDiffAbs = (diffAbs - emaDiffAbs) * multiplierDiffAbs + emaDiffAbs;
-        final tciRaw = (val - emaSrc) / (emaDiffAbs * 0.025);
-        emaTCIRaw = (tciRaw - emaTCIRaw) * multiplierTCIRaw + emaTCIRaw;
+        // Update emaSrc, emaDiffAbs and emaTCIRaw
+        emaSrc = (2 / (len + 1)) * data + (1 - 2 / (len + 1)) * emaSrc;
+        double diffAbs = (data - emaSrc).abs();
+        emaDiffAbs =
+            (2 / (len + 1)) * diffAbs + (1 - 2 / (len + 1)) * emaDiffAbs;
+        double tciRaw = (data - emaSrc) / (emaDiffAbs * 0.025);
+        emaTCIRaw = (2 / (6 + 1)) * tciRaw + (1 - 2 / (6 + 1)) * emaTCIRaw;
       }
 
-      yield (date: data.date, value: emaTCIRaw + 50);
+      return emaTCIRaw + 50;
     } else {
-      yield (date: data.date, value: double.nan);
+      return double.nan;
     }
-  }
+  };
 }

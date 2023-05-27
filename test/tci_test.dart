@@ -54,6 +54,9 @@ Future<void> main() async {
       final result614 = results[614];
       final result866 = results[866];
 
+      for (int i = 0; i < results.length; i++) {
+        print(results[i]);
+      }
       expect(result0.value.isNaN, true);
       expect(result6.value.isNaN, true);
       expect(
