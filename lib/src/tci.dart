@@ -4,6 +4,8 @@
  * license that can be found in the LICENSE file.
  */
 
+import 'package:collection/collection.dart';
+
 import 'circular_buf.dart';
 import 'types.dart';
 
@@ -30,7 +32,7 @@ double Function(double) getTCI({int len = 9}) {
     if (dataBuffer.isFull) {
       if (emaSrc == double.maxFinite) {
         // Initialize emaSrc, emaDiffAbs and emaTCIRaw using SMA
-        emaSrc = dataBuffer.orderedValues.reduce((a, b) => a + b) / len;
+        emaSrc = dataBuffer.orderedValues.average;
         double diffSum = dataBuffer.orderedValues
             .map((val) => (val - emaSrc).abs())
             .reduce((a, b) => a + b);
