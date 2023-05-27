@@ -10,22 +10,32 @@ import 'types.dart';
 
 Series<PriceData> calcWMA(
   Series<PriceData> series, {
-  int lookBack = 15,
+  int len = 15,
 }) async* {
-  final buffer = CircularBuf(size: lookBack);
-  final divisor = lookBack.toDouble() * (lookBack + 1) / 2.0;
+  final wma = getWma(len: len);
 
   await for (var data in series) {
-    buffer.put(data.value);
+    yield (date: data.date, value: wma(data.value));
+  }
+}
+
+double Function(double) getWma({int len = 15}) {
+  final buffer = CircularBuf(size: len);
+  final divisor = len.toDouble() * (len + 1) / 2.0;
+
+  return (double data) {
+    buffer.put(data);
+
     if (buffer.isFull) {
       double sum = 0.0;
-      for (var i = 0; i < lookBack; i++) {
-        var weight = lookBack - i;
-        sum += buffer.values[lookBack - i - 1] * weight;
+      for (var i = 0; i < len; i++) {
+        var weight = len - i;
+        sum += buffer.orderedValues.elementAt(len - i - 1) * weight;
       }
-      yield (date: data.date, value: sum / divisor);
+
+      return sum / divisor;
     } else {
-      yield (date: data.date, value: double.nan);
+      return double.nan;
     }
-  }
+  };
 }

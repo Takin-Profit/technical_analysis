@@ -335,7 +335,7 @@ extension QuoteExt on Quote {
     double low,
     double close,
     double volume
-  }) _toDoublePrecis() => (
+  }) toDoublePrecis() => (
         date: date,
         open: open.toDouble(),
         close: close.toDouble(),
@@ -347,7 +347,7 @@ extension QuoteExt on Quote {
   PriceData toPriceDataDouble({
     CandlePart candlePart = CandlePart.close,
   }) {
-    final data = _toDoublePrecis();
+    final data = toDoublePrecis();
 
     final high = data.high;
     final low = data.low;
@@ -401,7 +401,7 @@ extension QuoteExt on Quote {
   ({DateTime date, double value, double vol}) toPriceDataDoubleWithVol({
     CandlePart candlePart = CandlePart.close,
   }) {
-    final data = _toDoublePrecis();
+    final data = toDoublePrecis();
 
     final high = data.high;
     final low = data.low;

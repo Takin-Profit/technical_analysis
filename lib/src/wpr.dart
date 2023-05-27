@@ -12,25 +12,38 @@ import 'types.dart';
 
 Series<PriceData> calcWPR(
   QuoteSeries series, {
-  int lookBack = 14,
+  int len = 14,
 }) async* {
-  final highestBuffer = CircularBuf(size: lookBack);
-  final lowestBuffer = CircularBuf(size: lookBack);
+  final wpr = getWpr(len: len);
 
-  await for (final current in series) {
-    highestBuffer.put(current.high.toDouble());
-    lowestBuffer.put(current.low.toDouble());
+  await for (final data in series) {
+    final val = data.toDoublePrecis();
+    yield (
+      date: data.date,
+      value: wpr(high: val.high, low: val.low, close: val.close)
+    );
+  }
+}
+
+// Instantiate the circular buffers for high and low values
+Function getWpr({required int len}) {
+  final highestBuffer = CircularBuf(size: len);
+  final lowestBuffer = CircularBuf(size: len);
+  double? lastClose;
+
+  return ({required double high, required double low, required double close}) {
+    // Put high and low into their respective buffers
+    highestBuffer.put(high);
+    lowestBuffer.put(low);
+    lastClose = close;
 
     if (highestBuffer.isFull && lowestBuffer.isFull) {
-      final highest = highestBuffer.values.reduce(max);
-      final lowest = lowestBuffer.values.reduce(min);
+      final highestHigh = highestBuffer.values.reduce(max);
+      final lowestLow = lowestBuffer.values.reduce(min);
 
-      final percentR =
-          -100 * (highest - current.close.toDouble()) / (highest - lowest);
-
-      yield (date: current.date, value: percentR);
+      return -100 * (highestHigh - lastClose!) / (highestHigh - lowestLow);
     } else {
-      yield (date: current.date, value: double.nan);
+      return double.nan;
     }
-  }
+  };
 }

@@ -191,7 +191,7 @@ sealed class TA {
   }) {
     _validateArg('WPR (Williams Percent Range)', lookBack, 1);
 
-    return calcWPR(series, lookBack: lookBack);
+    return calcWPR(series, len: lookBack);
   }
 
   static Series<BBResult> bb(
@@ -227,7 +227,7 @@ sealed class TA {
   }) {
     _validateArg('WMA (Weighted Moving Average)', lookBack, 1);
 
-    return calcWMA(series, lookBack: lookBack);
+    return calcWMA(series, len: lookBack);
   }
 
   static Series<PriceData> linReg(
