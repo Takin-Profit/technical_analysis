@@ -2,10 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'package:collection/collection.dart';
-
-import 'circular_buf.dart';
 import 'series.dart';
+import 'sma.dart';
 import 'types.dart';
 
 /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.
@@ -13,22 +11,34 @@ import 'types.dart';
 /// recommended warmup periods = 150
 Series<PriceData> calcRMA(
   Series<PriceData> series, {
-  int lookBack = 14,
+  int len = 14,
 }) async* {
-  final double alpha = 1.0 / lookBack;
-  double? sum;
-  final buf = CircularBuf(size: lookBack);
-
+  final rma = getRMA(len: len);
   await for (final data in series) {
-    buf.put(data.value);
-    if (buf.isFull && sum == null) {
-      // Calculate initial SMA
-      sum = buf.values.average;
-    } else if (sum != null) {
+    yield (date: data.date, value: rma(data.value));
+  }
+}
+
+double Function(double) getRMA({int len = 14}) {
+  double alpha = 1.0 / len;
+  double? sum;
+  var getSmaFn = getSma(len: len);
+  bool isInitialSmaCalculated = false;
+
+  return (double data) {
+    double sma = getSmaFn(data);
+    if (!isInitialSmaCalculated) {
+      // Try to calculate initial SMA
+      if (!sma.isNaN) {
+        // If SMA calculation returned a number, it means initial SMA is calculated
+        sum = sma;
+        isInitialSmaCalculated = true;
+      }
+    } else {
       // Apply RMA calculation
-      sum = alpha * data.value + (1 - alpha) * sum;
+      sum = alpha * data + (1 - alpha) * sum!;
     }
 
-    yield (date: data.date, value: sum ?? double.nan);
-  }
+    return sum ?? double.nan;
+  };
 }

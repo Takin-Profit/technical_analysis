@@ -126,7 +126,7 @@ sealed class TA {
   }) {
     _validateArg('RMA (Relative Moving Average)', lookBack, 1);
 
-    return calcRMA(series, lookBack: lookBack);
+    return calcRMA(series, len: lookBack);
   }
 
   static Series<PriceData> ema(
