@@ -21,7 +21,7 @@ double Function(double) getSma({int len = 20}) {
   CircularBuf buffer = CircularBuf(size: len);
   double sum = 0.0;
 
-  double calculateSma(double data) {
+  return (double data) {
     if (buffer.isFull) {
       sum -= buffer.first; // Subtract the first item in the buffer
     }
@@ -34,7 +34,5 @@ double Function(double) getSma({int len = 20}) {
     }
 
     return sum / len;
-  }
-
-  return calculateSma;
+  };
 }

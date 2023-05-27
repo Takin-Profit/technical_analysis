@@ -28,7 +28,7 @@ double Function(({double value, double vol})) getMFI({int len = 14}) {
   CircularBuf lowerBuffer = CircularBuf(size: len);
   ({double value, double vol})? prev;
 
-  double calculateMfi(({double value, double vol}) data) {
+  return (({double value, double vol}) data) {
     double change = (prev == null) ? 0.0 : data.value - prev!.value;
     double mf = data.vol * data.value; // Raw Money Flow
 
@@ -63,7 +63,5 @@ double Function(({double value, double vol})) getMFI({int len = 14}) {
     } else {
       return double.nan;
     }
-  }
-
-  return calculateMfi;
+  };
 }

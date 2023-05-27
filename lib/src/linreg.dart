@@ -24,7 +24,7 @@ double Function(double) getLinReg({int len = 9}) {
   double xSum = 0, ySum = 0, xxSum = 0, xySum = 0;
   int count = 0;
 
-  double calculateLinReg(double y) {
+  return (double y) {
     double x = count.toDouble();
 
     if (buf.isFull) {
@@ -54,7 +54,5 @@ double Function(double) getLinReg({int len = 9}) {
 
       return slope * x + intercept;
     }
-  }
-
-  return calculateLinReg;
+  };
 }
