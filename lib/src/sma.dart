@@ -10,14 +10,14 @@ Series<PriceData> calcSMA(
   Series<PriceData> series, {
   int len = 20,
 }) async* {
-  final sma = getSma(len: len);
+  final sma = getSMA(len: len);
 
   await for (final data in series) {
     yield (date: data.date, value: sma(data.value));
   }
 }
 
-double Function(double) getSma({int len = 20}) {
+double Function(double) getSMA({int len = 20}) {
   CircularBuf buffer = CircularBuf(size: len);
   double sum = 0.0;
 

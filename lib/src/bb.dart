@@ -30,7 +30,7 @@ Series<BBResult> calcBB(
   int multi = 2,
 }) {
   int counter = 0;
-  final sma = getSma(len: len);
+  final sma = getSMA(len: len);
   final stDev = getStDev(len: len);
 
   return (double value) {

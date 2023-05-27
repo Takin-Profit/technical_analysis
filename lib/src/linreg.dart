@@ -12,14 +12,14 @@ Series<PriceData> calcLinReg(
   Series<PriceData> series, {
   int len = 9,
 }) async* {
-  final linReg = getLinReg(len: len);
+  final linReg = getLINREG(len: len);
 
   await for (PriceData data in series) {
     yield (date: data.date, value: linReg(data.value));
   }
 }
 
-double Function(double) getLinReg({int len = 9}) {
+double Function(double) getLINREG({int len = 9}) {
   CircularBuf buf = CircularBuf(size: len);
   double xSum = 0, ySum = 0, xxSum = 0, xySum = 0;
   int count = 0;

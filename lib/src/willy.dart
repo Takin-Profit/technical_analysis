@@ -10,14 +10,14 @@ import 'circular_buf.dart';
 import 'types.dart';
 
 Stream<PriceData> calcWilly(Stream<PriceData> series) async* {
-  final willy = getWilly();
+  final willy = getWILLY();
 
   await for (final data in series) {
     yield (date: data.date, value: willy(data.value));
   }
 }
 
-double Function(double) getWilly({int len = 6}) {
+double Function(double) getWILLY({int len = 6}) {
   final buffer = CircularBuf(size: len);
 
   return (double data) {

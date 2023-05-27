@@ -18,19 +18,21 @@ Series<PriceData> calcMFI(
 }) async* {
   final mfi = getMFI(len: len);
   await for (final data in series) {
-    final result = mfi((value: data.value, vol: data.vol));
+    final result = mfi(value: data.value, vol: data.vol);
     yield (date: data.date, value: result);
   }
 }
 
-double Function(({double value, double vol})) getMFI({int len = 14}) {
+double Function({required double value, required double vol}) getMFI({
+  int len = 14,
+}) {
   CircularBuf upperBuffer = CircularBuf(size: len);
   CircularBuf lowerBuffer = CircularBuf(size: len);
-  ({double value, double vol})? prev;
+  double? prev;
 
-  return (({double value, double vol}) data) {
-    double change = (prev == null) ? 0.0 : data.value - prev!.value;
-    double mf = data.vol * data.value; // Raw Money Flow
+  return ({required double value, required double vol}) {
+    double change = (prev == null) ? 0.0 : value - prev!;
+    double mf = vol * value; // Raw Money Flow
 
     double upper, lower;
     if (change > 0) {
@@ -47,7 +49,7 @@ double Function(({double value, double vol})) getMFI({int len = 14}) {
     upperBuffer.put(upper);
     lowerBuffer.put(lower);
 
-    prev = data;
+    prev = value;
 
     if (upperBuffer.isFull && lowerBuffer.isFull) {
       double upperSum = upperBuffer.values.sum;

@@ -22,7 +22,7 @@ Series<PriceData> calcRMA(
 double Function(double) getRMA({int len = 14}) {
   double alpha = 1.0 / len;
   double? sum;
-  var getSmaFn = getSma(len: len);
+  var getSmaFn = getSMA(len: len);
   bool isInitialSmaCalculated = false;
 
   return (double data) {
