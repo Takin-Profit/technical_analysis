@@ -183,7 +183,7 @@ sealed class TA {
   }) {
     _validateArg('MFI (Money Flow Index)', lookBack, 1);
 
-    return calcMFI(series, lookBack: lookBack);
+    return calcMFI(series, len: lookBack);
   }
 
   static Series<PriceData> wpr(
@@ -233,11 +233,11 @@ sealed class TA {
 
   static Series<PriceData> linReg(
     Series<PriceData> series, {
-    int lookBack = 1,
+    int len = 1,
   }) {
-    _validateArg('Linear Regression', lookBack, 1);
+    _validateArg('Linear Regression', len, 1);
 
-    return calcLinReg(series, lookBack: lookBack);
+    return calcLinReg(series, len: len);
   }
 
   static Series<PriceData> tci(

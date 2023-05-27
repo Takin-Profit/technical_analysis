@@ -28,13 +28,13 @@ Future<void> main() async {
   );
   group('TA.linreg tests', () {
     test('WMA Result should have correct length', () async {
-      final res = TA.linReg(quotes.closes, lookBack: 20);
+      final res = TA.linReg(quotes.closes, len: 20);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 900);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.linReg(quotes.closes, lookBack: 20);
+      final res = TA.linReg(quotes.closes, len: 20);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
@@ -42,7 +42,7 @@ Future<void> main() async {
     });
 
     test('Should return the correct calculation results', () async {
-      final res = TA.linReg(quotes.closes, lookBack: 20);
+      final res = TA.linReg(quotes.closes, len: 20);
       final _ = await quotes.close();
       final results = await res.toList();
 
@@ -65,7 +65,7 @@ Future<void> main() async {
     test(
       'Should return the correct calculation results at high precision',
       () async {
-        final res = TA.linReg(quotes.closes, lookBack: 20);
+        final res = TA.linReg(quotes.closes, len: 20);
         final _ = await quotes.close();
         final results = await res.toList();
 

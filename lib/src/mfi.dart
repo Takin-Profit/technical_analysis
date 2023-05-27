@@ -14,17 +14,23 @@ typedef PriceDataTriple = ({DateTime date, double value, double vol});
 
 Series<PriceData> calcMFI(
   Series<PriceDataTriple> series, {
-  int lookBack = 14,
+  int len = 14,
 }) async* {
-  final upperBuffer = CircularBuf(size: lookBack);
-  final lowerBuffer = CircularBuf(size: lookBack);
-  PriceDataTriple? prev;
+  final mfi = getMFI(len: len);
+  await for (final data in series) {
+    final result = mfi((value: data.value, vol: data.vol));
+    yield (date: data.date, value: result);
+  }
+}
 
-  await for (final current in series) {
-    final change = (prev == null) || prev.value == current.value
-        ? 0.0
-        : current.value - prev.value;
-    final mf = current.vol * current.value; // Raw Money Flow
+double Function(({double value, double vol})) getMFI({int len = 14}) {
+  CircularBuf upperBuffer = CircularBuf(size: len);
+  CircularBuf lowerBuffer = CircularBuf(size: len);
+  ({double value, double vol})? prev;
+
+  double calculateMfi(({double value, double vol}) data) {
+    double change = (prev == null) ? 0.0 : data.value - prev!.value;
+    double mf = data.vol * data.value; // Raw Money Flow
 
     double upper, lower;
     if (change > 0) {
@@ -41,22 +47,23 @@ Series<PriceData> calcMFI(
     upperBuffer.put(upper);
     lowerBuffer.put(lower);
 
+    prev = data;
+
     if (upperBuffer.isFull && lowerBuffer.isFull) {
-      final lowerSum = lowerBuffer.values.sum;
+      double upperSum = upperBuffer.values.sum;
+      double lowerSum = lowerBuffer.values.sum;
 
-      double mfi;
       if (lowerSum != 0) {
-        double mfRatio = upperBuffer.values.sum / lowerSum;
-        mfi = 100 - (100 / (mfRatio + 1));
+        double mfRatio = upperSum / lowerSum;
+
+        return 100 - (100 / (mfRatio + 1));
       } else {
-        mfi = 100;
+        return 100;
       }
-
-      yield (date: current.date, value: mfi);
     } else {
-      yield (date: current.date, value: double.nan);
+      return double.nan;
     }
-
-    prev = current;
   }
+
+  return calculateMfi;
 }

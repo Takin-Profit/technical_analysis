@@ -7,44 +7,54 @@
 import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
-import 'util.dart';
 
 Series<PriceData> calcLinReg(
   Series<PriceData> series, {
-  int lookBack = 9,
-  // double pcAbove = 0.009,
-  // double pcBelow = 0.009,
+  int len = 9,
 }) async* {
-  final buf = CircularBuf(size: lookBack);
+  final linReg = getLinReg(len: len);
 
   await for (PriceData data in series) {
-    buf.put(data.value);
+    yield (date: data.date, value: linReg(data.value));
+  }
+}
+
+double Function(double) getLinReg({int len = 9}) {
+  CircularBuf buf = CircularBuf(size: len);
+  double xSum = 0, ySum = 0, xxSum = 0, xySum = 0;
+  int count = 0;
+
+  double calculateLinReg(double y) {
+    double x = count.toDouble();
 
     if (buf.isFull) {
-      List<double> x = List.generate(
-        buf.length,
-        (index) => index.toDouble(),
-      );
+      double firstY = buf.first;
+      double firstX = count - len.toDouble();
+      xSum -= firstX;
+      ySum -= firstY;
+      xxSum -= firstX * firstX;
+      xySum -= firstX * firstY;
+    }
 
-      SimpleLinearRegression lr = SimpleLinearRegression(x, buf.values);
+    xSum += x;
+    ySum += y;
+    xxSum += x * x;
+    xySum += x * y;
 
-      double linReg = lr.predict((buf.length - 1).toDouble());
+    buf.put(y);
 
-      // double pcAboveVal = 1 + pcAbove / 100.0;
-      // double pcBelowVal = 1 - pcBelow / 100.0;
-      // final last = buf.last.value;
-      // bool sell = last > linReg * pcAboveVal;
-      // bool buy = last < linReg * pcBelowVal;
+    if (count < len - 1) {
+      count++;
 
-      yield (
-        date: data.date,
-        value: linReg,
-      );
+      return double.nan;
     } else {
-      yield (
-        date: data.date,
-        value: double.nan,
-      );
+      double slope = (len * xySum - xSum * ySum) / (len * xxSum - xSum * xSum);
+      double intercept = (ySum - slope * xSum) / len;
+      count++;
+
+      return slope * x + intercept;
     }
   }
+
+  return calculateLinReg;
 }

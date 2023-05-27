@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'package:collection/collection.dart';
-
 import 'series.dart';
 import 'types.dart';
 
@@ -19,17 +17,18 @@ Series<PriceData> calcEMA(
 }
 
 double Function(double data) getEma({int len = 20}) {
-  List<double> window = [];
   double? lastEma;
   double alpha = 2 / (len + 1);
+  int counter = 0;
+  double sum = 0;
 
   double calculateEma(double data) {
-    window.add(data);
-    if (window.length > len) {
-      var _ = window.removeAt(0);
-    }
-    if (lastEma == null && window.length == len) {
-      lastEma = window.average;
+    counter++;
+    sum += data;
+
+    // calculate initial SMA to be used as the first EMA
+    if (lastEma == null && counter == len) {
+      lastEma = sum / len;
     } else if (lastEma != null) {
       lastEma = alpha * data + (1 - alpha) * lastEma!;
     }
