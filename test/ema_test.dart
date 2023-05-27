@@ -58,6 +58,12 @@ Future<void> main() async {
         216.6228,
         reason: 'should be 216.6228',
       );
+
+      expect(
+        results[30].value.toPrecision(4),
+        217.1292,
+        reason: 'should be 217.1292',
+      );
       expect(
         result249.value.toPrecision(4),
         255.3873,

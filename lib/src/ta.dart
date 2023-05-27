@@ -170,7 +170,7 @@ sealed class TA {
 
     return calcTSI(
       series,
-      lookBack: lookBack,
+      len: lookBack,
       smoothLen: smoothLen,
       signalLen: signalLen,
     );

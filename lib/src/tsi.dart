@@ -2,64 +2,68 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import 'dart:async';
-
-import 'package:async/async.dart';
-
 import 'ema.dart';
 import 'series.dart';
 import 'types.dart';
-import 'util.dart';
 
 typedef TsiResult = ({DateTime date, double value, double? signal});
 
+/// requires a warmup period of at least 200 bars for best accuracy.
 Series<TsiResult> calcTSI(
   Series<PriceData> series, {
-  int lookBack = 25,
+  int len = 25,
   int smoothLen = 13,
   int signalLen = 13,
 }) async* {
-  // correct to this point
-  Stream<PriceData> doubleSmooth(
-    Stream<PriceData> stream,
-    int long,
-    int short,
-  ) {
-    return calcEMA(calcEMA(stream, len: long), len: short);
+  final tsi = getTSI(len: len, smoothLen: smoothLen, signalLen: signalLen);
+  await for (final data in series) {
+    final result = tsi(data.value);
+    yield (date: data.date, value: result.value, signal: result.signal);
   }
+}
 
-  final changeStream = Util.change(series).asBroadcastStream();
+({double value, double? signal}) Function(double) getTSI({
+  int len = 25,
+  int smoothLen = 13,
+  int signalLen = 13,
+}) {
+  double? lastValue;
 
-  final absChangeStream =
-      changeStream.map((data) => (date: data.date, value: data.value.abs()));
+  var firstEmaPC = getEma(len: len);
+  var firstEmaAPC = getEma(len: len);
+  var secondEmaPC = getEma(len: smoothLen);
+  var secondEmaAPC = getEma(len: smoothLen);
+  var emaSignal = getEma(len: signalLen);
 
-  final doubleSmoothedPc = doubleSmooth(changeStream, lookBack, smoothLen);
+  return (double value) {
+    double pc = 0;
+    double apc = 0;
 
-  final doubleSmoothedAbsPc =
-      doubleSmooth(absChangeStream, lookBack, smoothLen);
-
-  final zippedStream = StreamZip([doubleSmoothedPc, doubleSmoothedAbsPc]);
-
-  Stream<TsiResult> tsiStream() async* {
-    await for (final data in zippedStream) {
-      final double tsi = 100 * (data.first.value / data[1].value);
-      yield (date: data.first.date, value: tsi, signal: null);
+    if (lastValue != null) {
+      pc = value - lastValue!;
+      apc = pc.abs();
     }
-  }
 
-  final tsiWithSignalStream = tsiStream().asBroadcastStream();
+    lastValue = value;
 
-  // Convert to Stream<PriceDataDouble> before calculating EMA
-  final tsiPriceDataDoubleStream =
-      tsiWithSignalStream.map((tsi) => (date: tsi.date, value: tsi.value));
+    double firstEmaPCValue = firstEmaPC(pc);
+    double firstEmaAPCValue = firstEmaAPC(apc);
 
-  final signalStream = calcEMA(tsiPriceDataDoubleStream, len: signalLen);
+    if (firstEmaPCValue.isNaN || firstEmaAPCValue.isNaN) {
+      return (value: double.nan, signal: double.nan);
+    }
 
-  final finalZippedStream = StreamZip([tsiWithSignalStream, signalStream]);
+    double secondEmaPCValue = secondEmaPC(firstEmaPCValue);
+    double secondEmaAPCValue = secondEmaAPC(firstEmaAPCValue);
 
-  await for (final data in finalZippedStream) {
-    final tsiData = data.first as TsiResult;
-    final signalData = data[1] as PriceData;
-    yield (date: tsiData.date, value: tsiData.value, signal: signalData.value);
-  }
+    if (secondEmaPCValue.isNaN || secondEmaAPCValue.isNaN) {
+      return (value: double.nan, signal: double.nan);
+    }
+
+    double tsi =
+        secondEmaAPCValue != 0 ? secondEmaPCValue * 100 / secondEmaAPCValue : 0;
+    double signal = emaSignal(tsi);
+
+    return (value: tsi, signal: signal.isNaN ? double.nan : signal);
+  };
 }

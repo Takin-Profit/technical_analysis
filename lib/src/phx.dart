@@ -35,7 +35,7 @@ Stream<PhxResult> calcPhx(QuoteSeries series) async* {
   final mfiStream = calcMFI(series.hlc3WithVol, len: 3);
   final willyStream = calcWilly(hlc3);
   final rsiStream = calcRSI(hlc3, len: 3);
-  final tsiStream = calcTSI(series.open, lookBack: 9, smoothLen: 6)
+  final tsiStream = calcTSI(series.open, len: 9, smoothLen: 6)
       .map((el) => (date: el.date, value: el.value));
 
   final linRegBuf = CircularBuf(size: 32);
