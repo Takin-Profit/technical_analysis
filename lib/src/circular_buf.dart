@@ -12,6 +12,9 @@ class CircularBuf {
   int _start = 0;
   int _counter = 0;
 
+  // Provide filledSize property to return the filled size of the buffer
+  int get filledSize => _counter;
+
   Float64List get values => isFull ? _buffer : Float64List(0);
 
   Iterable<double> get orderedValues sync* {

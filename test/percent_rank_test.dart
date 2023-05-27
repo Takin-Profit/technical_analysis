@@ -30,13 +30,13 @@ Future<void> main() async {
   );
   group('TA.percentRank tests', () {
     test('should have correct length', () async {
-      final res = TA.percentRank(quotes.closes, lookBack: 20);
+      final res = TA.percentRank(quotes.closes, len: 20);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 630);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.percentRank(quotes.closes, lookBack: 20);
+      final res = TA.percentRank(quotes.closes, len: 20);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
@@ -44,7 +44,7 @@ Future<void> main() async {
     });
 
     test('Should return the correct calculation results', () async {
-      final res = TA.percentRank(quotes.closes, lookBack: 20);
+      final res = TA.percentRank(quotes.closes, len: 20);
       final _ = await quotes.close();
       final results = await res.toList();
 

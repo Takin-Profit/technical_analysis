@@ -22,7 +22,7 @@ double Function(double data) getEma({int len = 20}) {
   int counter = 0;
   double sum = 0;
 
-  double calculateEma(double data) {
+  return (double data) {
     counter++;
     sum += data;
 
@@ -34,7 +34,5 @@ double Function(double data) getEma({int len = 20}) {
     }
 
     return lastEma ?? double.nan;
-  }
-
-  return calculateEma;
+  };
 }
