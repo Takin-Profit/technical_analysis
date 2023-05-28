@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import 'package:collection/collection.dart';
+
 import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
@@ -19,20 +21,10 @@ Series<PriceData> calcSMA(
 
 double Function(double) getSMA({int len = 20}) {
   CircularBuf buffer = CircularBuf(size: len);
-  double sum = 0.0;
 
   return (double data) {
-    if (buffer.isFull) {
-      sum -= buffer.first; // Subtract the first item in the buffer
-    }
-
     buffer.put(data);
-    sum += data; // Add the new item to the sum
 
-    if (!buffer.isFull) {
-      return double.nan; // Not enough data yet
-    }
-
-    return sum / len;
+    return buffer.isFull ? buffer.values.average : double.nan;
   };
 }

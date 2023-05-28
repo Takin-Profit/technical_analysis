@@ -30,7 +30,7 @@ double Function(double data) getEma({int len = 20}) {
     if (lastEma == null && counter == len) {
       lastEma = sum / len;
     } else if (lastEma != null) {
-      lastEma = alpha * data + (1 - alpha) * lastEma!;
+      lastEma = alpha * data + (1 - alpha) * (lastEma ?? 0.0);
     }
 
     return lastEma ?? double.nan;

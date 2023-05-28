@@ -32,12 +32,7 @@ Future<void> main() async {
       final result = await res.toList();
       expect(result.length, 502);
     });
-    test('TSI Result should have correct length', () async {
-      final res = TA.tsi(quotes.closes);
-      final _ = await quotes.close();
-      final result = await res.toList();
-      expect(result.length, 502);
-    });
+
     test('TSI Result should have correct length of NaN results', () async {
       final res = TA.tsi(quotes.closes, signalLen: 7);
       final _ = await quotes.close();

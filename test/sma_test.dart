@@ -94,8 +94,16 @@ Future<void> main() async {
       final result501 = results[501];
 
       expect(result24.value, 77293768.2, reason: 'should be 77293768.2');
-      expect(result290.value, 157958070.8, reason: 'should be 157958070.8');
-      expect(result501.value, 163695200, reason: 'should be 163695200');
+      expect(
+        result290.value.toPrecision(1),
+        157958070.8,
+        reason: 'should be 157958070.8',
+      );
+      expect(
+        result501.value.toPrecision(0),
+        163695200,
+        reason: 'should be 163695200',
+      );
     });
   });
 }

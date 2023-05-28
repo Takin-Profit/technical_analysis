@@ -99,5 +99,8 @@ Future<List<Quote>> getEthBbw({int days = 630}) =>
 Future<List<Quote>> getSpxAlma({int days = 396}) =>
     _getQuotes('eth_bbw.csv', days);
 
+Future<List<Quote>> getBtcTsi({int days = 900}) =>
+    _getQuotes('btc_tsi.csv', days);
+
 Stream<Quote> getLongish({int days = 5285}) =>
     readFileStream('longish.csv', days: days);
