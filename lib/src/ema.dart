@@ -17,22 +17,28 @@ Series<PriceData> calcEMA(
 }
 
 double Function(double data) getEma({int len = 20}) {
-  double? lastEma;
+  double ema = double.nan;
   double alpha = 2 / (len + 1);
   int counter = 0;
   double sum = 0;
+  bool smaCalculated = false;
 
   return (double data) {
     counter++;
     sum += data;
 
-    // calculate initial SMA to be used as the first EMA
-    if (lastEma == null && counter == len) {
-      lastEma = sum / len;
-    } else if (lastEma != null) {
-      lastEma = alpha * data + (1 - alpha) * (lastEma ?? 0.0);
+    if (!smaCalculated) {
+      if (counter >= len) {
+        double sma = sum / len;
+        if (!sma.isNaN) {
+          ema = sma;
+          smaCalculated = true;
+        }
+      }
+    } else {
+      ema = (data - ema) * alpha + ema;
     }
 
-    return lastEma ?? double.nan;
+    return ema;
   };
 }

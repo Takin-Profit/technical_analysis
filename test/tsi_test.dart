@@ -61,7 +61,7 @@ Future<void> main() async {
       // still in warmup period
       expect(
         result[37].value.toPrecision(4),
-        closeTo(53.1204, 0.62),
+        53.1204,
         reason: 'should be close to 53.1204',
       );
       expect(

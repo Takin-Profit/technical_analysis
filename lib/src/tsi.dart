@@ -46,12 +46,8 @@ Series<TsiResult> calcTSI(
 
     lastValue = value;
 
-    double firstEmaPCValue = (firstEmaPC(pc));
+    double firstEmaPCValue = firstEmaPC(pc);
     double firstEmaAPCValue = firstEmaAPC(apc);
-
-    if (firstEmaPCValue.isNaN || firstEmaAPCValue.isNaN) {
-      return (value: double.nan, signal: double.nan);
-    }
 
     double secondEmaPCValue = secondEmaPC(firstEmaPCValue);
     double secondEmaAPCValue = secondEmaAPC(firstEmaAPCValue);
