@@ -24,18 +24,18 @@ double Function(double data) getEma({int len = 20}) {
   bool smaCalculated = false;
 
   return (double data) {
-    counter++;
-    sum += data;
+    if (!smaCalculated && !data.isNaN) {
+      counter++;
+      sum += data;
+    }
 
-    if (!smaCalculated) {
-      if (counter >= len) {
-        double sma = sum / len;
-        if (!sma.isNaN) {
-          ema = sma;
-          smaCalculated = true;
-        }
+    if (!smaCalculated && counter >= len) {
+      double sma = sum / len;
+      if (!sma.isNaN) {
+        ema = sma;
+        smaCalculated = true;
       }
-    } else {
+    } else if (smaCalculated && !data.isNaN) {
       ema = (data - ema) * alpha + ema;
     }
 

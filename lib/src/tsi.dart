@@ -22,18 +22,25 @@ Series<TsiResult> calcTSI(
   }
 }
 
+double Function(double) doubleSmooth({
+  required int long,
+  required int short,
+}) {
+  final emaShort = getEma(len: short);
+  final emaLong = getEma(len: long);
+
+  return (double value) => emaShort(emaLong(value));
+}
+
 ({double value, double? signal}) Function(double) getTSI({
   int len = 25,
   int smoothLen = 13,
   int signalLen = 13,
 }) {
   double? lastValue;
-
-  var firstEmaPC = getEma(len: len);
-  var firstEmaAPC = getEma(len: len);
-  var secondEmaPC = getEma(len: smoothLen);
-  var secondEmaAPC = getEma(len: smoothLen);
-  var emaSignal = getEma(len: signalLen);
+  final doubleSmoothPC = doubleSmooth(long: len, short: smoothLen);
+  final doubleSmoothAPC = doubleSmooth(long: len, short: smoothLen);
+  final emaSignal = getEma(len: signalLen);
 
   return (double value) {
     double pc = 0;
@@ -46,18 +53,16 @@ Series<TsiResult> calcTSI(
 
     lastValue = value;
 
-    double firstEmaPCValue = firstEmaPC(pc);
-    double firstEmaAPCValue = firstEmaAPC(apc);
+    double doubleSmoothPCValue = doubleSmoothPC(pc);
+    double doubleSmoothAPCValue = doubleSmoothAPC(apc);
 
-    double secondEmaPCValue = secondEmaPC(firstEmaPCValue);
-    double secondEmaAPCValue = secondEmaAPC(firstEmaAPCValue);
-
-    if (secondEmaPCValue.isNaN || secondEmaAPCValue.isNaN) {
+    if (doubleSmoothPCValue.isNaN || doubleSmoothAPCValue.isNaN) {
       return (value: double.nan, signal: double.nan);
     }
 
-    double tsi =
-        secondEmaAPCValue != 0 ? secondEmaPCValue * 100 / secondEmaAPCValue : 0;
+    double tsi = doubleSmoothAPCValue != 0
+        ? doubleSmoothPCValue * 100 / doubleSmoothAPCValue
+        : 0;
     double signal = emaSignal(tsi);
 
     return (value: tsi, signal: signal.isNaN ? double.nan : signal);
