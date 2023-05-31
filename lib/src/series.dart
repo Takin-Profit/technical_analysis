@@ -307,12 +307,6 @@ extension QuoteExt on Quote {
   PriceDataDecimal toPriceData({CandlePart candlePart = CandlePart.close}) {
     final dc2 = 2.0.toDecimal().compactedPrecision;
     final dc3 = 3.0.toDecimal().compactedPrecision;
-    final hl2 = (high + low) / dc2;
-    final hlc3 = (high + low + close) / dc3;
-    final oc2 = (open + close) / dc2;
-    final ohl3 = (open + high + low) / dc3;
-    final ohl4 =
-        (open + high + low + close) / 4.0.toDecimal().compactedPrecision;
 
     return switch (candlePart) {
       CandlePart.open => (date: date, value: open),
@@ -320,11 +314,27 @@ extension QuoteExt on Quote {
       CandlePart.low => (date: date, value: low),
       CandlePart.close => (date: date, value: close),
       CandlePart.volume => (date: date, value: volume),
-      CandlePart.hl2 => (date: date, value: hl2.compactedPrecision),
-      CandlePart.hlc3 => (date: date, value: hlc3.compactedPrecision),
-      CandlePart.oc2 => (date: date, value: oc2.compactedPrecision),
-      CandlePart.ohl3 => (date: date, value: ohl3.compactedPrecision),
-      CandlePart.ohlc4 => (date: date, value: ohl4.compactedPrecision),
+      CandlePart.hl2 => (
+          date: date,
+          value: ((high + low) / dc2).compactedPrecision
+        ),
+      CandlePart.hlc3 => (
+          date: date,
+          value: ((high + low + close) / dc3).compactedPrecision
+        ),
+      CandlePart.oc2 => (
+          date: date,
+          value: ((open + close) / dc2).compactedPrecision
+        ),
+      CandlePart.ohl3 => (
+          date: date,
+          value: ((open + high + low) / dc3).compactedPrecision
+        ),
+      CandlePart.ohlc4 => (
+          date: date,
+          value:
+              ((open + high + low + close) / 4.0.toDecimal()).compactedPrecision
+        ),
     };
   }
 
@@ -347,33 +357,26 @@ extension QuoteExt on Quote {
   PriceData toPriceDataDouble({
     CandlePart candlePart = CandlePart.close,
   }) {
-    final data = toDoublePrecis();
-
-    final high = data.high;
-    final low = data.low;
-    final close = data.close;
-    final open = data.open;
-
     return switch (candlePart) {
       CandlePart.open => (
           date: date,
-          value: open,
+          value: open.toDouble(),
         ),
       CandlePart.high => (
           date: date,
-          value: high,
+          value: high.toDouble(),
         ),
       CandlePart.low => (
           date: date,
-          value: low,
+          value: low.toDouble(),
         ),
       CandlePart.close => (
           date: date,
-          value: close,
+          value: close.toDouble(),
         ),
       CandlePart.volume => (
           date: date,
-          value: data.volume,
+          value: volume.toDouble(),
         ),
       CandlePart.hl2 => (
           date: date,
@@ -401,64 +404,58 @@ extension QuoteExt on Quote {
   ({DateTime date, double value, double vol}) toPriceDataDoubleWithVol({
     CandlePart candlePart = CandlePart.close,
   }) {
-    final data = toDoublePrecis();
-
-    final high = data.high;
-    final low = data.low;
-    final close = data.close;
-    final open = data.open;
-    final volume = data.volume;
+    final vol = volume.toDouble();
 
     return switch (candlePart) {
       CandlePart.open => (
           date: date,
-          value: open,
-          vol: volume,
+          value: open.toDouble(),
+          vol: vol,
         ),
       CandlePart.high => (
           date: date,
-          value: high,
-          vol: volume,
+          value: high.toDouble(),
+          vol: vol,
         ),
       CandlePart.low => (
           date: date,
-          value: low,
-          vol: volume,
+          value: low.toDouble(),
+          vol: vol,
         ),
       CandlePart.close => (
           date: date,
-          value: close,
-          vol: volume,
+          value: close.toDouble(),
+          vol: vol,
         ),
       CandlePart.volume => (
           date: date,
-          value: volume,
-          vol: volume,
+          value: vol,
+          vol: vol,
         ),
       CandlePart.hl2 => (
           date: date,
           value: toPriceDataDouble(candlePart: CandlePart.hl2).value,
-          vol: volume
+          vol: vol,
         ),
       CandlePart.hlc3 => (
           date: date,
           value: toPriceDataDouble(candlePart: CandlePart.hlc3).value,
-          vol: volume
+          vol: vol,
         ),
       CandlePart.oc2 => (
           date: date,
           value: toPriceDataDouble(candlePart: CandlePart.oc2).value,
-          vol: volume
+          vol: vol,
         ),
       CandlePart.ohl3 => (
           date: date,
           value: toPriceDataDouble(candlePart: CandlePart.ohl3).value,
-          vol: volume
+          vol: vol,
         ),
       CandlePart.ohlc4 => (
           date: date,
           value: toPriceDataDouble(candlePart: CandlePart.ohlc4).value,
-          vol: volume
+          vol: vol,
         ),
     };
   }
