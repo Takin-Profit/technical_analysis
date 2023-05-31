@@ -14,12 +14,14 @@ Series<TsiResult> calcTSI(
   int len = 25,
   int smoothLen = 13,
   int signalLen = 13,
-}) async* {
+}) {
   final tsi = getTSI(len: len, smoothLen: smoothLen, signalLen: signalLen);
-  await for (final data in series) {
-    final result = tsi(data.value);
-    yield (date: data.date, value: result.value, signal: result.signal);
-  }
+
+  return series.map((val) {
+    final r = tsi(val.value);
+
+    return (date: val.date, value: r.value, signal: r.signal);
+  });
 }
 
 double Function(double) doubleSmooth({

@@ -8,18 +8,21 @@ import 'types.dart';
 Series<PriceData> calcEMA(
   Series<PriceData> series, {
   int len = 14,
-}) async* {
+}) {
   final ema = getEma(len: len);
 
-  await for (final data in series) {
-    yield (date: data.date, value: ema(data.value));
-  }
+  return series.map((val) {
+    final v = ema(val.value);
+
+    return (date: val.date, value: v);
+  });
 }
 
 double Function(double data) getEma({int len = 20}) {
   double ema = double.nan;
   double alpha = 2 / (len + 1);
   int counter = 0;
+
   double sum = 0;
   bool smaCalculated = false;
 
@@ -28,8 +31,7 @@ double Function(double data) getEma({int len = 20}) {
       counter++;
       sum += data;
     }
-
-    if (!smaCalculated && counter >= len) {
+    if (!smaCalculated && counter == len) {
       double sma = sum / len;
       if (!sma.isNaN) {
         ema = sma;
