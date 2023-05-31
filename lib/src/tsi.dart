@@ -45,8 +45,8 @@ double Function(double) doubleSmooth({
   final emaSignal = getEma(len: signalLen);
 
   return (double value) {
-    double pc = 0;
-    double apc = 0;
+    double pc = double.nan;
+    double apc = double.nan;
 
     if (lastValue != null) {
       pc = value - lastValue!;

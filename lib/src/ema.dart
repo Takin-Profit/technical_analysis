@@ -31,6 +31,10 @@ double Function(double data) getEma({int len = 20}) {
       counter++;
       sum += data;
     }
+    if (data.isNaN) {
+      return data;
+    }
+
     if (!smaCalculated && counter == len) {
       double sma = sum / len;
       if (!sma.isNaN) {

@@ -38,7 +38,7 @@ Future<void> main() async {
       final _ = await quotes.close();
       final result = await res.toList();
       final nonNaN = result.filter((x) => !x.value.isNaN);
-      expect(nonNaN.length, 466, reason: 'should be 465 non NaN results');
+      expect(nonNaN.length, 465, reason: 'should be 465 non NaN results');
     });
     test('TSI Signal should have correct length of NaN results', () async {
       final res = TA.tsi(quotes.closes, signalLen: 7);
@@ -49,7 +49,7 @@ Future<void> main() async {
       final nonNaN = result.filter((x) => !x.signal!.isNaN);
       expect(
         nonNaN.length,
-        460,
+        459,
         reason: 'should be 459 non NaN signal results',
       );
     });
