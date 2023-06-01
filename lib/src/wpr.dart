@@ -30,7 +30,7 @@ Series<PriceData> calcWPR(
 Function getWpr({required int len}) {
   final highestBuffer = CircularBuf(size: len);
   final lowestBuffer = CircularBuf(size: len);
-  double? lastClose;
+  double lastClose = double.nan;
 
   return ({required double high, required double low, required double close}) {
     // Put high and low into their respective buffers
@@ -42,7 +42,7 @@ Function getWpr({required int len}) {
       final highestHigh = highestBuffer.values.reduce(max);
       final lowestLow = lowestBuffer.values.reduce(min);
 
-      return -100 * (highestHigh - lastClose!) / (highestHigh - lowestLow);
+      return -100 * (highestHigh - lastClose) / (highestHigh - lowestLow);
     } else {
       return double.nan;
     }
