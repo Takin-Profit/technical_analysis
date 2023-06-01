@@ -11,12 +11,10 @@ import 'types.dart';
 Series<PriceData> calcWMA(
   Series<PriceData> series, {
   int len = 15,
-}) async* {
+}) {
   final wma = getWma(len: len);
 
-  await for (var data in series) {
-    yield (date: data.date, value: wma(data.value));
-  }
+  return series.map((data) => (date: data.date, value: wma(data.value)));
 }
 
 double Function(double) getWma({int len = 15}) {
