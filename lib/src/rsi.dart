@@ -9,12 +9,10 @@ import 'types.dart';
 Series<PriceData> calcRSI(
   Series<PriceData> series, {
   int len = 14,
-}) async* {
+}) {
   final rsi = getRSI(len: len);
 
-  await for (final data in series) {
-    yield (date: data.date, value: rsi(data.value));
-  }
+  return series.map((data) => (date: data.date, value: rsi(data.value)));
 }
 
 double Function(double) getRSI({int len = 14}) {
