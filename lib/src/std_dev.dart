@@ -14,12 +14,10 @@ Series<PriceData> calcStdDev(
   Series<PriceData> series, {
   int len = 20,
   StDevOf bias = StDevOf.population,
-}) async* {
+}) {
   final stdDev = getStDev(len: len, bias: bias);
 
-  await for (final data in series) {
-    yield (date: data.date, value: stdDev(data.value));
-  }
+  return series.map((data) => (date: data.date, value: stdDev(data.value)));
 }
 
 double Function(double) getStDev({
