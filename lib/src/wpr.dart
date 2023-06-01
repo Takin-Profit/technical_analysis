@@ -13,16 +13,17 @@ import 'types.dart';
 Series<PriceData> calcWPR(
   QuoteSeries series, {
   int len = 14,
-}) async* {
+}) {
   final wpr = getWpr(len: len);
 
-  await for (final data in series) {
-    final val = data.toDoublePrecis();
-    yield (
-      date: data.date,
-      value: wpr(high: val.high, low: val.low, close: val.close)
-    );
-  }
+  return series.map((val) => (
+        date: val.date,
+        value: wpr(
+          high: val.high.toDouble(),
+          low: val.low.toDouble(),
+          close: val.close.toDouble(),
+        )
+      ));
 }
 
 // Instantiate the circular buffers for high and low values
