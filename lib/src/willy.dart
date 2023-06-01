@@ -9,12 +9,10 @@ import "dart:math";
 import 'circular_buf.dart';
 import 'types.dart';
 
-Stream<PriceData> calcWilly(Stream<PriceData> series) async* {
+Stream<PriceData> calcWilly(Stream<PriceData> series) {
   final willy = getWILLY();
 
-  await for (final data in series) {
-    yield (date: data.date, value: willy(data.value));
-  }
+  return series.map((data) => (date: data.date, value: willy(data.value)));
 }
 
 double Function(double) getWILLY({int len = 6}) {
