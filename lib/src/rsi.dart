@@ -18,7 +18,7 @@ Series<PriceData> calcRSI(
 }
 
 double Function(double) getRSI({int len = 14}) {
-  double? lastValue;
+  double lastValue = double.nan;
   double avgGain = 0.0;
   double avgLoss = 0.0;
   int count = 0;
@@ -27,8 +27,8 @@ double Function(double) getRSI({int len = 14}) {
     double gain = 0.0;
     double loss = 0.0;
 
-    if (lastValue != null) {
-      double change = currentValue - lastValue!;
+    if (!lastValue.isNaN) {
+      double change = currentValue - lastValue;
       gain = max(0, change);
       loss = max(0, -change);
     }
