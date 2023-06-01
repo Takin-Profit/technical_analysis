@@ -12,12 +12,10 @@ import 'types.dart';
 Stream<PriceData> calcTCI(
   Stream<PriceData> series, {
   int len = 9,
-}) async* {
+}) {
   final tci = getTCI(len: len);
 
-  await for (final data in series) {
-    yield (date: data.date, value: tci(data.value));
-  }
+  return series.map((data) => (date: data.date, value: tci(data.value)));
 }
 
 double Function(double) getTCI({int len = 9}) {
