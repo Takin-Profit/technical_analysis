@@ -11,12 +11,10 @@ import 'types.dart';
 Series<PriceData> calcSMA(
   Series<PriceData> series, {
   int len = 20,
-}) async* {
+}) {
   final sma = getSMA(len: len);
 
-  await for (final data in series) {
-    yield (date: data.date, value: sma(data.value));
-  }
+  return series.map((data) => (date: data.date, value: sma(data.value)));
 }
 
 double Function(double) getSMA({int len = 20}) {
