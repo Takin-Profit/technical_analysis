@@ -11,12 +11,17 @@ import 'types.dart';
 Series<PriceData> calcLinReg(
   Series<PriceData> series, {
   int len = 9,
-}) async* {
+}) {
   final linReg = getLINREG(len: len);
 
-  await for (PriceData data in series) {
-    yield (date: data.date, value: linReg(data.value));
-  }
+  return series.map(
+    (data) => (
+      date: data.date,
+      value: linReg(
+        data.value,
+      ),
+    ),
+  );
 }
 
 double Function(double) getLINREG({int len = 9}) {
