@@ -12,11 +12,15 @@ Series<PriceData> calcBBW(
   Series<PriceData> series, {
   int len = 5,
   int multi = 4,
-}) async* {
+}) {
   final bbw = getBBW(len: len, multi: multi);
-  await for (final data in series) {
-    yield (value: bbw(data.value), date: data.date);
-  }
+
+  return series.map(
+    (data) => (
+      value: bbw(data.value),
+      date: data.date,
+    ),
+  );
 }
 
 double Function(double) getBBW({
