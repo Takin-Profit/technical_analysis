@@ -7,16 +7,15 @@ import 'sma.dart';
 import 'types.dart';
 
 /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.
-/// requires about 100 quotes before higher acuracy kicks in.
+/// requires about 100 quotes before higher accuracy kicks in.
 /// recommended warmup periods = 150
 Series<PriceData> calcRMA(
   Series<PriceData> series, {
   int len = 14,
-}) async* {
+}) {
   final rma = getRMA(len: len);
-  await for (final data in series) {
-    yield (date: data.date, value: rma(data.value));
-  }
+
+  return series.map((data) => (date: data.date, value: rma(data.value)));
 }
 
 double Function(double) getRMA({int len = 14}) {
