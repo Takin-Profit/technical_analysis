@@ -1,16 +1,14 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 import 'dart:convert';
 
-import 'package:fpdart/fpdart.dart';
 import 'package:statistics/statistics.dart';
 
+import 'ta_result.dart';
 import 'util.dart';
 
 typedef Quote = ({
@@ -23,7 +21,7 @@ typedef Quote = ({
 });
 
 extension Quotes on Quote {
-  static Either<String, Quote> createQuote({
+  static TaResult<Quote> createQuote({
     required DateTime date,
     required Decimal open,
     required Decimal high,
@@ -45,14 +43,18 @@ extension Quotes on Quote {
 
     return switch ((errMsg, date)) {
       (final msg, _) when msg.isNotEmpty =>
-        Left("Invalid Data found $errMsg OLHCV values cannot be negative"),
+        TaResult.fromError(TaError.validation(
+          description:
+              "Invalid Data found $errMsg OLHCV values cannot be negative",
+        )),
       (_, final dt)
           when dt.millisecondsSinceEpoch >
               DateTime.now().millisecondsSinceEpoch =>
-        Left(
-          'TimeStamp $dt occurs in the future and cannot be added to the series.dart',
-        ),
-      (_, _) => Right(
+        TaResult.fromError(TaError.validation(
+          description:
+              'TimeStamp $dt occurs in the future and cannot be added to the series.dart',
+        )),
+      (_, _) => TaResult.fromValue(
           (
             date: date,
             open: open,

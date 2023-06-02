@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
@@ -53,9 +55,6 @@ Future<void> main() async {
       final result478 = results[478];
       final result679 = results[679];
 
-      for (var i = 0; i < results.length; i++) {
-        print('$i = ${results[i]}');
-      }
       expect(result0.fast.isNaN, true);
       expect(
         result7.fast,

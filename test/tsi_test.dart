@@ -1,10 +1,12 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 // ignore_for_file: prefer-correct-identifier-length,double-literal-format
 
-import 'package:fpdart/fpdart.dart';
+import 'package:collection/collection.dart';
 import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
 
@@ -37,7 +39,7 @@ Future<void> main() async {
       final res = TA.tsi(quotes.closes, signalLen: 7);
       final _ = await quotes.close();
       final result = await res.toList();
-      final nonNaN = result.filter((x) => !x.value.isNaN);
+      final nonNaN = result.whereNot((x) => x.value.isNaN);
       expect(nonNaN.length, 465, reason: 'should be 465 non NaN results');
     });
     test('TSI Signal should have correct length of NaN results', () async {
@@ -46,7 +48,7 @@ Future<void> main() async {
       final result = await res.toList();
       // we are ignoring no null assertion for testsing.
       // ignore: avoid-non-null-assertion
-      final nonNaN = result.filter((x) => !x.signal!.isNaN);
+      final nonNaN = result.whereNot((x) => x.signal!.isNaN);
       expect(
         nonNaN.length,
         459,
