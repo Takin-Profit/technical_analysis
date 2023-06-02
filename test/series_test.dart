@@ -31,16 +31,14 @@ Future<void> main() async {
       ];
       final result = QuotesSeries.fromIterable(quotes);
 
-      expect(result.isRight(), equals(true));
-      result.fold((l) => null, (r) async {
-        final first = await r.first;
-        expect(first.date, equals(quotes.first.date));
-        expect(first.open, equals(quotes.first.open));
-        expect(first.high, equals(quotes.first.high));
-        expect(first.low, equals(quotes.first.low));
-        expect(first.close, equals(quotes.first.close));
-        expect(first.volume, equals(quotes.first.volume));
-      });
+      expect(result.isError, false);
+      final first = await result.value?.first;
+      expect(first?.date, equals(quotes.first.date));
+      expect(first?.open, equals(quotes.first.open));
+      expect(first?.high, equals(quotes.first.high));
+      expect(first?.low, equals(quotes.first.low));
+      expect(first?.close, equals(quotes.first.close));
+      expect(first?.volume, equals(quotes.first.volume));
     });
 
     test('createSeries returns an error for duplicate dates', () {
@@ -65,9 +63,9 @@ Future<void> main() async {
       ];
       final result = QuotesSeries.fromIterable(quotes);
 
-      expect(result.isLeft(), equals(true));
+      expect(result.isError, true);
       expect(
-        result.swap().getOrElse((r) => ""),
+        result.firstError.description,
         startsWith('Quotes with duplicate dates found ${date.toString()}'),
       );
     });
@@ -86,10 +84,13 @@ Future<void> main() async {
       final maxSize = 10;
       final result = QuotesSeries.fromIterable(quotes, maxSize: maxSize);
 
-      expect(result.isRight(), equals(true));
-      result.fold((l) => null, (r) async {
-        expect(await r.length, equals(maxSize));
-      });
+      expect(result.isError, false);
+
+      final _ = await result.value?.close();
+
+      final len = await result.value?.length;
+
+      expect(len, equals(maxSize));
     });
 
     test('createSeries calls onListen and onCancel callbacks', () {
@@ -119,13 +120,12 @@ Future<void> main() async {
         onCancel: onCancel,
       );
 
-      expect(result.isRight(), equals(true));
-      result.fold((l) => null, (r) {
-        final subscription = r.listen((_) {});
-        expect(onListenCalled, equals(true));
-        subscription.cancel();
-        expect(onCancelCalled, equals(true));
-      });
+      expect(result.isError, false);
+
+      final subscription = result.value?.listen((_) {});
+      expect(onListenCalled, equals(true));
+      subscription?.cancel();
+      expect(onCancelCalled, equals(true));
     });
   });
 

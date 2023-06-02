@@ -7,20 +7,16 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:statistics/statistics.dart';
+import 'package:technical_analysis/src/ta_result.dart';
 import 'package:technical_analysis/technical_analysis.dart';
 
 typedef Series<T> = Stream<T>;
 
 typedef QuoteSeries = ReplaySubject<Quote>;
 
-sealed class CreateQuotesResult {}
-
-class QuotesError extends CreateQuotesResult {}
-
-Either<String, QuoteSeries> _fromIterable(
+TaResult<QuoteSeries> _fromIterable(
   Iterable<Quote> quotes, {
   int? maxSize,
   void Function()? onListen,
@@ -49,10 +45,13 @@ Either<String, QuoteSeries> _fromIterable(
       subj.add(q);
     }
 
-    return Right(subj);
+    return TaResult.fromValue(subj);
   } else {
-    return Left(
-      'Quotes with duplicate dates found ${dups.map((q) => q.date.toString()).join(', ')}',
+    return TaResult.fromError(
+      TaError.validation(
+        description:
+            'Quotes with duplicate dates found ${dups.map((q) => q.date.toString()).join(', ')}',
+      ),
     );
   }
 }
@@ -91,7 +90,7 @@ extension QuotesSeries on QuoteSeries {
         sync: sync,
       );
 
-  static Either<String, QuoteSeries> fromIterable(
+  static TaResult<QuoteSeries> fromIterable(
     Iterable<Quote> quotes, {
     int? maxSize,
     void Function()? onListen,
