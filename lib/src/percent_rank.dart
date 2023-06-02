@@ -12,11 +12,17 @@ import 'types.dart';
 Series<PriceData> calcPercentRank(
   Series<PriceData> series, {
   int len = 20,
-}) async* {
+}) {
   final pRank = getPercentRank(len: len);
-  await for (final data in series) {
-    yield (date: data.date, value: pRank(data.value));
-  }
+
+  return series.map(
+    (data) => (
+      date: data.date,
+      value: pRank(
+        data.value,
+      ),
+    ),
+  );
 }
 
 double Function(double) getPercentRank({int len = 20}) {
