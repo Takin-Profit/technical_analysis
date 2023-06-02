@@ -14,6 +14,8 @@ typedef Series<T> = Stream<T>;
 
 typedef QuoteSeries = ReplaySubject<Quote>;
 
+sealed class CreateQuotesResult {}
+
 Either<String, QuoteSeries> _fromIterable(
   Iterable<Quote> quotes, {
   int? maxSize,
