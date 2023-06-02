@@ -8,11 +8,11 @@ environment:
 # Add regular dependencies here.
 dependencies:
   collection: ^1.17.2
-  path: ^1.8.3
   rxdart: ^0.27.7
   statistics: ^1.0.25
 
 dev_dependencies:
+  path: ^1.8.3
   dart_code_metrics: ^5.7.4
   dart_code_metrics_presets: ^1.8.0
   folderslint: ^1.0.3
