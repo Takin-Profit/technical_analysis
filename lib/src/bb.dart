@@ -15,14 +15,19 @@ Series<BBResult> calcBB(
   Series<PriceData> series, {
   int len = 20,
   int multi = 2,
-}) async* {
+}) {
   final bb = getBB(len: len, multi: multi);
 
-  await for (final data in series) {
+  return series.map((data) {
     final _bb = bb(data.value);
 
-    yield (date: data.date, upper: _bb.upper, lower: _bb.lower, avg: _bb.avg);
-  }
+    return (
+      date: data.date,
+      upper: _bb.upper,
+      lower: _bb.lower,
+      avg: _bb.avg,
+    );
+  });
 }
 
 ({double upper, double lower, double avg}) Function(double) getBB({
