@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 import 'series.dart';
 import 'types.dart';
@@ -12,9 +14,12 @@ Series<PriceData> calcEMA(
   final ema = getEma(len: len);
 
   return series.map((val) {
-    final v = ema(val.value);
-
-    return (date: val.date, value: v);
+    return (
+      date: val.date,
+      value: ema(
+        val.value,
+      ),
+    );
   });
 }
 
