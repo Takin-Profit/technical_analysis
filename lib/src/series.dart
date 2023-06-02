@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 import 'dart:async';
 
@@ -15,6 +17,8 @@ typedef Series<T> = Stream<T>;
 typedef QuoteSeries = ReplaySubject<Quote>;
 
 sealed class CreateQuotesResult {}
+
+class QuotesError extends CreateQuotesResult {}
 
 Either<String, QuoteSeries> _fromIterable(
   Iterable<Quote> quotes, {
