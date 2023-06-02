@@ -6,6 +6,7 @@
 
 import 'dart:math';
 
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -14,30 +15,31 @@ Series<PriceData> calcAlma(
   int len = 9,
   double offset = 0.85,
   double sigma = 6,
-}) async* {
+}) {
   final alma = getAlma(len: len, offset: offset, sigma: sigma);
 
-  await for (PriceData data in series) {
-    yield (value: alma(data.value), date: data.date);
-  }
+  return series.map(
+    (data) => (
+      value: alma(data.value),
+      date: data.date,
+    ),
+  );
 }
 
-double Function(double data) getAlma({
+Function getAlma({
   int len = 20,
   double offset = 0.85,
   double sigma = 6,
 }) {
-  List<double> window = List.filled(len, 0.0);
-  int windowSize = len;
-  double m = offset * (windowSize - 1);
-  double s = windowSize / sigma;
-  int dataIndex = 0;
+  final window = CircularBuf(size: len);
+  final int windowSize = len;
+  final double m = offset * (windowSize - 1);
+  final double s = windowSize / sigma;
 
   double calculateAlma(double data) {
-    window[dataIndex % len] = data;
-    dataIndex++;
+    window.put(data);
 
-    if (dataIndex < len) {
+    if (window.filledSize < len) {
       return double.nan;
     }
 
@@ -46,7 +48,9 @@ double Function(double data) getAlma({
     for (int i = 0; i < windowSize; i++) {
       double weight = exp(-1 * pow(i - m, 2) / (2 * pow(s, 2)));
       norm += weight;
-      sum += window[(windowSize - i - 1) % len] * weight;
+      final int currentIndex = (window.filledSize - i - 1) % len;
+      double currentVal = window.orderedValues.elementAt(currentIndex);
+      sum += currentVal * weight;
     }
 
     return sum / norm;

@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 import 'alma.dart';
 import 'bb.dart';
@@ -140,37 +142,37 @@ sealed class TA {
 
   static Series<PriceData> alma(
     Series<PriceData> series, {
-    int lookBack = 9,
+    int len = 9,
     double offset = 0.85,
     double sigma = 6,
   }) {
-    _validateArg('ALMA (Arnaud Legoux Moving Average.)', lookBack, 1);
+    _validateArg('ALMA (Arnaud Legoux Moving Average.)', len, 1);
 
-    return calcAlma(series, len: lookBack, offset: offset, sigma: sigma);
+    return calcAlma(series, len: len, offset: offset, sigma: sigma);
   }
 
   static Series<PriceData> rsi(
     Series<PriceData> series, {
-    int lookBack = 14,
+    int len = 14,
   }) {
-    _validateArg('RSI (Relative Strength Index)', lookBack, 2);
+    _validateArg('RSI (Relative Strength Index)', len, 2);
 
-    return calcRSI(series, len: lookBack);
+    return calcRSI(series, len: len);
   }
 
   static Series<TsiResult> tsi(
     Series<PriceData> series, {
-    int lookBack = 25,
+    int len = 25,
     int smoothLen = 13,
     int signalLen = 13,
   }) {
-    _validateArg('TSI (True Strength Index)', lookBack, 1);
+    _validateArg('TSI (True Strength Index)', len, 1);
     _validateArg('TSI (True Strength Index)', smoothLen, 1);
     _validateArg('TSI (True Strength Index)', signalLen, 1);
 
     return calcTSI(
       series,
-      len: lookBack,
+      len: len,
       smoothLen: smoothLen,
       signalLen: signalLen,
     );
@@ -178,20 +180,20 @@ sealed class TA {
 
   static Series<PriceData> mfi(
     Series<({DateTime date, double value, double vol})> series, {
-    int lookBack = 14,
+    int len = 14,
   }) {
-    _validateArg('MFI (Money Flow Index)', lookBack, 1);
+    _validateArg('MFI (Money Flow Index)', len, 1);
 
-    return calcMFI(series, len: lookBack);
+    return calcMFI(series, len: len);
   }
 
   static Series<PriceData> wpr(
     QuoteSeries series, {
-    int lookBack = 14,
+    int len = 14,
   }) {
-    _validateArg('WPR (Williams Percent Range)', lookBack, 1);
+    _validateArg('WPR (Williams Percent Range)', len, 1);
 
-    return calcWPR(series, len: lookBack);
+    return calcWPR(series, len: len);
   }
 
   static Series<BBResult> bb(
@@ -212,22 +214,22 @@ sealed class TA {
 
   static Series<PriceData> bbw(
     Series<PriceData> series, {
-    int lookBack = 5,
+    int len = 5,
     int multi = 4,
   }) {
-    _validateArg('BBW (Bollinger Bands Width)', lookBack, 1);
+    _validateArg('BBW (Bollinger Bands Width)', len, 1);
     _validateArg('BBW (Bollinger Bands Width)', multi, 1);
 
-    return calcBBW(series, len: lookBack, multi: multi);
+    return calcBBW(series, len: len, multi: multi);
   }
 
   static Series<PriceData> wma(
     Series<PriceData> series, {
-    int lookBack = 15,
+    int len = 15,
   }) {
-    _validateArg('WMA (Weighted Moving Average)', lookBack, 1);
+    _validateArg('WMA (Weighted Moving Average)', len, 1);
 
-    return calcWMA(series, len: lookBack);
+    return calcWMA(series, len: len);
   }
 
   static Series<PriceData> linReg(

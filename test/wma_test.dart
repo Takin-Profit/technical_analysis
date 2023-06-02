@@ -26,13 +26,13 @@ Future<void> main() async {
   );
   group('TA.wma tests', () {
     test('WMA Result should have correct length', () async {
-      final res = TA.wma(quotes.closes, lookBack: 20);
+      final res = TA.wma(quotes.closes, len: 20);
       final _ = await quotes.close();
       final result = await res.toList();
       expect(result.length, 502);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.wma(quotes.closes, lookBack: 20);
+      final res = TA.wma(quotes.closes, len: 20);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
@@ -40,7 +40,7 @@ Future<void> main() async {
     });
 
     test('Should return the correct calculation results', () async {
-      final res = TA.wma(quotes.closes, lookBack: 20);
+      final res = TA.wma(quotes.closes, len: 20);
       final _ = await quotes.close();
       final results = await res.toList();
 

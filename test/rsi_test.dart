@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 // ignore_for_file: prefer-correct-identifier-length
 
@@ -80,12 +82,12 @@ Future<void> main() async {
       final _ = await quotes.close();
 
       expect(
-        () => TA.rsi(quotes.closes, lookBack: 1),
+        () => TA.rsi(quotes.closes, len: 1),
         throwsArgumentError,
         reason: 'should throw',
       );
       expect(
-        () => TA.rsi(quotes.closes, lookBack: 0),
+        () => TA.rsi(quotes.closes, len: 0),
         throwsArgumentError,
         reason: 'should throw',
       );
