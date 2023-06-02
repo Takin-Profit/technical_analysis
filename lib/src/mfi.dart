@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 // ignore_for_file: prefer-moving-to-variable,no-magic-number
 
@@ -15,12 +17,18 @@ typedef PriceDataTriple = ({DateTime date, double value, double vol});
 Series<PriceData> calcMFI(
   Series<PriceDataTriple> series, {
   int len = 14,
-}) async* {
+}) {
   final mfi = getMFI(len: len);
-  await for (final data in series) {
-    final result = mfi(value: data.value, vol: data.vol);
-    yield (date: data.date, value: result);
-  }
+
+  return series.map(
+    (data) => (
+      date: data.date,
+      value: mfi(
+        value: data.value,
+        vol: data.vol,
+      ),
+    ),
+  );
 }
 
 double Function({required double value, required double vol}) getMFI({
