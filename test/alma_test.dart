@@ -14,7 +14,7 @@ import 'data/test_data.dart';
 /*
  *
  * expected results.
- * https://docs.google.com/spreadsheets/d/1lg7Fbz-986auSClakX9RS-Y-zrcDZYP8gfYSHQhHP4E/edit?usp=sharing
+ * https://docs.google.com/spreadsheets/d/1T14VAhzM14Yqf4sjE7UEcl1yJUyS27TRLPf0Bg-n3BY/edit?usp=sharing
  */
 
 Future<void> main() async {
@@ -35,46 +35,46 @@ Future<void> main() async {
       expect(result.length, 502);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.ema(quotes.closes);
+      final res = TA.alma(quotes.closes, len: 10);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
-      expect(result.length, 483);
+      expect(result.length, 493);
     });
 
     test('Should return the correct calculation results', () async {
-      final res = TA.ema(quotes.closes);
+      final res = TA.alma(quotes.closes, len: 10);
       final _ = await quotes.close();
       final results = await res.toList();
 
       final result0 = results.first;
-      final result6 = results[6];
-      final result29 = results[29];
+      final result8 = results[8];
+      final result9 = results[9];
       final result249 = results[249];
       final result501 = results[501];
 
       expect(result0.value.isNaN, true);
-      expect(result6.value.isNaN, true);
+      expect(result8.value.isNaN, true);
       expect(
-        result29.value.toPrecision(4),
-        216.6228,
-        reason: 'should be 216.6228',
+        result9.value.toPrecision(4),
+        214.1839,
+        reason: 'should be 214.1839',
       );
 
       expect(
-        results[30].value.toPrecision(4),
-        217.1292,
-        reason: 'should be 217.1292',
+        results[24].value.toPrecision(4),
+        216.0619,
+        reason: 'should be 216.0619',
       );
       expect(
         result249.value.toPrecision(4),
-        255.3873,
-        reason: 'should be 255.3873',
+        257.5787,
+        reason: 'should be 257.5787',
       );
       expect(
         result501.value.toPrecision(4),
-        249.3519,
-        reason: 'should be 249.3519',
+        242.1871,
+        reason: 'should be 242.1871',
       );
     });
   });

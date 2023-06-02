@@ -36,7 +36,7 @@ Function getAlma({
   final double m = offset * (windowSize - 1);
   final double s = windowSize / sigma;
 
-  double calculateAlma(double data) {
+  return (double data) {
     window.put(data);
 
     if (window.filledSize < len) {
@@ -45,16 +45,17 @@ Function getAlma({
 
     double norm = 0.0;
     double sum = 0.0;
+    List<double> weights = List.filled(windowSize, 0.0);
     for (int i = 0; i < windowSize; i++) {
-      double weight = exp(-1 * pow(i - m, 2) / (2 * pow(s, 2)));
-      norm += weight;
-      final int currentIndex = (window.filledSize - i - 1) % len;
-      double currentVal = window.orderedValues.elementAt(currentIndex);
-      sum += currentVal * weight;
+      weights[i] = exp(-0.5 * pow((i - m) / s, 2));
+      norm += weights[i];
+    }
+
+    List<double> bufValues = window.orderedValues.toList();
+    for (int i = 0; i < windowSize; i++) {
+      sum += bufValues[i] * weights[i];
     }
 
     return sum / norm;
-  }
-
-  return calculateAlma;
+  };
 }
