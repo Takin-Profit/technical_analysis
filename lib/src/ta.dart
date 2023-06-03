@@ -9,6 +9,7 @@ import 'bb.dart';
 import 'bbw.dart';
 import 'dema.dart';
 import 'ema.dart';
+import 'er.dart';
 import 'hma.dart';
 import 'kama.dart';
 import 'linreg.dart';
@@ -155,11 +156,11 @@ sealed class TA {
 
   static Series<PriceData> ema(
     Series<PriceData> series, {
-    int lookBack = 20,
+    int len = 20,
   }) {
-    _validateArg('EMA (Exponential Moving Average)', lookBack, 1);
+    _validateArg('EMA (Exponential Moving Average)', len, 1);
 
-    return calcEMA(series, len: lookBack);
+    return calcEMA(series, len: len);
   }
 
   static Series<PriceData> alma(
@@ -171,6 +172,15 @@ sealed class TA {
     _validateArg('ALMA (Arnaud Legoux Moving Average.)', len, 1);
 
     return calcAlma(series, len: len, offset: offset, sigma: sigma);
+  }
+
+  static Series<PriceData> er(
+    Series<PriceData> series, {
+    int len = 10,
+  }) {
+    _validateArg('ER (Efficiency Ratio)', len, 1);
+
+    return calcEr(series, len: len);
   }
 
   static Series<PriceData> mom(
