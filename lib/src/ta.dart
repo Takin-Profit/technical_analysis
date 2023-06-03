@@ -4,6 +4,8 @@
  * license that can be found in the LICENSE file.
  */
 
+import 'package:technical_analysis/src/hma.dart';
+
 import 'alma.dart';
 import 'bb.dart';
 import 'bbw.dart';
@@ -230,6 +232,15 @@ sealed class TA {
     _validateArg('WMA (Weighted Moving Average)', len, 1);
 
     return calcWMA(series, len: len);
+  }
+
+  static Series<PriceData> hma(
+    Series<PriceData> series, {
+    int len = 16,
+  }) {
+    _validateArg('HMA (Weighted Moving Average)', len, 1);
+
+    return calcHma(series, len: len);
   }
 
   static Series<PriceData> linReg(
