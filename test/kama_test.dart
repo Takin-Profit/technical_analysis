@@ -11,11 +11,11 @@ import 'data/test_data.dart';
 // ignore_for_file: prefer-correct-identifier-length,double-literal-format
 /*
  * expected results.
- * https://docs.google.com/spreadsheets/d/1BXN6hLp82zW2v2TvZhgG6mG4ei_O46fthgW09Y3d5XE/edit?usp=sharing
+ * https://docs.google.com/spreadsheets/d/1N1QmE53TOTb4ejipyg3O5rZpoSBErOx84eE7y_qaSnE/edit?usp=sharing
  */
 
 Future<void> main() async {
-  final data = await getBtcKama();
+  final data = await getEthKama();
   late QuoteSeries quotes;
   setUp(
     () => {
@@ -29,14 +29,14 @@ Future<void> main() async {
       final res = TA.kama(quotes.closes);
       final _ = await quotes.close();
       final result = await res.toList();
-      expect(result.length, 800);
+      expect(result.length, 600);
     });
     test('Should return the correct number of results without nan', () async {
       final res = TA.kama(quotes.closes);
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
-      expect(result.length, 790);
+      expect(result.length, 590);
     });
 
     test('Should return the correct calculation results', () async {
@@ -45,31 +45,19 @@ Future<void> main() async {
       final results = await res.toList();
 
       expect(
-        results[28].value.toPrecision(5),
-        40082.93864,
-        reason: 'should be 40082.93864',
-      );
-
-      expect(
-        results[100].value.toPrecision(5),
-        38890.52285,
-        reason: 'should be 235.6972',
-      );
-
-      expect(
-        results[218].value.toPrecision(5),
-        53797.05852,
-        reason: 'should be 53797.05852',
+        results[218].value.toPrecision(6),
+        closeTo(3213.655685, .00001),
+        reason: 'should be 3213.655685',
       );
       expect(
-        results[457].value.toPrecision(5),
-        26967.0988,
-        reason: 'should be 26967.0988',
+        results[457].value.toPrecision(6),
+        1255.504734,
+        reason: 'should be 1255.504734',
       );
       expect(
-        results[756].value.toPrecision(5),
-        47478.49872,
-        reason: 'should be 47478.49872',
+        results[598].value.toPrecision(6),
+        1924.649009,
+        reason: 'should be 1924.649009',
       );
     });
   });

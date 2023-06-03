@@ -10,6 +10,7 @@ import 'er.dart';
 import 'series.dart';
 import 'types.dart';
 
+/// requires 200 bar warmup period
 Series<PriceData> calcKama(
   Series<PriceData> series, {
   int len = 10,
@@ -30,8 +31,8 @@ double Function(double) getKama({int len = 10}) {
   final er = getEr(len: len);
 
   double kama = 0.0;
-  final double fast = 0.666666666666667;
-  final double slow = 0.0645161290322581;
+  final double fast = 2.0 / (2.0 + 1.0);
+  final double slow = 2.0 / (30.0 + 1.0);
 
   return (double price) {
     double erValue = er(price);
@@ -39,9 +40,11 @@ double Function(double) getKama({int len = 10}) {
       return double.nan;
     }
 
-    erValue = erValue.abs();
+    erValue = erValue.abs() / 100.0;
     double sc = pow(erValue * (fast - slow) + slow, 2).toDouble();
 
-    return kama == 0.0 ? price : sc * (price - kama);
+    kama = kama == 0.0 ? price : kama + sc * (price - kama);
+
+    return kama;
   };
 }
