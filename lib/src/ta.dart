@@ -4,16 +4,16 @@
  * license that can be found in the LICENSE file.
  */
 
-import 'package:technical_analysis/src/hma.dart';
-
 import 'alma.dart';
 import 'bb.dart';
 import 'bbw.dart';
 import 'dema.dart';
 import 'ema.dart';
+import 'hma.dart';
 import 'kama.dart';
 import 'linreg.dart';
 import 'mfi.dart';
+import 'mom.dart';
 import 'percent_rank.dart';
 import 'phx.dart';
 import 'rma.dart';
@@ -171,6 +171,15 @@ sealed class TA {
     _validateArg('ALMA (Arnaud Legoux Moving Average.)', len, 1);
 
     return calcAlma(series, len: len, offset: offset, sigma: sigma);
+  }
+
+  static Series<PriceData> mom(
+    Series<PriceData> series, {
+    int len = 20,
+  }) {
+    _validateArg('Momentum', len, 1);
+
+    return calcMom(series, len: len);
   }
 
   static Series<PriceData> rsi(

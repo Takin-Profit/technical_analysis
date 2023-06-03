@@ -4,6 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
+import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
@@ -24,27 +25,19 @@ Series<PriceData> calcMom(
 }
 
 double Function(double) getMom({int len = 20}) {
-  double prevPrice = double.nan;
-  int counter = 0;
+  final prices = CircularBuf(size: len + 1);
 
   return (double close) {
     if (close.isNaN) {
       return close;
     }
 
-    counter++;
+    prices.put(close);
 
-    if (counter <= len) {
-      if (counter == len) {
-        prevPrice = close;
-      }
-
+    if (prices.filledSize < len + 1) {
       return double.nan;
-    } else {
-      double mom = close - prevPrice;
-      prevPrice = close;
-
-      return mom;
     }
+
+    return close - prices.orderedValues.first;
   };
 }
