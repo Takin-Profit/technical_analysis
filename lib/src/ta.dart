@@ -9,6 +9,7 @@ import 'package:technical_analysis/src/hma.dart';
 import 'alma.dart';
 import 'bb.dart';
 import 'bbw.dart';
+import 'dema.dart';
 import 'ema.dart';
 import 'linreg.dart';
 import 'mfi.dart';
@@ -120,6 +121,15 @@ sealed class TA {
     _validateArg('SMA (Simple Moving Average)', lookBack, 1);
 
     return calcSMA(series, len: lookBack);
+  }
+
+  static Series<PriceData> dema(
+    Series<PriceData> series, {
+    int len = 20,
+  }) {
+    _validateArg('Dema (Simple Moving Average)', len, 1);
+
+    return calcDema(series, len: len);
   }
 
   /// Moving average used in RSI. It is the exponentially weighted moving average with alpha = 1 / length.
