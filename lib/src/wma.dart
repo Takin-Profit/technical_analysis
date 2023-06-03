@@ -17,7 +17,7 @@ Series<PriceData> calcWMA(
   return series.map((data) => (date: data.date, value: wma(data.value)));
 }
 
-double Function(double) getWma({int len = 15}) {
+TaFunc getWma({int len = 15}) {
   final buffer = CircularBuf(size: len);
   final divisor = len.toDouble() * (len + 1) / 2.0;
 
