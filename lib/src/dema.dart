@@ -8,6 +8,7 @@ import 'ema.dart';
 import 'series.dart';
 import 'types.dart';
 
+/// requires 200 bar warmup period
 Series<PriceData> calcDema(Series<PriceData> series, {int len = 20}) {
   final dema = getDema(len: len);
 
