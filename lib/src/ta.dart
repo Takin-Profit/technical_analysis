@@ -11,6 +11,7 @@ import 'bb.dart';
 import 'bbw.dart';
 import 'dema.dart';
 import 'ema.dart';
+import 'kama.dart';
 import 'linreg.dart';
 import 'mfi.dart';
 import 'percent_rank.dart';
@@ -141,6 +142,15 @@ sealed class TA {
     _validateArg('RMA (Relative Moving Average)', lookBack, 1);
 
     return calcRMA(series, len: lookBack);
+  }
+
+  static Series<PriceData> kama(
+    Series<PriceData> series, {
+    int len = 10,
+  }) {
+    _validateArg('Kama (Kaufman Moving Average Adaptive )', len, 1);
+
+    return calcKama(series, len: len);
   }
 
   static Series<PriceData> ema(
