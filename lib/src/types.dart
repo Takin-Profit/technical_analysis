@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 import 'dart:convert';
 
@@ -8,6 +10,8 @@ import 'package:statistics/statistics.dart';
 
 typedef PriceDataDecimal = ({DateTime date, Decimal value});
 typedef PriceData = ({DateTime date, double value});
+
+typedef TaFunc = double Function(double);
 
 enum StDevOf { population, sample }
 
@@ -115,7 +119,7 @@ enum Match implements Comparable<Match> {
 enum MaType {
   alma,
   dema,
-  epma,
+  lsma,
   ema,
   hma,
   kama,
