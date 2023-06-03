@@ -30,6 +30,9 @@ double Function(double) getLINREG({int len = 9}) {
   int count = 0;
 
   return (double y) {
+    if (y.isNaN) {
+      return y;
+    }
     double x = count.toDouble();
 
     if (buf.isFull) {

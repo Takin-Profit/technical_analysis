@@ -39,7 +39,7 @@ Future<void> main() async {
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.fast.isNaN).toList();
-      expect(result.length, 687);
+      expect(result.length, 686);
     });
 
     test('fast Should return the correct results', () async {
@@ -64,14 +64,14 @@ Future<void> main() async {
       // still warming up data
       expect(
         result77.fast.toPrecision(8),
-        closeTo(50.36170597, 0.2),
-        reason: 'should be 50.36170597',
+        closeTo(50.36170598, 0.00004),
+        reason: 'should be 50.36170598',
       );
       // still warming up data
       expect(
-        result136.fast.toPrecision(8),
-        closeTo(43.54124617, 0.05),
-        reason: 'should be 43.54124617',
+        result136.fast.toPrecision(6),
+        43.541246,
+        reason: 'should be 43.541246',
       );
       // still warming up data
       expect(

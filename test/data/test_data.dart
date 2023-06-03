@@ -1,6 +1,8 @@
-// Copyright 2023 Takin Profit. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2023.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 // ignore_for_file: avoid-top-level-members-in-tests
 
@@ -89,6 +91,9 @@ Future<List<Quote>> getGoldWilly({int days = 1000}) =>
 
 Future<List<Quote>> getEurUsdPhx({int days = 700}) =>
     _getQuotes('eurusd_phx.csv', days);
+
+Future<List<Quote>> getBtcPhx({int days = 600}) =>
+    _getQuotes('phx_test.csv', days);
 
 Future<List<Quote>> getCrudePercentRank({int days = 630}) =>
     _getQuotes('%_rank_crude.csv', days);
