@@ -92,8 +92,8 @@ Future<List<Quote>> getGoldWilly({int days = 1000}) =>
 Future<List<Quote>> getEurUsdPhx({int days = 700}) =>
     _getQuotes('eurusd_phx.csv', days);
 
-Future<List<Quote>> getBtcPhx({int days = 600}) =>
-    _getQuotes('phx_test.csv', days);
+Future<List<Quote>> getBtcKama({int days = 800}) =>
+    _getQuotes('btc_kama.csv', days);
 
 Future<List<Quote>> getCrudePercentRank({int days = 630}) =>
     _getQuotes('%_rank_crude.csv', days);

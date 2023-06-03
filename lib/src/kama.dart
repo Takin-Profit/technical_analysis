@@ -26,44 +26,45 @@ Series<PriceData> calcKama(
   );
 }
 
-TaFunc getKama({int len = 10}) {
-  final priceChanges = CircularBuf(size: len);
-  double prevClose = double.nan;
+double Function(double) getKama({int len = 10}) {
+  final prices = CircularBuf(size: len + 1);
   double kama = double.nan;
 
   // Constants for Fast and Slow EMA
-  final double fastEmaConstant = 2 / (2 + 1);
-  final double slowEmaConstant = 2 / (30 + 1);
+  const fastEmaConstant = 0.666666666666667;
+  const slowEmaConstant = 0.0645161290322581;
 
   return (double close) {
     if (close.isNaN) {
       return close;
     }
 
-    // Calculate the absolute price change and add it to the buffer
-    if (!prevClose.isNaN) {
-      priceChanges.put(close - prevClose);
-    }
+    // Add close price to the buffer
+    prices.put(close);
 
-    prevClose = close;
-
-    if (priceChanges.filledSize < len) {
+    if (prices.filledSize < len + 1) {
       return double.nan;
     }
 
-    double change = close - priceChanges.values.first;
-    double volatility =
-        priceChanges.orderedValues.fold(0, (a, b) => a + b.abs());
+    // Calculate signal
+    double signal = (close - prices.values.elementAt(len)).abs();
 
-    // Calculate the Efficiency Ratio (ER)
-    double er = volatility != 0 ? (change / volatility).abs() : 1.0;
+    // Calculate noise
+    double noise = 0;
+    for (int i = 0; i < len; i++) {
+      noise +=
+          (prices.values.elementAt(i) - prices.values.elementAt(i + 1)).abs();
+    }
 
-    // Calculate the Smoothing Constant (SC)
+    // Calculate Efficiency Ratio (ER)
+    double er = noise != 0 ? signal / noise : 0;
+
+    // Calculate Smoothing Constant (SC)
     double sc =
         pow((er * (fastEmaConstant - slowEmaConstant) + slowEmaConstant), 2)
             .toDouble();
 
-    // Calculate KAMA
+    // Initialize or Calculate KAMA
     kama = kama.isNaN ? close : kama + sc * (close - kama);
 
     return kama;
