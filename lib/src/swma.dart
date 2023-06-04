@@ -10,8 +10,10 @@ import 'circular_buf.dart';
 import 'series.dart';
 import 'types.dart';
 
-Series<PriceData> calcSwma(Series<PriceData> series, {int len = 20}) {
-  final swma = getSwma(len: len);
+Series<PriceData> calcSwma(
+  Series<PriceData> series,
+) {
+  final swma = getSwma();
 
   return series.map(
     (data) => (
@@ -23,26 +25,25 @@ Series<PriceData> calcSwma(Series<PriceData> series, {int len = 20}) {
   );
 }
 
-double Function(double) getSwma({int len = 20}) {
-  final buf = CircularBuf(size: len);
+double Function(double) getSwma() {
+  final buf = CircularBuf(size: 4);
 
   return (double price) {
     buf.put(price);
 
+    // If the buffer isn't full yet, return NaN
     if (!buf.isFull) {
       return double.nan;
     }
 
-    final allPrices = Float64List.fromList(
-      buf.orderedValues.toList(),
-    );
+    // Retrieve the last four data points
+    Float64List lastFourPrices =
+        Float64List.fromList(buf.orderedValues.toList());
 
     // Compute the SWMA
-    double swma = 0;
-    for (int i = 0; i < len; ++i) {
-      swma += allPrices[i] * (i + 1) / (len * (len + 1) / 2);
-    }
-
-    return swma;
+    return (lastFourPrices.first * 1 / 6) +
+        (lastFourPrices[1] * 2 / 6) +
+        (lastFourPrices[2] * 2 / 6) +
+        (lastFourPrices[3] * 1 / 6);
   };
 }

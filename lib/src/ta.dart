@@ -186,12 +186,9 @@ sealed class TA {
   }
 
   static Series<PriceData> swma(
-    Series<PriceData> series, {
-    int len = 20,
-  }) {
-    _validateArg('SWMA (Symmetrically weighted moving average)', len, 1);
-
-    return calcSwma(series, len: len);
+    Series<PriceData> series,
+  ) {
+    return calcSwma(series);
   }
 
   static Series<PriceData> er(
