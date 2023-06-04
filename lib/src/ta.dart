@@ -23,6 +23,7 @@ import 'series.dart';
 import 'sma.dart';
 import 'smma.dart';
 import 'std_dev.dart';
+import 'swma.dart';
 import 'tci.dart';
 import 'tsi.dart';
 import 'types.dart';
@@ -182,6 +183,15 @@ sealed class TA {
     _validateArg('SMMA (Smoothed Moving Average)', len, 1);
 
     return calcSmma(series, len: len);
+  }
+
+  static Series<PriceData> swma(
+    Series<PriceData> series, {
+    int len = 20,
+  }) {
+    _validateArg('SWMA (Symmetrically weighted moving average)', len, 1);
+
+    return calcSwma(series, len: len);
   }
 
   static Series<PriceData> er(
