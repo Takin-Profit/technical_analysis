@@ -1,8 +1,10 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023. 
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
+
+import 'package:technical_analysis/src/bbwp.dart';
 
 import 'alma.dart';
 import 'bb.dart';
@@ -289,6 +291,15 @@ sealed class TA {
     _validateArg('BBW (Bollinger Bands Width)', multi, 1);
 
     return calcBBW(series, len: len, multi: multi);
+  }
+
+  static Series<PriceData> bbwp(
+    Series<PriceData> series, {
+    int len = 13,
+  }) {
+    _validateArg('BBWP (Bollinger Bands Width Percentile)', len, 2);
+
+    return calcBbwp(series, len: len);
   }
 
   static Series<PriceData> wma(
