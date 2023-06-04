@@ -8,6 +8,7 @@ import 'ema.dart';
 import 'series.dart';
 import 'types.dart';
 
+// TODO: refactor this to pass tests with closer accuracy
 Series<PriceData> calcTema(
   Series<PriceData> series, {
   int len = 20,
