@@ -9,6 +9,8 @@ import 'percent_rank.dart';
 import 'series.dart';
 import 'types.dart';
 
+/// requires at least 252 bars of data to start with
+/// 500 for best accuracy.
 Series<PriceData> calcBbwp(Series<PriceData> series, {int len = 13}) {
   final bbwp = getBbwp(len: len);
 
@@ -23,7 +25,7 @@ Series<PriceData> calcBbwp(Series<PriceData> series, {int len = 13}) {
 }
 
 double Function(double) getBbwp({
-  int len = 20,
+  int len = 13,
 }) {
   final percentRank = getPercentRank(len: 252);
   final bbw = getBBW(len: len, multi: 1);

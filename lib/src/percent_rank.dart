@@ -30,7 +30,7 @@ double Function(double) getPercentRank({int len = 20}) {
 
   return (double data) {
     int count = 0;
-    double percentRank = 0.0;
+    double percentRank = double.nan;
 
     if (buffer.isFull) {
       for (var value in buffer.orderedValues) {

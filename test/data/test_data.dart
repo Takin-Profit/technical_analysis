@@ -101,8 +101,8 @@ Future<List<Quote>> getEthSwma({int days = 600}) =>
 Future<List<Quote>> getEthKama({int days = 600}) =>
     _getQuotes('eth_kama.csv', days);
 
-Future<List<Quote>> getEthBbwp({int days = 600}) =>
-    _getQuotes('eth_kama.csv', days);
+Future<List<Quote>> getEthBbwp({int days = 700}) =>
+    _getQuotes('eth_bbwp.csv', days);
 
 Future<List<Quote>> getBtcMom({int days = 800}) =>
     _getQuotes('btc_mom.csv', days);

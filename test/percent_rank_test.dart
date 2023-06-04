@@ -40,7 +40,7 @@ Future<void> main() async {
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.where((q) => !q.value.isNaN).toList();
-      expect(result.length, 630);
+      expect(result.length, 610);
     });
 
     test('Should return the correct calculation results', () async {
@@ -55,7 +55,7 @@ Future<void> main() async {
       final result501 = results[501];
       final result628 = results[628];
 
-      expect(result6.value.isNaN, false);
+      expect(result6.value.isNaN, true);
       expect(
         result29.value,
         80,

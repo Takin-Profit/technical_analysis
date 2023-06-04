@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023. 
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
@@ -40,7 +40,7 @@ Future<void> main() async {
       final _ = await quotes.close();
       final resultList = await res.toList();
       final result = resultList.whereNot((q) => q.value.isNaN).toList();
-      expect(result.length, 700);
+      expect(result.length, 448);
     });
 
     test('Should return the correct calculation results', () async {
@@ -50,29 +50,39 @@ Future<void> main() async {
 
       final result18 = results[18];
 
-      for (var i = 0; i < results.length; i++) {
-        print('$i = ${results[i]}');
-      }
-
       expect(
-        result18.value.toPrecision(6),
-        23.809524,
-        reason: 'should be 23.809524',
+        result18.value.isNaN,
+        true,
+        reason: 'should be nan',
       );
       expect(
-        results[87].value.toPrecision(6),
-        1.587302,
-        reason: 'should be 1.587302',
+        results[87].value,
+        isNaN,
+        reason: 'should be nan',
       );
+      // beginning of warmup phase
       expect(
-        results[249].value.toPrecision(6),
-        36.111111,
-        reason: 'should be 36.111111',
+        results[252].value.toPrecision(5),
+        closeTo(72.61905, 2.4),
+        reason: 'should be 72.61905',
       );
+      // fully warmed.
       expect(
         results[501].value.toPrecision(6),
         5.952381,
         reason: 'should be 5.952381',
+      );
+      // fully warmed.
+      expect(
+        results[589].value.toPrecision(6),
+        25.793651,
+        reason: 'should be 25.793651',
+      );
+      // fully warmed
+      expect(
+        results[699].value.toPrecision(6),
+        55.158730,
+        reason: 'should be 55.158730',
       );
     });
   });
