@@ -21,6 +21,7 @@ import 'rma.dart';
 import 'rsi.dart';
 import 'series.dart';
 import 'sma.dart';
+import 'smma.dart';
 import 'std_dev.dart';
 import 'tci.dart';
 import 'tsi.dart';
@@ -172,6 +173,15 @@ sealed class TA {
     _validateArg('ALMA (Arnaud Legoux Moving Average.)', len, 1);
 
     return calcAlma(series, len: len, offset: offset, sigma: sigma);
+  }
+
+  static Series<PriceData> smma(
+    Series<PriceData> series, {
+    int len = 20,
+  }) {
+    _validateArg('SMMA (Smoothed Moving Average)', len, 1);
+
+    return calcSmma(series, len: len);
   }
 
   static Series<PriceData> er(
