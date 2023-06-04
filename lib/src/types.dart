@@ -123,10 +123,13 @@ enum MaType {
   ema,
   hma,
   kama,
-  mama,
+  // TODO: add mama,
+  rma,
   sma,
+  swma,
   smma,
   tema,
+  vwma,
   wma,
 }
 
