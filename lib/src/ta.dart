@@ -5,6 +5,7 @@
  */
 
 import 'package:technical_analysis/src/bbwp.dart';
+import 'package:technical_analysis/src/tr.dart';
 
 import 'alma.dart';
 import 'atr.dart';
@@ -107,6 +108,13 @@ sealed class TA {
     _validateArg('Percent Rank', len, 2);
 
     return calcPercentRank(series, len: len);
+  }
+
+  static Series<PriceData> tr(
+    Series<Quote> series, {
+    bool handleNa = true,
+  }) {
+    return calcTr(series, handleNa: handleNa);
   }
 
   static Series<PriceData> stdDev(
