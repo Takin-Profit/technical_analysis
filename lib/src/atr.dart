@@ -11,6 +11,7 @@ import 'rma.dart';
 import 'series.dart';
 import 'types.dart';
 
+// requires 150 bar warmup period.
 Series<PriceData> calcAtr(
   Series<Quote> series, {
   int len = 14,
