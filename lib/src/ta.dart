@@ -7,6 +7,7 @@
 import 'package:technical_analysis/src/bbwp.dart';
 
 import 'alma.dart';
+import 'atr.dart';
 import 'bb.dart';
 import 'bbw.dart';
 import 'dema.dart';
@@ -19,6 +20,7 @@ import 'mfi.dart';
 import 'mom.dart';
 import 'percent_rank.dart';
 import 'phx.dart';
+import 'quotes.dart';
 import 'rma.dart';
 import 'rsi.dart';
 import 'series.dart';
@@ -264,6 +266,15 @@ sealed class TA {
     _validateArg('WPR (Williams Percent Range)', len, 1);
 
     return calcWPR(series, len: len);
+  }
+
+  static Series<PriceData> atr(
+    Series<Quote> series, {
+    int len = 14,
+  }) {
+    _validateArg('ATR (Average True Range)', len, 1);
+
+    return calcAtr(series, len: len);
   }
 
   static Series<BBResult> bb(
