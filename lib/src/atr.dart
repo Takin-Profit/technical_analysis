@@ -6,10 +6,28 @@
 
 import 'dart:math';
 
+import 'quotes.dart';
 import 'rma.dart';
+import 'series.dart';
 import 'types.dart';
 
-double Function(HLC) calcAtr({int len = 14}) {
+Series<PriceData> calcAtr(
+  Series<Quote> series, {
+  int len = 14,
+}) {
+  final atr = getAtr(len: len);
+
+  return series.map(
+    (data) => (
+      date: data.date,
+      value: atr(
+        data.hlc,
+      ),
+    ),
+  );
+}
+
+double Function(HLC) getAtr({int len = 14}) {
   var prevClose = double.nan;
   final rma = getRMA(len: len);
 
