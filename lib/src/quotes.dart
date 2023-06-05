@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:statistics/statistics.dart';
 
 import 'ta_result.dart';
+import 'types.dart';
 import 'util.dart';
 
 typedef Quote = ({
@@ -119,4 +120,7 @@ extension Quotes on Quote {
   }
 
   String toJson() => json.encode(toMap());
+
+  HLC get hlc =>
+      (high: high.toDouble(), low: low.toDouble(), close: close.toDouble());
 }

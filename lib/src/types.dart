@@ -11,6 +11,8 @@ import 'package:statistics/statistics.dart';
 typedef PriceDataDecimal = ({DateTime date, Decimal value});
 typedef PriceData = ({DateTime date, double value});
 
+typedef HLC = ({double high, double low, double close});
+
 typedef TaFunc = double Function(double);
 
 enum StDevOf { population, sample }
