@@ -118,6 +118,8 @@ enum Match implements Comparable<Match> {
   int compareTo(Match other) => val - other.val;
 }
 
+enum AtrSlMaType { rma, sma, ema, wma }
+
 enum MaType {
   alma,
   dema,
