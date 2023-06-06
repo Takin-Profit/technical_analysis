@@ -9,7 +9,8 @@
         "OLHCV",
         "smma",
         "tema",
-        "vals"
+        "vals",
+        "vwma"
     ],
     "conventionalCommits.scopes": [
         "replay_subject",

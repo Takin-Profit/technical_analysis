@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2023. 
+ * Copyright (c) 2023.
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
 
 import 'package:technical_analysis/src/bbwp.dart';
 import 'package:technical_analysis/src/tr.dart';
+import 'package:technical_analysis/src/vwma.dart';
 
 import 'alma.dart';
 import 'atr.dart';
@@ -138,6 +139,15 @@ sealed class TA {
     _validateArg('SMA (Simple Moving Average)', lookBack, 1);
 
     return calcSMA(series, len: lookBack);
+  }
+
+  static Series<PriceData> vwma(
+    Series<({DateTime date, double vol, double value})> series, {
+    int len = 20,
+  }) {
+    _validateArg('VWMA (Volume Weighted Moving Average)', len, 1);
+
+    return calcVwma(series, len: len);
   }
 
   static Series<PriceData> dema(
