@@ -72,21 +72,21 @@ Future<void> main() async {
       );
 
       expect(
-        results[271].value.toPrecision(4),
-        closeTo(1642.0148, 0.001),
-        reason: 'should be close to 1280.8835',
+        results[271].value.toPrecision(6),
+        closeTo(1642.014873, 0.000002),
+        reason: 'should be close to 1642.014873',
       );
 
       expect(
-        results[452].value.toPrecision(4),
-        closeTo(1568.4215, 0.001),
-        reason: 'should be close to 1568.4215',
+        results[452].value.toPrecision(6),
+        1568.421575,
+        reason: 'should be close to 1568.421575',
       );
 
       expect(
-        results[488].value.toPrecision(4),
-        closeTo(1879.2303, 0.001),
-        reason: 'should be close to 1879.2303',
+        results[488].value.toPrecision(5),
+        1879.23033,
+        reason: 'should be close to 1879.23033',
       );
     });
   });
