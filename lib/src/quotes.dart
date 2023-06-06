@@ -79,7 +79,7 @@ extension Quotes on Quote {
           when dt.millisecondsSinceEpoch >
               DateTime.now().millisecondsSinceEpoch =>
         errResult(
-          'TimeStamp $dt occurs in the future and cannot be added to the series.dart',
+          'TimeStamp $dt occurs in the future and cannot be added to the series',
         ),
       (_, _, _) => TaResult.fromValue(
           (

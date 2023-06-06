@@ -90,5 +90,227 @@ void main() {
         reason: 'should return correct ohlc4 price',
       );
     });
+
+    test(
+      'createQuote should return error when low price is greater than open, high, or close price',
+      () {
+        final result = Quotes.createQuote(
+          date: DateTime.now(),
+          open: Decimal.fromInt(100),
+          high: Decimal.fromInt(200),
+          low: Decimal.fromInt(300),
+          close: Decimal.fromInt(150),
+          volume: Decimal.fromInt(5000),
+        );
+
+        expect(result.isError, true);
+        expect(
+          result.firstError.description,
+          contains(
+            'low: 300.0, cannot be greater than open: 100.0, high: 200.0, or close: 150.0 price',
+          ),
+        );
+      },
+    );
+
+    test(
+      'createQuote should return error when high price is less than open, low, or close price',
+      () {
+        final result = Quotes.createQuote(
+          date: DateTime.now(),
+          open: Decimal.fromInt(100),
+          high: Decimal.fromInt(50),
+          low: Decimal.fromInt(80),
+          close: Decimal.fromInt(90),
+          volume: Decimal.fromInt(5000),
+        );
+
+        expect(result.isError, true);
+        expect(
+          result.firstError.description,
+          contains(
+            'low: 80.0, cannot be greater than open: 100.0, high: 50.0, or close: 90.0 price',
+          ),
+        );
+      },
+    );
+
+    test('createQuote should return error when OLHCV values are negative', () {
+      final result = Quotes.createQuote(
+        date: DateTime.now(),
+        open: Decimal.fromInt(-100),
+        high: Decimal.fromInt(200),
+        low: Decimal.fromInt(80),
+        close: Decimal.fromInt(150),
+        volume: Decimal.fromInt(-5000),
+      );
+
+      expect(result.isError, true);
+      expect(
+        result.firstError.description,
+        contains(
+          'low: 80.0, cannot be greater than open: -100.0, high: 200.0, or close: 150.0 price',
+        ),
+      );
+    });
+
+    test('createQuote should return error when date is in the future', () {
+      final result = Quotes.createQuote(
+        date: DateTime.now().add(Duration(days: 1)),
+        open: Decimal.fromInt(100),
+        high: Decimal.fromInt(200),
+        low: Decimal.fromInt(80),
+        close: Decimal.fromInt(150),
+        volume: Decimal.fromInt(5000),
+      );
+
+      expect(result.isError, true);
+      expect(
+        result.firstError.description,
+        contains(
+          'occurs in the future and cannot be added to the series',
+        ),
+      );
+    });
+
+    test('createQuote should return valid Quote when data is valid', () {
+      final result = Quotes.createQuote(
+        date: DateTime.now(),
+        open: Decimal.fromInt(100),
+        high: Decimal.fromInt(200),
+        low: Decimal.fromInt(80),
+        close: Decimal.fromInt(150),
+        volume: Decimal.fromInt(5000),
+      );
+
+      expect(result.isError, false);
+      expect(result.valueGet, isNotNull);
+    });
+    test(
+      'createQuote should return error when open price is negative',
+      () {
+        final result = Quotes.createQuote(
+          date: DateTime.now(),
+          open: Decimal.fromInt(-100),
+          high: Decimal.fromInt(200),
+          low: Decimal.fromInt(80),
+          close: Decimal.fromInt(150),
+          volume: Decimal.fromInt(5000),
+        );
+
+        expect(result.isError, true);
+        expect(
+          result.firstError.description,
+          contains(
+            'low: 80.0, cannot be greater than open: -100.0, high: 200.0, or close: 150.0 price',
+          ),
+        );
+      },
+    );
+
+    test(
+      'createQuote should return error when high price is negative',
+      () {
+        final result = Quotes.createQuote(
+          date: DateTime.now(),
+          open: Decimal.fromInt(100),
+          high: Decimal.fromInt(-200),
+          low: Decimal.fromInt(80),
+          close: Decimal.fromInt(150),
+          volume: Decimal.fromInt(5000),
+        );
+
+        expect(result.isError, true);
+        expect(
+          result.firstError.description,
+          contains(
+            'low: 80.0, cannot be greater than open: 100.0, high: -200.0, or close: 150.0 price',
+          ),
+        );
+      },
+    );
+
+    test(
+      'createQuote should return error when low price is negative',
+      () {
+        final result = Quotes.createQuote(
+          date: DateTime.now(),
+          open: Decimal.fromInt(100),
+          high: Decimal.fromInt(200),
+          low: Decimal.fromInt(-80),
+          close: Decimal.fromInt(150),
+          volume: Decimal.fromInt(5000),
+        );
+
+        expect(result.isError, true);
+        expect(
+          result.firstError.description,
+          contains(
+            'Invalid Data found low = -80.0 OLHCV values cannot be negative',
+          ),
+        );
+      },
+    );
+
+    test(
+      'createQuote should return error when close price is negative',
+      () {
+        final result = Quotes.createQuote(
+          date: DateTime.now(),
+          open: Decimal.fromInt(100),
+          high: Decimal.fromInt(200),
+          low: Decimal.fromInt(80),
+          close: Decimal.fromInt(-150),
+          volume: Decimal.fromInt(5000),
+        );
+
+        expect(result.isError, true);
+        expect(
+          result.firstError.description,
+          contains(
+            'low: 80.0, cannot be greater than open: 100.0, high: 200.0, or close: -150.0 price',
+          ),
+        );
+      },
+    );
+
+    test(
+      'createQuote should return error when volume is negative',
+      () {
+        final result = Quotes.createQuote(
+          date: DateTime.now(),
+          open: Decimal.fromInt(100),
+          high: Decimal.fromInt(200),
+          low: Decimal.fromInt(80),
+          close: Decimal.fromInt(150),
+          volume: Decimal.fromInt(-5000),
+        );
+
+        expect(result.isError, true);
+        expect(
+          result.firstError.description,
+          contains(
+            'Invalid Data found volume = -5000.0 OLHCV values cannot be negative',
+          ),
+        );
+      },
+    );
+
+    test('createQuote should return valid Quote when all values are zero', () {
+      final dec = Decimal.fromInt(0);
+      //
+      // ignore_for_file: no-equal-arguments
+      final result = Quotes.createQuote(
+        date: DateTime.now(),
+        open: dec,
+        high: dec,
+        low: dec,
+        close: dec,
+        volume: dec,
+      );
+
+      expect(result.isError, false);
+      expect(result.valueGet, isNotNull);
+    });
   });
 }
