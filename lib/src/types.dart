@@ -4,6 +4,8 @@
  * license that can be found in the LICENSE file.
  */
 
+// ignore_for_file: prefer-match-file-name
+
 import 'dart:convert';
 
 import 'package:statistics/statistics.dart';

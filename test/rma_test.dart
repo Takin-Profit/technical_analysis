@@ -24,7 +24,7 @@ Future<void> main() async {
     },
   );
   group('TA.rma tests', () {
-    test('Sma Result should have correct length', () async {
+    test('RMA Result should have correct length', () async {
       final res = TA.rma(quotes.closes);
       final _ = await quotes.close();
       final result = await res.toList();
