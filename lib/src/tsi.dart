@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// ignore_for_file: avoid-non-null-assertion
 import 'ema.dart';
 import 'series.dart';
 import 'types.dart';

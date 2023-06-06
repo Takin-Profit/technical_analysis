@@ -25,10 +25,10 @@ analyzer:
     avoid_classes_with_only_static_members: ignore
 
   exclude:
-    - 'example/**'
-    - 'build/**'
-    - '**/*.g.dart'
-    - '**/*.freezed.dart'
+    - "example/**"
+    - "build/**"
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
   plugins:
     - dart_code_metrics
 
@@ -43,6 +43,7 @@ dart_code_metrics:
     - no-magic-number: false
     - format-comment: false
     - avoid-dynamic: false
+    - prefer-correct-identifier-length: false
 # exclude:
 #     - path/to/excluded/files/**
 
