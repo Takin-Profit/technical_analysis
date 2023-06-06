@@ -22,19 +22,19 @@ Series<PriceData> calcSmma(Series<PriceData> series, {int len = 20}) {
 
 double Function(double) getSmma({int len = 20}) {
   final buf = CircularBuf(size: len);
-  double? smma;
+  double smma = double.nan;
 
   return (double price) {
     buf.put(price);
 
-    if (smma == null) {
+    if (smma.isNaN) {
       if (buf.isFull) {
         smma = buf.orderedValues.fold(0.0, (a, b) => a + b) / len;
       }
     } else {
-      smma = ((smma! * (len - 1)) + price) / len;
+      smma = ((smma * (len - 1)) + price) / len;
     }
 
-    return smma ?? double.nan;
+    return smma;
   };
 }
