@@ -11,20 +11,21 @@ import 'data/test_data.dart';
 // ignore_for_file: prefer-correct-identifier-length,double-literal-format
 /*
  * expected results.
- * https://docs.google.com/spreadsheets/d/1JPLgPpKkOfr8hGDOzlO3sVGI4GsP-4wJ6pWMEPkbXxo/edit?usp=sharing
+ * https://docs.google.com/spreadsheets/d/1bG_dLbUHhW07FRFH58p2A9ZSF5P5QskahsfMmhCQKkE/edit?usp=sharing
  */
 
 Future<void> main() async {
   final data = await getDefault();
-  late QuoteSeries quotes;
-  setUp(
-    () => {
-      quotes = QuotesSeries.fromIterable(data).getOrElse(
-        (l) => emptySeries,
-      ),
-    },
-  );
-  group('TA.tr tests', () {
+  final data2 = await getBtcTr();
+  group('TA.tr tests default', () {
+    late QuoteSeries quotes;
+    setUp(
+      () => {
+        quotes = QuotesSeries.fromIterable(data).getOrElse(
+          (l) => emptySeries,
+        ),
+      },
+    );
     test('True Range Result should have correct length', () async {
       final res = TA.tr(quotes);
       final _ = await quotes.close();
@@ -61,6 +62,47 @@ Future<void> main() async {
         results[12].value.toPrecision(8),
         1.32,
         reason: 'should be 1.32',
+      );
+    });
+  });
+  /*
+  * https://docs.google.com/spreadsheets/d/1KCe51EDHQZ_wi2Fvu2o4darQwlZnMoI1rCCdoqR-7aw/edit?usp=sharing
+ * data exported from tradingview.
+  */
+  group('TA.tr test tradingview data', () {
+    late QuoteSeries quotes2;
+    setUp(
+      () => {
+        quotes2 = QuotesSeries.fromIterable(data2).getOrElse(
+          (l) => emptySeries,
+        ),
+      },
+    );
+    test('Should return the correct true range', () async {
+      final res = TA.tr(quotes2);
+      final _ = await quotes2.close();
+      final results = await res.toList();
+
+      expect(
+        results[1].value.toPrecision(1),
+        1170.8,
+        reason: 'should be 1170.8',
+      );
+
+      expect(
+        results[12].value.toPrecision(1),
+        2497.3,
+        reason: 'should be 2497.3',
+      );
+      expect(
+        results[145].value.toPrecision(1),
+        873.3,
+        reason: 'should be 873.3',
+      );
+      expect(
+        results[402].value.toPrecision(1),
+        404.9,
+        reason: 'should be 404.9',
       );
     });
   });

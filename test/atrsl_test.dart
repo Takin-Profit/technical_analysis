@@ -6,6 +6,7 @@
 
 // ignore_for_file: prefer-correct-identifier-length
 
+import 'package:collection/collection.dart';
 import 'package:technical_analysis/technical_analysis.dart';
 import 'package:test/test.dart';
 
@@ -19,7 +20,7 @@ import 'data/test_data.dart';
  */
 
 Future<void> main() async {
-  final data = await getGoldAtr();
+  final data = await getBtcAtrSl();
   late QuoteSeries quotes;
   setUp(
     () => {
@@ -30,21 +31,22 @@ Future<void> main() async {
   );
   group('TA.atrSl tests', () {
     test('ATRSL Result should have correct length', () async {
-      final res = TA.atr(quotes);
+      final res = TA.atrSl(quotes);
       final _ = await quotes.close();
       final result = await res.toList();
-      expect(result.length, 750);
+
+      expect(result.length, 1000);
     });
     test('Should return the correct number of results without nan', () async {
-      final res = TA.atr(quotes);
+      final res = TA.atrSl(quotes);
       final _ = await quotes.close();
       final resultList = await res.toList();
-      final result = resultList.where((q) => !q.value.isNaN).toList();
-      expect(result.length, 737);
+      final result = resultList.whereNot((q) => q.shortSl.isNaN).toList();
+      expect(result.length, 994);
     });
 
-    test('Should return the correct calculation results', () async {
-      final res = TA.atr(quotes);
+    test('Should return the correct short stop loss with maType RMA', () async {
+      final res = TA.atrSl(quotes);
       final _ = await quotes.close();
       final results = await res.toList();
 
@@ -54,38 +56,39 @@ Future<void> main() async {
       final result249 = results[249];
       final result501 = results[501];
 
-      expect(result0.value.isNaN, true);
-      expect(result6.value.isNaN, true);
+      for (int i = 0; i < results.length; i++) {
+        print('$i = ${results[i]}');
+      }
+
+      expect(result0.shortSl.isNaN, true);
+      expect(result6.shortSl.isNaN, false);
       // warmup period
       expect(
-        result29.value.toPrecision(6),
-        closeTo(33.534839, 0.54),
-        reason: 'should be 33.534839',
+        result29.shortSl.toPrecision(5),
+        30501.05984,
+        reason: '30501.05984',
       );
       // warmup period
       expect(
-        results[120].value.toPrecision(6),
-        closeTo(
-          28.173596,
-          0.001,
-        ),
-        reason: 'should be 28.173596',
+        results[120].shortSl.toPrecision(5),
+        30684.72417,
+        reason: 'should be 30684.72417',
       );
       expect(
-        result249.value.toPrecision(6),
-        26.339388,
-        reason: 'should be 26.339388',
+        result249.shortSl.toPrecision(5),
+        29298.15774,
+        reason: 'should be 29298.15774',
       );
       expect(
-        result501.value.toPrecision(6),
-        23.935408,
-        reason: 'should be 23.935408',
+        result501.shortSl.toPrecision(5),
+        29564.37024,
+        reason: 'should be 29564.37024',
       );
 
       expect(
-        results[744].value.toPrecision(6),
-        27.673529,
-        reason: 'should be 27.673529',
+        results[744].shortSl.toPrecision(5),
+        27847.30258,
+        reason: 'should be 27847.30258',
       );
     });
   });

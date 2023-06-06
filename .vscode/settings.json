@@ -7,6 +7,7 @@
         "dups",
         "endregion",
         "epma",
+        "eurusd",
         "fpdart",
         "Legoux",
         "linreg",
@@ -16,6 +17,7 @@
         "smma",
         "swma",
         "tema",
+        "tradingview",
         "vals",
         "vwma"
     ],
