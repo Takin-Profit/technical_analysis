@@ -10,6 +10,7 @@ import 'quotes.dart';
 import 'rma.dart';
 import 'series.dart';
 import 'types.dart';
+// ignore_for_file: prefer-moving-to-variable
 
 // requires 150 bar warmup period.
 Series<PriceData> calcAtr(

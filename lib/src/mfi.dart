@@ -36,10 +36,10 @@ double Function({required double value, required double vol}) getMFI({
 }) {
   CircularBuf upperBuffer = CircularBuf(size: len);
   CircularBuf lowerBuffer = CircularBuf(size: len);
-  double? prev;
+  double prev = double.nan;
 
   return ({required double value, required double vol}) {
-    double change = (prev == null) ? 0.0 : value - prev!;
+    double change = prev.isNaN ? 0.0 : value - prev;
     double mf = vol * value; // Raw Money Flow
 
     double upper, lower;

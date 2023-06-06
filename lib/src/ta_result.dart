@@ -4,6 +4,8 @@
  * license that can be found in the LICENSE file.
  */
 
+// ignore_for_file: avoid-non-null-assertion, prefer-match-file-name
+
 enum ErrorType { failure, unexpected, validation, conflict, notFound }
 
 class TaError {
