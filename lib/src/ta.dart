@@ -4,14 +4,12 @@
  * license that can be found in the LICENSE file.
  */
 
-import 'package:technical_analysis/src/bbwp.dart';
-import 'package:technical_analysis/src/tr.dart';
-import 'package:technical_analysis/src/vwma.dart';
-
 import 'alma.dart';
 import 'atr.dart';
+import 'atrsl.dart';
 import 'bb.dart';
 import 'bbw.dart';
+import 'bbwp.dart';
 import 'dema.dart';
 import 'ema.dart';
 import 'er.dart';
@@ -32,12 +30,16 @@ import 'std_dev.dart';
 import 'swma.dart';
 import 'tci.dart';
 import 'tema.dart';
+import 'tr.dart';
 import 'tsi.dart';
 import 'types.dart';
 import 'util.dart';
+import 'vwma.dart';
 import 'willy.dart';
 import 'wma.dart';
 import 'wpr.dart';
+
+export 'atrsl.dart' show AtrSlResult;
 
 void _validateArg(String indicator, int value, int minValue) {
   if (value < minValue) {
@@ -266,6 +268,22 @@ sealed class TA {
       smoothLen: smoothLen,
       signalLen: signalLen,
     );
+  }
+
+  static Series<AtrSlResult> atrSl(
+    Series<Quote> series, {
+    int len = 14,
+    AtrSlMaType maType = AtrSlMaType.rma,
+    double multi = 1.5,
+  }) {
+    _validateArg('ATRSL (Average True Range Stop Loss)', len, 2);
+    if (multi < 0.5) {
+      throw ArgumentError(
+        'Multiplier must be greater 0.5',
+      );
+    }
+
+    return calcAtrSl(series, len: len, maType: maType, multi: multi);
   }
 
   static Series<PriceData> mfi(
