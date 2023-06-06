@@ -21,6 +21,21 @@ typedef Quote = ({
   Decimal volume
 });
 
+String _validate({
+  required Decimal open,
+  required Decimal high,
+  required Decimal low,
+  required Decimal close,
+}) {
+  return switch ((open, high, low, close)) {
+    (final o, final h, final l, final c) when l > o || l > c || l > h =>
+      'low: $l, cannot be greater than open: $o, high: $h, or close: $c price',
+    (final o, final h, final l, final c) when h < c || h < l || h < o =>
+      'high: $h cannot be less than open: $o, low: $l, or close: $c price',
+    (_, _, _, _) => '',
+  };
+}
+
 extension Quotes on Quote {
   static TaResult<Quote> createQuote({
     required DateTime date,
@@ -41,21 +56,32 @@ extension Quotes on Quote {
       for (final entry in vals)
         if (entry.$2.toDouble() < 0) '${entry.$1} = ${entry.$2}',
     ].join(', ');
+    TaResult<Quote> Function(String) errResult =
+        (String msg) => TaResult.fromError(TaError.validation(
+              description: msg,
+            ));
 
-    return switch ((errMsg, date)) {
-      (final msg, _) when msg.isNotEmpty =>
-        TaResult.fromError(TaError.validation(
-          description:
-              "Invalid Data found $errMsg OLHCV values cannot be negative",
-        )),
-      (_, final dt)
+    return switch ((
+      errMsg,
+      date,
+      _validate(
+        open: open,
+        high: high,
+        low: low,
+        close: close,
+      )
+    )) {
+      (_, _, final err) when err.isNotEmpty => errResult(err),
+      (final err, _, _) when err.isNotEmpty => errResult(
+          'Invalid Data found $errMsg OLHCV values cannot be negative',
+        ),
+      (_, final dt, _)
           when dt.millisecondsSinceEpoch >
               DateTime.now().millisecondsSinceEpoch =>
-        TaResult.fromError(TaError.validation(
-          description:
-              'TimeStamp $dt occurs in the future and cannot be added to the series.dart',
-        )),
-      (_, _) => TaResult.fromValue(
+        errResult(
+          'TimeStamp $dt occurs in the future and cannot be added to the series.dart',
+        ),
+      (_, _, _) => TaResult.fromValue(
           (
             date: date,
             open: open,

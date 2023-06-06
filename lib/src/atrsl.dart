@@ -13,6 +13,7 @@ import 'wma.dart';
 
 typedef AtrSlResult = ({DateTime date, double longSl, double shortSl});
 
+/// https://www.tradingview.com/script/LgjsidVh-ATR-Stop-Loss-Finder/
 Series<AtrSlResult> calcAtrSl(
   Series<Quote> series, {
   int len = 14,
