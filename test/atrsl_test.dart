@@ -16,6 +16,7 @@ Future<void> main() async {
   final data = await getAtrSlRma();
   final smaData = await getAtrSlSma();
   final emaData = await getAtrSlEma();
+  final wmaData = await getAtrSlWma();
 
   /*
  *
@@ -314,6 +315,118 @@ Future<void> main() async {
           final res = TA.atrSl(
             quotes,
             maType: AtrSlMaType.ema,
+          );
+          final _ = await quotes.close();
+          final results = await res.toList();
+
+          final result0 = results.first;
+          final result6 = results[6];
+          final result29 = results[29];
+          final result249 = results[249];
+          final result501 = results[501];
+
+          expect(result0.longSl.isNaN, true);
+          expect(result6.longSl.isNaN, true);
+          // warmup period
+          expect(
+            result29.longSl.toPrecision(5),
+            closeTo(6.70923, 0.008),
+            reason: 'should be 6.70923',
+          );
+          // warmup period
+          expect(
+            results[120].longSl.toPrecision(5),
+            closeTo(12.87743, 0.00002),
+            reason: 'should be 12.87743',
+          );
+          expect(
+            result249.longSl.toPrecision(5),
+            102.18391,
+            reason: 'should be 102.18391',
+          );
+          expect(
+            result501.longSl.toPrecision(5),
+            363.02531,
+            reason: 'should be 363.02531',
+          );
+
+          expect(
+            results[744].longSl.toPrecision(5),
+            74.03820,
+            reason: 'should be 74.03820',
+          );
+        },
+      );
+    });
+
+    /*
+ * expected results.
+ * https://docs.google.com/spreadsheets/d/1ccz9yLxlnvuweh7mwXOMXuKxPkX1OpskDf1hLLH2b1Q/edit?usp=sharing
+ * data exported from tradingview.com
+ */
+    group('Ta.atrSl WMA tests', () {
+      late QuoteSeries quotes;
+      setUp(
+        () => {
+          quotes = QuotesSeries.fromIterable(wmaData).getOrElse(
+            (l) => emptySeries,
+          ),
+        },
+      );
+      test(
+        'Should return the correct SHORT stop loss with maType WMA',
+        () async {
+          final res = TA.atrSl(
+            quotes,
+            maType: AtrSlMaType.wma,
+          );
+          final _ = await quotes.close();
+          final results = await res.toList();
+
+          final result0 = results.first;
+          final result6 = results[6];
+          final result29 = results[29];
+          final result249 = results[249];
+          final result501 = results[501];
+
+          expect(result0.shortSl.isNaN, true);
+          expect(result6.shortSl.isNaN, true);
+          // warmup period
+          expect(
+            result29.shortSl.toPrecision(5),
+            closeTo(9.94067, 0.04),
+            reason: 'should be 9.94067',
+          );
+          // warmup period
+          expect(
+            results[120].shortSl.toPrecision(5),
+            closeTo(22.78104, 0.00002),
+            reason: 'should be 22.78104',
+          );
+          expect(
+            result249.shortSl.toPrecision(5),
+            241.81609,
+            reason: 'should be 241.81609',
+          );
+          expect(
+            result501.shortSl.toPrecision(5),
+            574.70469,
+            reason: 'should be 574.70469',
+          );
+
+          expect(
+            results[744].shortSl.toPrecision(4),
+            143.5418,
+            reason: 'should be 143.5418',
+          );
+        },
+      );
+      test(
+        'Should return the correct LONG stop loss with maType WMA',
+        () async {
+          final res = TA.atrSl(
+            quotes,
+            maType: AtrSlMaType.wma,
           );
           final _ = await quotes.close();
           final results = await res.toList();
