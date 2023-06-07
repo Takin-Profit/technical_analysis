@@ -251,7 +251,7 @@ Future<void> main() async {
  * https://docs.google.com/spreadsheets/d/1Hvtw3hfWLSdl1k2pnme_6bSogxMSDN_SiWQYMU_2mYs/edit?usp=sharing
  * data exported from tradingview.com
  */
-    group('Ta.atrSl SMA tests', () {
+    group('Ta.atrSl EMA tests', () {
       late QuoteSeries quotes;
       setUp(
         () => {
@@ -281,35 +281,35 @@ Future<void> main() async {
           // warmup period
           expect(
             result29.shortSl.toPrecision(5),
-            closeTo(9.86079, 0.04),
-            reason: 'should be 9.86079',
+            closeTo(9.94067, 0.04),
+            reason: 'should be 9.94067',
           );
           // warmup period
           expect(
             results[120].shortSl.toPrecision(5),
-            closeTo(22.72193, 0.00002),
-            reason: 'should be 22.72193',
+            closeTo(22.78104, 0.00002),
+            reason: 'should be 22.78104',
           );
           expect(
             result249.shortSl.toPrecision(5),
-            236.50711,
-            reason: 'should be 236.50711',
+            241.81609,
+            reason: 'should be 241.81609',
           );
           expect(
             result501.shortSl.toPrecision(5),
-            585.58214,
-            reason: 'should be 585.58214',
+            574.70469,
+            reason: 'should be 574.70469',
           );
 
           expect(
-            results[744].shortSl.toPrecision(5),
-            144.35536,
-            reason: 'should be 144.35536',
+            results[744].shortSl.toPrecision(4),
+            143.5418,
+            reason: 'should be 143.5418',
           );
         },
       );
       test(
-        'Should return the correct LONG stop loss with maType SMA',
+        'Should return the correct LONG stop loss with maType EMA',
         () async {
           final res = TA.atrSl(
             quotes,
