@@ -110,8 +110,11 @@ Future<List<Quote>> getGoldAtr({int days = 750}) =>
 Future<List<Quote>> getBtcMom({int days = 800}) =>
     _getQuotes('btc_mom.csv', days);
 
-Future<List<Quote>> getBtcAtrSl({int days = 1000}) =>
-    _getQuotes('btc_atr_sl.csv', days);
+Future<List<Quote>> getAtrSlRma({int days = 800}) =>
+    _getQuotes('atrsl_rma.csv', days);
+
+Future<List<Quote>> getAtrSlSma({int days = 800}) =>
+    _getQuotes('atrsl_sma.csv', days);
 
 Future<List<Quote>> getBtcTr({int days = 420}) =>
     _getQuotes('btc_tr.csv', days);

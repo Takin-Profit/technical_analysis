@@ -49,13 +49,16 @@ TaFunc _getMaType(int len, AtrSlMaType maType) {
   AtrSlMaType maType = AtrSlMaType.rma,
   double multi = 1.5,
 }) {
-  final ma = _getMaType(len, maType);
+  final shortMa = _getMaType(len, maType);
+  final longMa = _getMaType(len, maType);
   final tr = getTr();
 
   return (HLC data) {
+    final trueRange = tr(data);
+
     return (
-      longSl: data.low - ma(tr(data)) * multi,
-      shortSl: ma(tr(data)) * multi + data.high
+      longSl: data.low - longMa(trueRange) * multi,
+      shortSl: shortMa(trueRange) * multi + data.high
     );
   };
 }
