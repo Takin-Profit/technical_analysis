@@ -116,6 +116,9 @@ Future<List<Quote>> getAtrSlRma({int days = 800}) =>
 Future<List<Quote>> getAtrSlSma({int days = 800}) =>
     _getQuotes('atrsl_sma.csv', days);
 
+Future<List<Quote>> getAtrSlEma({int days = 800}) =>
+    _getQuotes('atrsl_ema.csv', days);
+
 Future<List<Quote>> getBtcTr({int days = 420}) =>
     _getQuotes('btc_tr.csv', days);
 
