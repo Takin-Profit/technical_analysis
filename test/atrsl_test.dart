@@ -329,30 +329,30 @@ Future<void> main() async {
           // warmup period
           expect(
             result29.longSl.toPrecision(5),
-            closeTo(5.98522, 0.8),
-            reason: 'should be 5.98522',
+            closeTo(6.70923, 0.008),
+            reason: 'should be 6.70923',
           );
           // warmup period
           expect(
             results[120].longSl.toPrecision(5),
-            closeTo(12.93654, 0.00002),
-            reason: 'should be 12.93654',
+            closeTo(12.87743, 0.00002),
+            reason: 'should be 12.87743',
           );
           expect(
             result249.longSl.toPrecision(5),
-            107.49289,
-            reason: 'should be 107.49289',
+            102.18391,
+            reason: 'should be 102.18391',
           );
           expect(
             result501.longSl.toPrecision(5),
-            352.14786,
-            reason: 'should be 352.14786',
+            363.02531,
+            reason: 'should be 363.02531',
           );
 
           expect(
             results[744].longSl.toPrecision(5),
-            73.22464,
-            reason: 'should be 73.22464',
+            74.03820,
+            reason: 'should be 74.03820',
           );
         },
       );
