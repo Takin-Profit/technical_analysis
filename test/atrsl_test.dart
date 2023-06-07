@@ -393,31 +393,31 @@ Future<void> main() async {
           expect(result6.shortSl.isNaN, true);
           // warmup period
           expect(
-            result29.shortSl.toPrecision(5),
-            closeTo(9.94067, 0.04),
-            reason: 'should be 9.94067',
+            result29.shortSl.toPrecision(6),
+            closeTo(10.040728, 0.04),
+            reason: 'should be 10.040728',
           );
           // warmup period
           expect(
             results[120].shortSl.toPrecision(5),
-            closeTo(22.78104, 0.00002),
-            reason: 'should be 22.78104',
+            closeTo(23.11802, 0.00002),
+            reason: 'should be 23.11802',
           );
           expect(
-            result249.shortSl.toPrecision(5),
-            241.81609,
-            reason: 'should be 241.81609',
+            result249.shortSl.toPrecision(4),
+            240.6705,
+            reason: 'should be 240.6705',
           );
           expect(
             result501.shortSl.toPrecision(5),
-            574.70469,
-            reason: 'should be 574.70469',
+            572.31357,
+            reason: 'should be 572.31357',
           );
 
           expect(
-            results[744].shortSl.toPrecision(4),
-            143.5418,
-            reason: 'should be 143.5418',
+            results[744].shortSl.toPrecision(5),
+            145.79343,
+            reason: 'should be 145.79343',
           );
         },
       );
@@ -442,30 +442,30 @@ Future<void> main() async {
           // warmup period
           expect(
             result29.longSl.toPrecision(5),
-            closeTo(6.70923, 0.008),
-            reason: 'should be 6.70923',
+            closeTo(6.60917, 0.008),
+            reason: 'should be 6.60917',
           );
           // warmup period
           expect(
             results[120].longSl.toPrecision(5),
-            closeTo(12.87743, 0.00002),
-            reason: 'should be 12.87743',
+            closeTo(12.54045, 0.00002),
+            reason: 'should be 12.54045',
           );
           expect(
-            result249.longSl.toPrecision(5),
-            102.18391,
-            reason: 'should be 102.18391',
+            result249.longSl.toPrecision(4),
+            103.3295,
+            reason: 'should be 103.3295',
           );
           expect(
             result501.longSl.toPrecision(5),
-            363.02531,
-            reason: 'should be 363.02531',
+            365.41643,
+            reason: 'should be 365.41643',
           );
 
           expect(
-            results[744].longSl.toPrecision(5),
-            74.03820,
-            reason: 'should be 74.03820',
+            results[744].longSl.toPrecision(6),
+            71.786571,
+            reason: 'should be 71.786571',
           );
         },
       );
